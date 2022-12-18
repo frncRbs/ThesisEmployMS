@@ -203,7 +203,7 @@ def login_IT():
 @_route_it.route('/signupIT', methods=['POST'])
 def signupIT():
     try:
-        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'information technology', (generate_password_hash(request.form['password'], method="sha256")), False, 1)
+        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Information Technology', (generate_password_hash(request.form['password'], method="sha256")), False, 1)
         db.session.add(new_user)
         db.session.commit()
         flash('Account successfully created', category='success_register')
