@@ -170,7 +170,7 @@ def Home():
 def login_registerIT_view():
     auth_user=current_user
     if auth_user.is_authenticated:
-        if auth_user.user_type == 1 and auth_user.department == "information technology":
+        if auth_user.user_type == 1 and auth_user.department == "Information Technology":
             return redirect(url_for('.it_dashboard'))
         else:
             return redirect(url_for('_auth.index'))
@@ -180,13 +180,13 @@ def login_registerIT_view():
 def login_IT():
     auth_user=current_user
     if auth_user.is_authenticated:
-        if auth_user.user_type == 1 and auth_user.department == "information technology":
+        if auth_user.user_type == 1 and auth_user.department == "Information Technology":
             return redirect(url_for('.it_dashboard'))
         else:
             return redirect(url_for('_auth.index'))
     else:
         if request.method == 'POST':
-            user = User.query.filter_by(email=request.form['email'], department='information technology').first()
+            user = User.query.filter_by(email=request.form['email'], department='Information Technology').first()
             if user:
                 if user.is_approve == True:
                     if check_password_hash(user.password, request.form['password']):
@@ -217,7 +217,7 @@ def signupIT():
 @login_required
 def it_dashboard():
     auth_user=current_user
-    if auth_user.user_type == 1 and auth_user.department == "information technology":
+    if auth_user.user_type == 1 and auth_user.department == "Information Technology":
         return render_template("IT/ITinputs.html", auth_user=auth_user)
     else:
         return redirect(url_for('_auth.index'))
@@ -227,7 +227,7 @@ def it_dashboard():
 @_route_it.route("/ITinputs_", methods=['GET'])
 def predict_IT_():
     auth_user=current_user
-    if auth_user.user_type == 1 and auth_user.department == "information technology":
+    if auth_user.user_type == 1 and auth_user.department == "Information Technology":
         return render_template("IT/ITinputs.html")
     else:
         return redirect(url_for('_auth.index'))

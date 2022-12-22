@@ -42,7 +42,7 @@
     <main>
         <!-- HERO SECTION -->
         <div>
-          <div style="position: absolute; left: 65%; bottom: 72%; display: flex;">
+          <div style="position: absolute; left: 62%; bottom: 72%; display: flex; width: 20%; height: auto; background: rgba(255, 255, 255, 0.404)">
             <form action="{{ url_for('_faculty.faculty_dash') }}" method="GET">
               <select style="display: inline; z-index: 0" type="text" name="sex" id="drop-down" placeholder="Sex" required="" onchange="this.form.submit()">
                 <option value="">Sex</option>
@@ -57,6 +57,49 @@
           </div>
         <div class="hero">
           <div style="background-color: #6b915954;">
+            <div>
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                  {% for category, message in messages %}
+                    {% if category == 'success_deletion' %}
+                      <div class="">
+                        <div class="">
+                          <div class="">
+                            <div style="padding: 10%; color: rgb(47, 241, 47); font-size: 25px; font-weight: 700">
+                              <center>
+                                {{ message }}
+                              </center>
+                              <script>
+                                window.setTimeout(function () {
+                                  window.location.reload();
+                                  }, 3000);
+                              </script>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% elif category == 'error' %}
+                      <div class="">
+                        <div class="">
+                          <div class="">
+                            <div style="padding: 10%; color: rgb(180, 29, 29); font-size: 25px; font-weight: 700">
+                              <center>
+                                {{ message }}
+                              </center>
+                              <script>
+                                window.setTimeout(function () {
+                                  window.location.reload();
+                                }, 3000);
+                              </script>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              {% endwith %}
+            </div>
               <table>
                 <thead>
                   <tr>
@@ -101,9 +144,9 @@
                             class should be inline
                           -->
                           <div style="display: flex">
-                            <form action="/delete_results" method="POST">
-                              <input type="hidden" name="user_id" value="{{ user.user_id }}">
-                              <button type="submit"> Delete </button>
+                            <form action="/delete_student" method="POST">
+                              <input type="hidden" name="user_id" value="{{ user.id }}">
+                              <button type="submit" style="padding: 10px; margin: 5px"> Delete </button>
                             </form>
                           </div>
                         </td>

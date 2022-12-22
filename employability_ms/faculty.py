@@ -5,8 +5,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy import delete
 from sqlalchemy import select
+import json
 
-from .auth import send_link # for email message
+from .auth import send_link, send_link_disapproved # for email message
 
 _faculty = Blueprint('_faculty', __name__)
 
@@ -155,6 +156,19 @@ def faculty_view():
 @_faculty.route('/faculty_dashboard', methods=['GET'])
 @login_required
 def faculty_dashboard():
+    
+    software_engineer_programmer = User.query.filter(User.desired_career.like('Software Engineer / Programmer'), User.user_type.like(1)).count()
+    
+    technical_support_specialist = User.query.filter(User.desired_career.like('Technical Support Specialist'), User.user_type.like(1)).count()
+    
+    academician = User.query.filter(User.desired_career.like('Academician'), User.user_type.like(1)).count()
+    
+    administrative_assistant = User.query.filter(User.desired_career.like('Administrative Assistant'), User.user_type.like(1)).count()
+    
+    male = User.query.filter(User.sex=='Male', User.user_type.like(1)).count()
+        
+    female = User.query.filter(User.sex=='Female', User.user_type.like(1)).count()
+    
     if request.method == 'GET':
         # Current Logged User
         auth_user=current_user
@@ -207,69 +221,65 @@ def faculty_dashboard():
         else:
             return redirect(url_for('_auth.index'))
         
-        return render_template("Faculty/facultyEnd.html", auth_user=auth_user, students_record=students_record, unapprove_account=unapprove_account, count_unapprove=count_unapprove, search=search, department=department, sex=sex, curriculum_year=curriculum_year)
+        return render_template("Faculty/facultyEnd.html", auth_user=auth_user, 
+                               students_record=students_record, 
+                               unapprove_account=unapprove_account, 
+                               count_unapprove=count_unapprove, search=search, 
+                               department=department, sex=sex, curriculum_year=curriculum_year, 
+                               software_engineer_programmer=json.dumps(software_engineer_programmer), technical_support_specialist=json.dumps(technical_support_specialist),
+                               academician=json.dumps(academician), administrative_assistant=json.dumps(administrative_assistant),
+                               male=json.dumps(male), female=json.dumps(female)
+                               )
 
 @_faculty.route('/view_results', methods=['POST'])
 @login_required
 def view_results():
     auth_user=current_user
     page = request.args.get('page', 1, type=int)
-    search = request.args.getlist('search')
-    search = (','.join(search))
-    # page = request.args.get('page', 1, type=int)
-    view_pred_result = db.session.query(User).get(request.form['user_id'])
-    # view_pred_result =  db.session.query(User).where(User.first_name == request.form['first_name'])
-    students_record = db.session.query(User, PredictionResult).join(PredictionResult).filter(User.user_type == 1).paginate(page=page, per_page=8)
-    # # view_pred_result =  select(User, PredictionResult).where(PredictionResult.result_id == request.form['user_id'])
-    # # view_pred_result = PredictionResult.query(PredictionResult).where(PredictionResult.result_id == request.form['user_id'])
-    # # db.session.execute(view_pred_result)
-    # # # db.session.execute(delete_result)
-    # # db.session.commit()
-    
-    # return render_template("Faculty/faculty_view.html", auth_user=auth_user, view_pred_result=view_pred_result)
+    view_pred_result = db.session.query(User, PredictionResult).filter(User.id == int(request.form['user_id'])).filter(PredictionResult.user_id == int(request.form['user_id'])).group_by(PredictionResult.result_id).paginate(page=page, per_page=8)
 
-    return render_template("Faculty/faculty_view.html", view_pred_result=view_pred_result, students_record=students_record, auth_user=auth_user)
+    return render_template("Faculty/faculty_view.html", view_pred_result=view_pred_result, auth_user=auth_user)
 
 @_faculty.route('/delete_results', methods=['POST'])
 @login_required
 def delete_results():
-    auth_user=current_user
-    
-    # delete_result = delete(User).where(User.id == request.form['user_id'])
-    delete_pred_result = delete(PredictionResult).where(PredictionResult.result_id == request.form['user_id'])
+    try:
+        delete_pred_result = delete(PredictionResult).where(PredictionResult.result_id == request.form['user_id'])
+        db.session.execute(delete_pred_result)
+        db.session.commit()
+        flash('History successfully deleted', category='success_deletion')
+        return redirect(url_for('.faculty_dashboard'))
+    except:
+        flash('Server error cannot delete data', category='error')
+        return redirect(url_for('.faculty_dashboard'))
 
-    
-    db.session.execute(delete_pred_result)
-    # db.session.execute(delete_result)
-    db.session.commit()
-    return redirect(url_for('.faculty_dashboard'))
+@_faculty.route('/delete_student', methods=['POST'])
+@login_required
+def delete_student():
+    try:
+        delete_result = delete(User).where(User.id == request.form['user_id'])
+        db.session.execute(delete_result)
+        db.session.commit()
+        flash('Account successfully deleted', category='success_deletion')
+        return redirect(url_for('.faculty_dashboard'))
+    except:
+        flash('Delete the prediction history first to delete account', category='error')
+        return redirect(url_for('.faculty_dashboard'))
 
 @_faculty.route('/approve_account', methods=['POST'])
 @login_required
 def approve_account():
-    approve_account = User.query.filter_by(id=int(request.form['user_id'])).first()
-    approve_account.is_approve = True
-    db.session.commit()
-
-    # send_link(request.form['user_email'], request.form['user_department'])
-
-    # auth_user=current_user
-    # if auth_user.user_type == -1 or auth_user.user_type == 0:
-    #     auth_user=current_user
-    #     page = request.args.get('page', 1, type=int)
-    #     unapprove_account = User.query.filter_by(is_approve = False, user_type = 1).all()
-    #     count_unapprove = User.query.filter_by(is_approve = False, user_type = 1).count()
-    #     students_record = db.session.query(User, PredictionResult).join(PredictionResult).filter(User.user_type == 1).paginate(page=page, per_page=5)# fetch user students only
-    return redirect(url_for('_faculty.faculty_dashboard'))
-
-@_faculty.route('/disapprove_account', methods=['POST'])
-@login_required
-def disapprove_account():
-    disapprove_account = User.query.filter_by(id=int(request.form['user_id'])).first()
-    disapprove_account.is_approve = False
-    db.session.commit()
-
-    # send_link(request.form['user_email'], request.form['user_department'])
+    if int(request.form['approve_flag']) == 1:
+        approve_account = User.query.filter_by(id=int(request.form['user_id'])).first()
+        approve_account.is_approve = True
+        db.session.commit()
+        send_link(request.form['user_email'], request.form['user_department'])
+    elif int(request.form['approve_flag']) == 0:
+        print(request.form['approve_flag'])
+        approve_account = delete(User).where(User.id == request.form['user_id'])
+        db.session.execute(approve_account)
+        db.session.commit()
+        send_link_disapproved(request.form['user_email'])
 
     return redirect(url_for('_faculty.faculty_dashboard'))
 

@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="shsa384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/chart.min.js" integrity="sha512-MC1YbhseV2uYKljGJb7icPOjzF2k6mihfApPyPhEAo3NsLUW0bpgtL4xYWK1B+1OuSrUkfOTfhxrRKCz/Jp3rQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"> -->
     <!-- <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> -->
@@ -52,17 +53,17 @@
                           <form action="/approve_account" method="POST">
                             <input type="hidden" name="user_id" value="{{ unapprove.id }}">
                             <input type="hidden" name="user_email" value="{{ unapprove.email }}">
-                            <input type="hidden" name="user_email" value="{{ unapprove.password }}">
                             <input type="hidden" name="user_department" value="{{ unapprove.department }}">
+                            <input type="hidden" name="approve_flag" value="1">
                             <button type="submit"> Approve </button>
                           </form>
                         </div>
                         <div style="display: inline-block">
-                          <form action="/disapprove_account" method="POST">
+                          <form action="/approve_account" method="POST">
                             <input type="hidden" name="user_id" value="{{ unapprove.id }}">
                             <input type="hidden" name="user_email" value="{{ unapprove.email }}">
-                            <input type="hidden" name="user_email" value="{{ unapprove.password }}">
                             <input type="hidden" name="user_department" value="{{ unapprove.department }}">
+                            <input type="hidden" name="approve_flag" value="0">
                             <button type="submit"> Disapprove </button>
                           </form>
                         </div>
@@ -79,7 +80,7 @@
         <!-- HERO SECTION -->
         <div>
           
-          <div style="position: absolute; left: 40%; bottom: 72%; display: flex;">
+          <div style="width: 43%; height: auto; position: absolute; left: 40%; bottom: 72%; display: flex; background: rgba(255, 255, 255, 0.404)">
             <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
               <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
                 <option value="">Department</option>
@@ -108,115 +109,164 @@
               <!-- <button type="submit" style="display: inline-block;">Search</button>   -->
             </form>
           </div>
+          
         <div class="hero">
           <div style="background-color: #6b915954;">
-              <table>
-                <thead>
-                  <tr>
-                    <th style="text-align: center">Full Name</th>
-                    <th style="text-align: center">Sex</th>
-                    <th style="text-align: center">Curriculum year</th>
-                    <th style="text-align: center">Department</th>
-                    <th style="text-align: center">Contact Number</th>
-                    <th style="text-align: center">Email</th>
-                    <th style="text-align: center">Date Registered</th>
-                    <!-- <th style="text-align: center">Desired Career</th>
-                    <th style="text-align: center">Prediction Results</th>
-                    <th style="text-align: center">Date Predicted</th> -->
-                    <th style="text-align: center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% if students_record %}
-                    {% for user in students_record.items %}
-                      <tr>
-                        <td>
-                          <span>{{ user.first_name }}</span>
-                          <span>{{ user.middle_name }}</span>
-                          <span>{{ user.last_name }} </span>
-                        </td>
-                        <td>
-                          <span style="margin: 5px">{{ user.sex }}</span>
-                        </td>
-                        <td>
-                          <span style="margin: 5px">{{ user.curriculum_year }}</span>
-                        </td>
-                        <td>
-                          <span style="margin: 5px">{{ user.department }}</span>
-                        </td>
-                        <td>
-                          <span style="margin: 5px">{{ user.contact_number }}</span>
-                        </td>
-                        <td>
-                          <span style="margin: 5px">{{ user.email }}</span>
-                        </td>
-                        <td>
-                          <span style="margin: 5px">{{ user.date_created }}</span>
-                        </td>
-                        <td>
-                          <!-- 
-                            class should be inline
-                          -->
-                          <div style="display: flex">
-                            <form action="/view_results" method="POST">
-                              <input type="hidden" name="user_id" value="{{ user.user_id }}">
-                              <button type="submit"> View </button>
-                            </form>
-                            <form action="/delete_results" method="POST">
-                              <input type="hidden" name="user_id" value="{{ user.user_id }}">
-                              <button type="submit"> Delete </button>
-                            </form>
+            <div>
+              {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                  {% for category, message in messages %}
+                    {% if category == 'success_deletion' %}
+                      <div class="">
+                        <div class="">
+                          <div class="">
+                            <div style="padding: 10%; color: rgb(47, 241, 47); font-size: 25px; font-weight: 700">
+                              <center>
+                                {{ message }}
+                              </center>
+                              <script>
+                                window.setTimeout(function () {
+                                  window.location.reload();
+                                  }, 3000);
+                              </script>
+                            </div>
                           </div>
-                        </td>
-                      </tr>
-                    {% endfor %}
-                  {% endif %}
-                </tbody>
-              </table>
-              <div class="" style="border-color: #294f0f; color: white; margin-left: 50%">
-                {% if students_record %}
-                    {% for page_num in students_record.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-                        {% if page_num  %}
-                            {% if students_record.page == page_num  %}
-                              {% if search  %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
-                              {% elif department %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
-                              {% elif sex %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
-                              {% elif curriculum_year %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
-                              {% else %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
-                              {% endif %}
-
-                            {% else %}
-                              {% if search  %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
-                              {% elif department %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
-                              {% elif sex %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
-                              {% elif curriculum_year %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
-                              {% else %}
-                                <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
-                              {% endif %}
-                            {% endif %}
-                        {% else %}
-                            ...
-                        {% endif %}
-                    {% endfor %}
+                        </div>
+                      </div>
+                    {% elif category == 'error' %}
+                      <div class="">
+                        <div class="">
+                          <div class="">
+                            <div style="padding: 10%; color: rgb(180, 29, 29); font-size: 25px; font-weight: 700">
+                              <center>
+                                {{ message }}
+                              </center>
+                              <script>
+                                window.setTimeout(function () {
+                                  window.location.reload();
+                                }, 3000);
+                              </script>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
                 {% endif %}
+              {% endwith %}
             </div>
-            
+              <div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th style="text-align: center">Full Name</th>
+                      <th style="text-align: center">Sex</th>
+                      <th style="text-align: center">Curriculum year</th>
+                      <th style="text-align: center">Department</th>
+                      <th style="text-align: center">Contact Number</th>
+                      <th style="text-align: center">Email</th>
+                      <th style="text-align: center">Date Registered</th>
+                      <!-- <th style="text-align: center">Desired Career</th>
+                      <th style="text-align: center">Prediction Results</th>
+                      <th style="text-align: center">Date Predicted</th> -->
+                      <th style="text-align: center">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if students_record %}
+                      {% for user in students_record.items %}
+                        <tr>
+                          <td>
+                            <span>{{ user.first_name }}</span>
+                            <span>{{ user.middle_name }}</span>
+                            <span>{{ user.last_name }} </span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px">{{ user.sex }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px">{{ user.curriculum_year }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px">{{ user.department }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px">{{ user.contact_number }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px">{{ user.email }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px">{{ user.date_created }}</span>
+                          </td>
+                          <td>
+                            <!-- 
+                              class should be inline
+                            -->
+                            <div style="display: flex">
+                              <form action="/view_results" method="POST">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <button type="submit" style="padding: 10px; margin: 5px"> View </button>
+                              </form>
+                              <form action="/delete_student" method="POST">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <button type="submit" style="padding: 10px; margin: 5px"> Delete </button>
+                              </form>
+                            </div>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table>
+                <div class="" style="border-color: #294f0f; color: white; margin-left: 50%">
+                  {% if students_record %}
+                      {% for page_num in students_record.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                          {% if page_num  %}
+                              {% if students_record.page == page_num  %}
+                                {% if search  %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
+                                {% elif department %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
+                                {% elif sex %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
+                                {% elif curriculum_year %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
+                                {% else %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
+                                {% endif %}
+
+                              {% else %}
+                                {% if search  %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
+                                {% elif department %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
+                                {% elif sex %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
+                                {% elif curriculum_year %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
+                                {% else %}
+                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
+                                {% endif %}
+                              {% endif %}
+                          {% else %}
+                              ...
+                          {% endif %}
+                      {% endfor %}
+                  {% endif %}
+              </div>
+            </div>
           </div>
         </div>
-        
       </div>
-      
+
         <hr>
-        
+
+      <div style="margin: 10px; display: flex; justify-content: center">
+        <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 30px; border-radius: 10px" ><canvas id="myChart"></canvas></div>
+        <div style="background: rgba(255, 255, 255, 0.795); width: 25%; height: auto; margin: 30px; border-radius: 10px" ><canvas id="mypieChart"></canvas></div>
+      </div>
+
         <div class="popup" id="popupID">
           <div class="popup__inner">
             <div class="popup__container">
@@ -244,12 +294,81 @@
           </div>
         </div>
       </main>
+
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       <script>
         $(document).ready(function() {
           $(".notification-drop .item").on('click',function() {
             $(this).find('ul').toggle();
           });
         });
+
+        const ctx = document.getElementById('myChart');
+        
+        software_engineer_programmer = JSON.parse({{ software_engineer_programmer  | tojson}})
+        technical_support_specialist = JSON.parse({{ technical_support_specialist  | tojson}})
+        academician = JSON.parse({{ academician  | tojson}})
+        administrative_assistant = JSON.parse({{ administrative_assistant  | tojson}})
+        male = JSON.parse({{ male  | tojson}})
+        female = JSON.parse({{ female  | tojson}})
+
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
+            datasets: [{
+              label: '# of Students Desired Career',
+              data: [software_engineer_programmer, technical_support_specialist, academician, administrative_assistant],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+
+        let pieChart = new Chart(mypieChart, {
+          type: 'pie',
+          data: {
+          labels: ['Male', 'Female'],
+              datasets: [{
+                  label: "# of Students",
+                  data: [male, female],
+                  backgroundColor: ['#5DA5DA ', '#FAA43A', '#60BD68',
+                      '#B276B2', '#E16851', '#FB8267'],
+
+                  fontColor: "white",
+                  borderWidth: 1,
+                  hoverBorderColor: "black",
+                  hoverBorderWidth: 2,
+                  hoverBackgroundColor: 'rgba(154, 245, 140)',
+                  pointHoverRadius: 5
+              }],
+          },
+          options: {
+                  title: {
+                      display: true,
+                          text: "Male and Female",
+                              fontSize: 20,
+                              fontColor: "white"
+                  },
+                  legend: {
+                      position: "right",
+                          labels: {
+                          fontColor: "white"
+                      },
+                      display: true,
+                  },
+
+                  elements: {
+                      hitRadius: 3,
+                  }
+          }
+      })
       </script>
 </body>
 </html>
@@ -674,7 +793,7 @@ box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  padding: 15% 10% 20% 10%;
+  padding: 15% 10% 2% 10%; 
   display: flex;
   z-index: 0;
   justify-content: center;

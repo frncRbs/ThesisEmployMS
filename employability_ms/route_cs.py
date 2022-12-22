@@ -170,7 +170,7 @@ def Home():
 def login_registerCS_view():
     auth_user=current_user
     if auth_user.is_authenticated:
-        if auth_user.user_type == 1 and auth_user.department == "computer science":
+        if auth_user.user_type == 1 and auth_user.department == "Computer Science":
             return redirect(url_for('.cs_dashboard'))
         else:
             return redirect(url_for('_auth.index'))
@@ -180,13 +180,13 @@ def login_registerCS_view():
 def login_CS():
     auth_user=current_user
     if auth_user.is_authenticated:
-        if auth_user.user_type == 1 and auth_user.department == "computer science":
+        if auth_user.user_type == 1 and auth_user.department == "Computer Science":
             return redirect(url_for('.cs_dashboard'))
         else:
             return redirect(url_for('_auth.index'))
     else:
         if request.method == 'POST':
-            user = User.query.filter_by(email=request.form['email'], department='computer science').first()
+            user = User.query.filter_by(email=request.form['email'], department='Computer Science').first()
             if user:
                 if user.is_approve == True:
                     if check_password_hash(user.password, request.form['password']):
@@ -216,7 +216,7 @@ def signupCS():
 @login_required
 def cs_dashboard():
     auth_user=current_user
-    if auth_user.user_type == 1 and auth_user.department == "computer science":
+    if auth_user.user_type == 1 and auth_user.department == "Computer Science":
         return render_template("CS/CSinputs.html", auth_user=auth_user)
     else:
         return redirect(url_for('_auth.index'))
