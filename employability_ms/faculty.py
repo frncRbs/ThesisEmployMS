@@ -28,6 +28,7 @@ def register_faculty():
     if auth_user.is_authenticated and auth_user.user_type == -1:
         return render_template("Faculty/register_admin.html")
     else:
+        flash('Sorry only the admin is permitted to register a faculty account', category='error')
         return redirect(url_for('.faculty_dashboard'))
 
     
@@ -169,6 +170,10 @@ def faculty_dashboard():
         
     female = User.query.filter(User.sex=='Female', User.user_type.like(1)).count()
     
+    registered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(1)).count()
+    
+    unregistered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(0)).count()
+    
     if request.method == 'GET':
         # Current Logged User
         auth_user=current_user
@@ -199,21 +204,21 @@ def faculty_dashboard():
                     (User.contact_number.like('%' + search + '%'))  |
                     (User.department.like('%' + search + '%'))    |
                     (User.email.like('%' + search + '%')))\
-                    .paginate(page=page, per_page=8)# fetch user students only
+                    .paginate(page=page, per_page=5)# fetch user students only
             elif department:
                 students_record = db.session.query(User).filter(User.is_approve == 1, User.department != 'Faculty')\
                     .filter((User.department.like('%' + department + '%')))\
-                    .paginate(page=page, per_page=8)# fetch department only
+                    .paginate(page=page, per_page=5)# fetch department only
             elif sex:
                 students_record = db.session.query(User).filter(User.is_approve == 1, User.department != 'Faculty')\
                     .filter((User.sex==sex))\
-                    .paginate(page=page, per_page=8)# fetch sex only
+                    .paginate(page=page, per_page=5)# fetch sex only
             elif curriculum_year:
                 students_record = db.session.query(User).filter(User.is_approve == 1, User.department != 'Faculty')\
                     .filter((User.curriculum_year.like('%' + curriculum_year + '%')))\
-                    .paginate(page=page, per_page=8)# fetch curriculum year only
+                    .paginate(page=page, per_page=5)# fetch curriculum year only
             else:
-                students_record = db.session.query(User).filter(User.is_approve == 1, User.department != 'Faculty').paginate(page=page, per_page=8)# fetch user students only
+                students_record = db.session.query(User).filter(User.is_approve == 1, User.department != 'Faculty').paginate(page=page, per_page=5)# fetch user students only
 
             auth_user=current_user
             unapprove_account = User.query.filter_by(is_approve = False, user_type = 1).all()
@@ -228,7 +233,8 @@ def faculty_dashboard():
                                department=department, sex=sex, curriculum_year=curriculum_year, 
                                software_engineer_programmer=json.dumps(software_engineer_programmer), technical_support_specialist=json.dumps(technical_support_specialist),
                                academician=json.dumps(academician), administrative_assistant=json.dumps(administrative_assistant),
-                               male=json.dumps(male), female=json.dumps(female)
+                               male=json.dumps(male), female=json.dumps(female), registered_students=registered_students,
+                               unregistered_students=unregistered_students
                                )
 
 @_faculty.route('/view_results', methods=['POST'])
@@ -250,7 +256,7 @@ def delete_results():
         flash('History successfully deleted', category='success_deletion')
         return redirect(url_for('.faculty_dashboard'))
     except:
-        flash('Server error cannot delete data', category='error')
+        flash('System error cannot delete data', category='error')
         return redirect(url_for('.faculty_dashboard'))
 
 @_faculty.route('/delete_student', methods=['POST'])
@@ -260,11 +266,30 @@ def delete_student():
         delete_result = delete(User).where(User.id == request.form['user_id'])
         db.session.execute(delete_result)
         db.session.commit()
-        flash('Account successfully deleted', category='success_deletion')
+        flash('Student account successfully deleted', category='success_deletion')
         return redirect(url_for('.faculty_dashboard'))
     except:
         flash('Delete the prediction history first to delete account', category='error')
         return redirect(url_for('.faculty_dashboard'))
+    
+@_faculty.route('/delete_faculty', methods=['POST'])
+@login_required
+def delete_faculty():
+    auth_user=current_user
+    
+    if auth_user.is_authenticated and auth_user.user_type == -1:
+        try:
+            delete_result = delete(User).where(User.id == request.form['user_id'])
+            db.session.execute(delete_result)
+            db.session.commit()
+            flash('Faculty account successfully deleted', category='success_deletion')
+            return redirect(url_for('.faculty_dashboard'))
+        except:
+            flash('System error cannot delete data please try again', category='error')
+            return redirect(url_for('.faculty_dashboard'))
+        
+    flash('Sorry only the admin is permitted to delete some data', category='error')
+    return redirect(url_for('.faculty_dashboard'))
 
 @_faculty.route('/approve_account', methods=['POST'])
 @login_required
@@ -273,13 +298,18 @@ def approve_account():
         approve_account = User.query.filter_by(id=int(request.form['user_id'])).first()
         approve_account.is_approve = True
         db.session.commit()
-        send_link(request.form['user_email'], request.form['user_department'])
+        flash('Account successfully approved', category='success_deletion')
+        return redirect(url_for('.faculty_dashboard'))
+        # send_link(request.form['user_email'], request.form['user_department'])
     elif int(request.form['approve_flag']) == 0:
-        print(request.form['approve_flag'])
+        # print(request.form['approve_flag'])
         approve_account = delete(User).where(User.id == request.form['user_id'])
+        approve_account.is_approve = False
         db.session.execute(approve_account)
         db.session.commit()
-        send_link_disapproved(request.form['user_email'])
+        flash('Account successfully disapproved/deleted', category='success_deletion')
+        return redirect(url_for('.faculty_dashboard'))
+        # send_link_disapproved(request.form['user_email'])
 
     return redirect(url_for('_faculty.faculty_dashboard'))
 

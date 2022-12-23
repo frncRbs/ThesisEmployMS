@@ -219,7 +219,7 @@
                     {% endif %}
                   </tbody>
                 </table>
-                <div class="" style="border-color: #294f0f; color: white; margin-left: 50%">
+                <div class="" style="color: white; margin-left: 50%">
                   {% if students_record %}
                       {% for page_num in students_record.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                           {% if page_num  %}
@@ -260,8 +260,19 @@
         </div>
       </div>
 
-        <hr>
-
+      <hr>
+      <center><div><h1>Data Visualization</h1></div></center>
+      <hr>
+      <div style="display: flex; justify-content: center">
+        <div style="width: 50%; height: auto; text-align: center; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; border-radius: 10px; margin: 20px">
+          <h2>Number of Registered Student</h2>
+          <h1>{{ registered_students }}</h1>
+        </div>
+        <div style="width: 50%; height: auto; text-align: center; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; border-radius: 10px; margin: 20px">
+          <h2>Number of Unregistered Student</h2>
+          <h1>{{ unregistered_students }}</h1>
+        </div>
+      </div>
       <div style="margin: 10px; display: flex; justify-content: center">
         <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 30px; border-radius: 10px" ><canvas id="myChart"></canvas></div>
         <div style="background: rgba(255, 255, 255, 0.795); width: 25%; height: auto; margin: 30px; border-radius: 10px" ><canvas id="mypieChart"></canvas></div>
@@ -336,7 +347,7 @@
           data: {
           labels: ['Male', 'Female'],
               datasets: [{
-                  label: "# of Students",
+                  label: "# of Student",
                   data: [male, female],
                   backgroundColor: ['#5DA5DA ', '#FAA43A', '#60BD68',
                       '#B276B2', '#E16851', '#FB8267'],
