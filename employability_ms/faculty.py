@@ -158,17 +158,17 @@ def faculty_view():
 @login_required
 def faculty_dashboard():
     
-    software_engineer_programmer = User.query.filter(User.desired_career.like('Software Engineer / Programmer'), User.user_type.like(1)).count()
+    software_engineer_programmer = User.query.filter(User.desired_career.like('Software Engineer / Programmer'), User.user_type.like(1), User.is_approve.like(1)).count()
     
-    technical_support_specialist = User.query.filter(User.desired_career.like('Technical Support Specialist'), User.user_type.like(1)).count()
+    technical_support_specialist = User.query.filter(User.desired_career.like('Technical Support Specialist'), User.user_type.like(1), User.is_approve.like(1)).count()
     
-    academician = User.query.filter(User.desired_career.like('Academician'), User.user_type.like(1)).count()
+    academician = User.query.filter(User.desired_career.like('Academician'), User.user_type.like(1), User.is_approve.like(1)).count()
     
-    administrative_assistant = User.query.filter(User.desired_career.like('Administrative Assistant'), User.user_type.like(1)).count()
+    administrative_assistant = User.query.filter(User.desired_career.like('Administrative Assistant'), User.user_type.like(1), User.is_approve.like(1)).count()
     
-    male = User.query.filter(User.sex=='Male', User.user_type.like(1)).count()
+    male = User.query.filter(User.sex=='Male', User.user_type.like(1), User.is_approve.like(1)).count()
         
-    female = User.query.filter(User.sex=='Female', User.user_type.like(1)).count()
+    female = User.query.filter(User.sex=='Female', User.user_type.like(1), User.is_approve.like(1)).count()
     
     registered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(1)).count()
     
@@ -302,7 +302,6 @@ def approve_account():
         return redirect(url_for('.faculty_dashboard'))
         # send_link(request.form['user_email'], request.form['user_department'])
     elif int(request.form['approve_flag']) == 0:
-        # print(request.form['approve_flag'])
         approve_account = delete(User).where(User.id == request.form['user_id'])
         approve_account.is_approve = False
         db.session.execute(approve_account)
