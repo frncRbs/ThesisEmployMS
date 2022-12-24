@@ -19,9 +19,9 @@
 # google-auth==2.10.0
 # google-auth-oauthlib==0.4.6
 # google-pasta==0.2.0
-# greenlet==1.1.2 et
-# grpcio==1.47.0 et
-# h5py==3.7.0 et
+# greenlet==1.1.2 ------------------------
+# grpcio==1.47.0 ------------------------
+# h5py==3.7.0 ------------------------
 # idna==3.3
 # itsdangerous==2.1.2
 # Jinja2==3.1.2
@@ -34,7 +34,7 @@
 # oauthlib==3.2.0
 # opt-einsum==3.3.0
 # packaging==21.3
-# pandas==1.4.3
+# pandas==1.4.3 ---------------------
 # Pillow==9.2.0
 # protobuf==3.19.4
 # pyasn1==0.4.8
@@ -56,3 +56,5 @@
 # Werkzeug==2.1.2
 # wrapt==1.14.1
 # WTForms==3.0.1
+#pip install pandas
+#pip install scikit-learn

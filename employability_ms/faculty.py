@@ -298,17 +298,18 @@ def approve_account():
         approve_account = User.query.filter_by(id=int(request.form['user_id'])).first()
         approve_account.is_approve = True
         db.session.commit()
+        # send_link(request.form['user_email'], request.form['user_department'])
         flash('Account successfully approved', category='success_deletion')
         return redirect(url_for('.faculty_dashboard'))
-        # send_link(request.form['user_email'], request.form['user_department'])
+        
     elif int(request.form['approve_flag']) == 0:
         approve_account = delete(User).where(User.id == request.form['user_id'])
         approve_account.is_approve = False
         db.session.execute(approve_account)
         db.session.commit()
+        # send_link_disapproved(request.form['user_email'])
         flash('Account successfully disapproved/deleted', category='success_deletion')
         return redirect(url_for('.faculty_dashboard'))
-        # send_link_disapproved(request.form['user_email'])
 
     return redirect(url_for('_faculty.faculty_dashboard'))
 
