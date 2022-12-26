@@ -83,13 +83,13 @@ def faculty_dash():
                     (User.contact_number.like('%' + search + '%'))  |
                     (User.department.like('%' + search + '%'))    |
                     (User.email.like('%' + search + '%')))\
-                    .paginate(page=page, per_page=8)# fetch user students only
+                    .paginate(page=page, per_page=5)# fetch user students only
             elif sex:
                 students_record = db.session.query(User).filter(User.is_approve == 1, User.department == 'Faculty')\
                     .filter((User.sex==sex))\
-                    .paginate(page=page, per_page=8)# fetch sex only
+                    .paginate(page=page, per_page=5)# fetch sex only
             else:
-                students_record = db.session.query(User).filter(User.is_approve == 1, User.department == 'Faculty').paginate(page=page, per_page=8)# fetch user students only
+                students_record = db.session.query(User).filter(User.is_approve == 1, User.department == 'Faculty').paginate(page=page, per_page=5)# fetch user students only
 
             auth_user=current_user
         else:
@@ -97,66 +97,21 @@ def faculty_dash():
         
         return render_template("Faculty/faculty_dashboard.html", auth_user=auth_user, students_record=students_record, search=search, sex=sex)
 
-@_faculty.route('/faculty_view', methods=['GET'])
-@login_required
-def faculty_view():
-    if request.method == 'GET':
-        # Current Logged User
-        auth_user=current_user
-        page = request.args.get('page', 1, type=int)
-
-        # Data for search
-        search = request.args.getlist('search')
-        search = (','.join(search))
-
-        department = request.args.getlist('department')
-        department = (','.join(department))
-
-        sex = request.args.getlist('sex')
-        sex = (','.join(sex))
-
-        curriculum_year = request.args.getlist('curriculum_year')
-        curriculum_year = (','.join(curriculum_year))
-        print(search, department, sex, curriculum_year)
-        # Data for filter department
-        # Return Data for template
-        if auth_user.user_type == -1 or auth_user.user_type == 0:
-            if search:
-                students_record = db.session.query(User, PredictionResult).join(PredictionResult).filter(User.user_type == 1).where(PredictionResult.result_id == request.form['user_id'])\
-                    .filter((User.first_name.like('%' + search + '%'))      |
-                    (User.middle_name.like('%' + search + '%'))     |
-                    (User.last_name.like('%' + search + '%'))       |
-                    (User.desired_career.like('%' + search + '%'))         |
-                    (User.contact_number.like('%' + search + '%'))  |
-                    (User.department.like('%' + search + '%'))    |
-                    (User.email.like('%' + search + '%')))\
-                    .paginate(page=page, per_page=8)# fetch user students only
-            elif department:
-                students_record = db.session.query(User, PredictionResult).join(PredictionResult).filter(User.user_type == 1).where(PredictionResult.result_id == request.form['user_id'])\
-                    .filter((User.department.like('%' + department + '%')))\
-                    .paginate(page=page, per_page=8)# fetch department only
-            elif sex:
-                students_record = db.session.query(User, PredictionResult).join(PredictionResult).filter(User.user_type == 1).where(PredictionResult.result_id == request.form['user_id'])\
-                    .filter((User.sex==sex))\
-                    .paginate(page=page, per_page=8)# fetch department only
-            elif curriculum_year:
-                students_record = db.session.query(User, PredictionResult).join(PredictionResult).filter(User.user_type == 1).where(PredictionResult.result_id == request.form['user_id'])\
-                    .filter((User.curriculum_year.like('%' + curriculum_year + '%')))\
-                    .paginate(page=page, per_page=8)# fetch department only
-            else:
-                students_record = db.session.query(User, PredictionResult).join(PredictionResult).filter(User.user_type == 1).paginate(page=page, per_page=8).where(PredictionResult.result_id == request.form['user_id']) # fetch user students only
-
-            auth_user=current_user
-            unapprove_account = User.query.filter_by(is_approve = False, user_type = 1).all()
-            count_unapprove = User.query.filter_by(is_approve = False, user_type = 1).count()
-        else:
-            return redirect(url_for('_auth.index'))
-
-        return render_template("Faculty/faculty_view.html", auth_user=auth_user, students_record=students_record, unapprove_account=unapprove_account, count_unapprove=count_unapprove, search=search, department=department, sex=sex, curriculum_year=curriculum_year)
-
 @_faculty.route('/faculty_dashboard', methods=['GET'])
 @login_required
 def faculty_dashboard():
+    
+    cs_students = User.query.filter(User.department.like('Computer Science'), User.user_type.like(1), User.is_approve.like(1)).count()
+    
+    it_students = User.query.filter(User.department.like('Information Technology'), User.user_type.like(1), User.is_approve.like(1)).count()
+    
+    first_SE = PredictionResult.query.filter(PredictionResult.chart_rank.like('Software Engineer / Programmer')).count()
+    
+    first_TSS = PredictionResult.query.filter(PredictionResult.chart_rank.like('Technical Support Specialist')).count()
+    
+    first_A = PredictionResult.query.filter(PredictionResult.chart_rank.like('Academician')).count()
+    
+    first_AA = PredictionResult.query.filter(PredictionResult.chart_rank.like('Administrative Assistant')).count()
     
     software_engineer_programmer = User.query.filter(User.desired_career.like('Software Engineer / Programmer'), User.user_type.like(1), User.is_approve.like(1)).count()
     
@@ -234,7 +189,9 @@ def faculty_dashboard():
                                software_engineer_programmer=json.dumps(software_engineer_programmer), technical_support_specialist=json.dumps(technical_support_specialist),
                                academician=json.dumps(academician), administrative_assistant=json.dumps(administrative_assistant),
                                male=json.dumps(male), female=json.dumps(female), registered_students=registered_students,
-                               unregistered_students=unregistered_students
+                               unregistered_students=unregistered_students, first_SE=json.dumps(first_SE), first_TSS=json.dumps(first_TSS),
+                               first_A=json.dumps(first_A), first_AA=json.dumps(first_AA), cs_students = json.dumps(cs_students),
+                               it_students = json.dumps(it_students)
                                )
 
 @_faculty.route('/view_results', methods=['POST'])
@@ -242,11 +199,11 @@ def faculty_dashboard():
 def view_results():
     auth_user=current_user
     page = request.args.get('page', 1, type=int)
-    view_pred_result = db.session.query(User, PredictionResult).filter(User.id == int(request.form['user_id'])).filter(PredictionResult.user_id == int(request.form['user_id'])).group_by(PredictionResult.result_id).paginate(page=page, per_page=8)
+    view_pred_result = db.session.query(User, PredictionResult).filter(User.id == int(request.form['user_id'])).filter(PredictionResult.user_id == int(request.form['user_id'])).group_by(PredictionResult.result_id).paginate(page=page, per_page=5)
 
     return render_template("Faculty/faculty_view.html", view_pred_result=view_pred_result, auth_user=auth_user)
 
-@_faculty.route('/delete_results', methods=['POST'])
+@_faculty.route('/delete_results', methods=['POST', 'GET'])
 @login_required
 def delete_results():
     try:
@@ -254,7 +211,7 @@ def delete_results():
         db.session.execute(delete_pred_result)
         db.session.commit()
         flash('History successfully deleted', category='success_deletion')
-        return redirect(url_for('.faculty_dashboard'))
+        return redirect(url_for('.view_results'))
     except:
         flash('System error cannot delete data', category='error')
         return redirect(url_for('.faculty_dashboard'))

@@ -343,7 +343,7 @@ def predict_CS():
             pred4 = "No Result" if fetch4 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred4 == '0' else "{}".format(f"{prediction[K-3]} : {fetch4}%")
             pred1 = "No Result" if fetch1 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred1 == '0' else "{}".format(f"{prediction[K]} : {fetch1}%")
             
-            new_pred = PredictionResult(pred2, pred4, pred3, pred1, current_user.id, date_created=date_predicted)
+            new_pred = PredictionResult(fetchPred2, pred2, pred4, pred3, pred1, current_user.id, date_created=date_predicted)
             db.session.add(new_pred)
             db.session.commit()
             

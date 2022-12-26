@@ -43,10 +43,11 @@ class User(db.Model, UserMixin):
 
 class PredictionResultSchema(marsh.Schema):
     class Meta:
-        fields = ('result_id', 'main_rank', 'sub_rank1', 'sub_rank2', 'sub_rank3', 'user_id', 'date_created')
+        fields = ('result_id', 'chart_rank', 'main_rank', 'sub_rank1', 'sub_rank2', 'sub_rank3', 'user_id', 'date_created')
 
 class PredictionResult(db.Model):
     result_id = db.Column(db.Integer, primary_key=True)
+    chart_rank = db.Column(db.String(255), nullable=False)
     main_rank = db.Column(db.String(255), nullable=False)
     sub_rank1 = db.Column(db.String(255), nullable=False)
     sub_rank2 = db.Column(db.String(255), nullable=False)
@@ -54,7 +55,8 @@ class PredictionResult(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
 
-    def __init__(self, main_rank, sub_rank1, sub_rank2, sub_rank3, user_id, date_created):
+    def __init__(self, chart_rank, main_rank, sub_rank1, sub_rank2, sub_rank3, user_id, date_created):
+        self.chart_rank = chart_rank
         self.main_rank = main_rank
         self.sub_rank1 = sub_rank1
         self.sub_rank2 = sub_rank2
