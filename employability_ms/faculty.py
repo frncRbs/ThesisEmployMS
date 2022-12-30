@@ -127,7 +127,7 @@ def faculty_dashboard():
     
     registered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(1)).count()
     
-    unregistered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(0)).count()
+    unregistered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(0)).count() 
     
     if request.method == 'GET':
         # Current Logged User
@@ -203,15 +203,21 @@ def view_results():
 
     return render_template("Faculty/faculty_view.html", view_pred_result=view_pred_result, auth_user=auth_user)
 
-@_faculty.route('/delete_results', methods=['POST', 'GET'])
+@_faculty.route('/delete_results', methods=["GET", "POST"])
 @login_required
 def delete_results():
+    auth_user=current_user
     try:
         delete_pred_result = delete(PredictionResult).where(PredictionResult.result_id == request.form['user_id'])
         db.session.execute(delete_pred_result)
+
+        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+        Val = predict_iter.predict_no
+        predict_iter.predict_no = (Val - 1)
         db.session.commit()
+
         flash('History successfully deleted', category='success_deletion')
-        return redirect(url_for('.view_results'))
+        return redirect(url_for('.faculty_dashboard'))
     except:
         flash('System error cannot delete data', category='error')
         return redirect(url_for('.faculty_dashboard'))

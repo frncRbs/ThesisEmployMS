@@ -203,7 +203,7 @@ def login_CS():
 @_route_cs.route('/signupCS', methods=['POST'])
 def signupCS():
     # try:
-        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Computer Science', (generate_password_hash(request.form['password'], method="sha256")), False, 1)
+        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Computer Science', (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
         db.session.add(new_user)
         db.session.commit()
         flash('Account successfully created', category='success_register')
@@ -238,126 +238,134 @@ def predict_CS_():
 @_route_cs.route("/predict_CS", methods=["GET", "POST"])
 def predict_CS():
     auth_user=current_user
-    if request.method== 'GET':
-        return render_template("CS/CSinputs.html")
-    else:
-        float_features = [float(x) for x in request.form.values()]
-        features = [np.array(float_features)]
-        new_Xdata_CS = X_CS.sample(4)
-        new_Ydata_CS = Cat_Y[new_Xdata_CS.index.values]
-        pred_CS = model_CS.predict(features)
-        suggestCS = model_CSsuggest.predict(pred_CS)
+    
+    if auth_user.predict_no <= 1:
+        if request.method== 'GET':
+            return render_template("CS/CSinputs.html")
+        else:
+            float_features = [float(x) for x in request.form.values()]
+            features = [np.array(float_features)]
+            new_Xdata_CS = X_CS.sample(4)
+            new_Ydata_CS = Cat_Y[new_Xdata_CS.index.values]
+            pred_CS = model_CS.predict(features)
+            suggestCS = model_CSsuggest.predict(pred_CS)
 
-        def recall(new_Ydata_CS, pred_CS, K):
-                act_set = set(new_Ydata_CS)
-                pred_set = set(pred_CS[:K])
-                result = round(len(act_set & pred_set) / float(len(act_set)), 2)
-                return result
-            
-        for K in range(0, 3):
-            
-            predCS = pred_CS[0]
-            actual = new_Ydata_CS
-            prediction = ["Software Engineer / Programmer", "Technical Support Specialist", "Academician", "Administrative Assistant"]
-            # random.shuffle(prediction)
-            prediction = [prediction.replace(predCS, '0')for prediction in prediction]
-            prediction.append(predCS)
-            
-            fetch1 = recall(actual, prediction, K)
-            if fetch1 == 1.0:
-                fetch1 = 100
-            elif fetch1 == 0.75:
-                fetch1 = 75
-            elif fetch1 == 0.67:
-                fetch1 = 67 
-            elif fetch1 == 0.5:
-                fetch1 = 50
-            elif fetch1 == 0.33:
-                fetch1 = 33
-            elif fetch1 == 0.25:
-                fetch1 = 25
-            else:
-                fetch1 = 0
+            def recall(new_Ydata_CS, pred_CS, K):
+                    act_set = set(new_Ydata_CS)
+                    pred_set = set(pred_CS[:K])
+                    result = round(len(act_set & pred_set) / float(len(act_set)), 2)
+                    return result
                 
-            fetch2 = recall(actual, prediction, K-1)
-            if fetch2 == 1.0:
-                fetch2 = 100
-            elif fetch2 == 0.75:
-                fetch2 = 75
-            elif fetch2 == 0.67:
-                fetch2 = 67
-            elif fetch2 == 0.5:
-                fetch2 = 50
-            elif fetch2 == 0.33:
-                fetch2 = 33
-            elif fetch2 == 0.25:
-                fetch2 = 25
-            else:
-                fetch2 = 0
+            for K in range(0, 3):
                 
-            fetch3 = recall(actual, prediction, K-2)
-            if fetch3 == 1.0:
-                fetch3 = 100
-            elif fetch3 == 0.75:
-                fetch3 = 75
-            elif fetch3 == 0.67:
-                fetch3 = 67
-            elif fetch3 == 0.5:
-                fetch3 = 50
-            elif fetch3 == 0.33:
-                fetch3 = 33
-            elif fetch3 == 0.25:
-                fetch3 = 25
-            else:
-                fetch3 = 0
+                predCS = pred_CS[0]
+                actual = new_Ydata_CS
+                prediction = ["Software Engineer / Programmer", "Technical Support Specialist", "Academician", "Administrative Assistant"]
+                # random.shuffle(prediction)
+                prediction = [prediction.replace(predCS, '0')for prediction in prediction]
+                prediction.append(predCS)
                 
-            fetch4 = recall(actual, prediction, K-3)
-            if fetch4 == 1.0:
-                fetch4 = 100
-            elif fetch4 == 0.75:
-                fetch4 = 75
-            elif fetch4 == 0.67:
-                fetch4 = 67
-            elif fetch4 == 0.5:
-                fetch4 = 50
-            elif fetch4 == 0.33:
-                fetch4 = 33
-            elif fetch4 == 0.25:
-                fetch4 = 25
-            else:
-                fetch4 = 0
+                fetch1 = recall(actual, prediction, K)
+                if fetch1 == 1.0:
+                    fetch1 = 100
+                elif fetch1 == 0.75:
+                    fetch1 = 75
+                elif fetch1 == 0.67:
+                    fetch1 = 67 
+                elif fetch1 == 0.5:
+                    fetch1 = 50
+                elif fetch1 == 0.33:
+                    fetch1 = 33
+                elif fetch1 == 0.25:
+                    fetch1 = 25
+                else:
+                    fetch1 = 0
+                    
+                fetch2 = recall(actual, prediction, K-1)
+                if fetch2 == 1.0:
+                    fetch2 = 100
+                elif fetch2 == 0.75:
+                    fetch2 = 75
+                elif fetch2 == 0.67:
+                    fetch2 = 67
+                elif fetch2 == 0.5:
+                    fetch2 = 50
+                elif fetch2 == 0.33:
+                    fetch2 = 33
+                elif fetch2 == 0.25:
+                    fetch2 = 25
+                else:
+                    fetch2 = 0
+                    
+                fetch3 = recall(actual, prediction, K-2)
+                if fetch3 == 1.0:
+                    fetch3 = 100
+                elif fetch3 == 0.75:
+                    fetch3 = 75
+                elif fetch3 == 0.67:
+                    fetch3 = 67
+                elif fetch3 == 0.5:
+                    fetch3 = 50
+                elif fetch3 == 0.33:
+                    fetch3 = 33
+                elif fetch3 == 0.25:
+                    fetch3 = 25
+                else:
+                    fetch3 = 0
+                    
+                fetch4 = recall(actual, prediction, K-3)
+                if fetch4 == 1.0:
+                    fetch4 = 100
+                elif fetch4 == 0.75:
+                    fetch4 = 75
+                elif fetch4 == 0.67:
+                    fetch4 = 67
+                elif fetch4 == 0.5:
+                    fetch4 = 50
+                elif fetch4 == 0.33:
+                    fetch4 = 33
+                elif fetch4 == 0.25:
+                    fetch4 = 25
+                else:
+                    fetch4 = 0
+                    
+                fetchPred1 = prediction[0]
+                fetchPred2 = prediction[-1]
+                fetchPred3 = prediction[-2]
+                fetchPred4 = prediction[-3]
                 
-            fetchPred1 = prediction[0]
-            fetchPred2 = prediction[-1]
-            fetchPred3 = prediction[-2]
-            fetchPred4 = prediction[-3]
-            
-            
-            '''
-                ADD NEW RECORD TO DATABASE
-            '''
-            date_predicted = datetime.now()
-            
-            pred2 = "No Result" if fetch2 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred2 == '0' else "{}".format(f"{prediction[K-1]} : {fetch2}%")
-            pred3 = "No Result" if fetch3 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred3 == '0' else "{}".format(f"{prediction[K-2]} : {fetch3}%"),
-            pred4 = "No Result" if fetch4 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred4 == '0' else "{}".format(f"{prediction[K-3]} : {fetch4}%")
-            pred1 = "No Result" if fetch1 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred1 == '0' else "{}".format(f"{prediction[K]} : {fetch1}%")
-            
-            new_pred = PredictionResult(fetchPred2, pred2, pred4, pred3, pred1, current_user.id, date_created=date_predicted)
-            db.session.add(new_pred)
-            db.session.commit()
-            
-            return render_template("/CS/CSPredRes.html", 
-                                prediction_text1 = "" if fetch1 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred1 == '0' else "{}".format(f"{prediction[K]} : {fetch1}%"), 
-                                prediction_text2 = "" if fetch2 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred2 == '0' else "{}".format(f"{prediction[K-1]} : {fetch2}%"),
-                                prediction_text3 = "" if fetch3 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred3 == '0' else "{}".format(f"{prediction[K-2]} : {fetch3}%"),
-                                prediction_text4 = "" if fetch4 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred4 == '0' else "{}".format(f"{prediction[K-3]} : {fetch4}%"),
-                                prediction_label1 = "" if fetch2 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 == 1.0 and fetchPred2 == "Administrative Assistant" else "{}".format(f"{prediction[K-1]} is a more likely career path for you. Congratulations!"),
-                                prediction_label3 = "{}".format(f"We apologize for the poor results caused by the anomaly our algorithm discovered when performing the prediction....") if fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 else "",
-                                prediction_label4 = "- In addition to the possibilities mentioned above, there is still a significant chance that you will be hired for your first job in one or more of the positions listed on the left side." if fetch1 > 0 and fetchPred1 !="0" or fetch3 > 0 and fetchPred3 !="0" or fetch4 > 0 and fetchPred4 !="0" or fetchPred2 == "Administrative Assistant" else "",
-                                job_label1 = "{}".format(f"{prediction[K-1]} = {fetch2}%") if fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == "Administrative Assistant" else "",
-                                job_label2 = "Predicted IT/CS Related Job(s)" if fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch1 == 0 and fetch2 <= 100 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" else "Predicted IT/CS Related Job(s)",
-                                label_text2 = "- To increase the likelihood of landing IT/CS-related jobs, the below courses on the left side must be improved." if fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == "Administrative Assistant" or fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == '0' or fetch1 == 0 and fetch2 <= 100 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" else "",
-                                course_suggestion2 = "{}".format(suggestCS.tolist()) if fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == "Administrative Assistant" or fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == '0' or fetch1 == 0 and fetch2 <= 100 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" else "",
-                                auth_user=auth_user
-                                )
+                
+                '''
+                    ADD NEW RECORD TO DATABASE
+                '''
+                date_predicted = datetime.now()
+                
+                pred2 = "No Result" if fetch2 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred2 == '0' else "{}".format(f"{prediction[K-1]} : {fetch2}%")
+                pred3 = "No Result" if fetch3 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred3 == '0' else "{}".format(f"{prediction[K-2]} : {fetch3}%"),
+                pred4 = "No Result" if fetch4 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred4 == '0' else "{}".format(f"{prediction[K-3]} : {fetch4}%")
+                pred1 = "No Result" if fetch1 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred1 == '0' else "{}".format(f"{prediction[K]} : {fetch1}%")
+                
+                new_pred = PredictionResult(fetchPred2, pred2, pred4, pred3, pred1, current_user.id, date_created=date_predicted)
+                db.session.add(new_pred)
+                
+                predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+                predict_iter.predict_no += 1
+                db.session.commit()
+                
+                return render_template("/CS/CSPredRes.html", 
+                                    prediction_text1 = "" if fetch1 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred1 == '0' else "{}".format(f"{prediction[K]} : {fetch1}%"), 
+                                    prediction_text2 = "" if fetch2 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred2 == '0' else "{}".format(f"{prediction[K-1]} : {fetch2}%"),
+                                    prediction_text3 = "" if fetch3 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred3 == '0' else "{}".format(f"{prediction[K-2]} : {fetch3}%"),
+                                    prediction_text4 = "" if fetch4 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred4 == '0' else "{}".format(f"{prediction[K-3]} : {fetch4}%"),
+                                    prediction_label1 = "" if fetch2 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 == 1.0 and fetchPred2 == "Administrative Assistant" else "{}".format(f"{prediction[K-1]} is a more likely career path for you. Congratulations!"),
+                                    prediction_label3 = "{}".format(f"We apologize for the poor results caused by the anomaly our algorithm discovered when performing the prediction....") if fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 else "",
+                                    prediction_label4 = "- In addition to the possibilities mentioned above, there is still a significant chance that you will be hired for your first job in one or more of the positions listed on the left side." if fetch1 > 0 and fetchPred1 !="0" or fetch3 > 0 and fetchPred3 !="0" or fetch4 > 0 and fetchPred4 !="0" or fetchPred2 == "Administrative Assistant" else "",
+                                    job_label1 = "{}".format(f"{prediction[K-1]} = {fetch2}%") if fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == "Administrative Assistant" else "",
+                                    job_label2 = "Predicted IT/CS Related Job(s)" if fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch1 == 0 and fetch2 <= 100 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" else "Predicted IT/CS Related Job(s)",
+                                    label_text2 = "- To increase the likelihood of landing IT/CS-related jobs, the below courses on the left side must be improved." if fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == "Administrative Assistant" or fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == '0' or fetch1 == 0 and fetch2 <= 100 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" else "",
+                                    course_suggestion2 = "{}".format(suggestCS.tolist()) if fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == "Administrative Assistant" or fetch2 <= 100 and fetch1 >= 0 and fetch3 >= 0 and fetch4 >= 0 and fetchPred2 == '0' or fetch1 == 0 and fetch2 <= 100 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" else "",
+                                    auth_user=auth_user
+                                    )
+    else:
+        flash('Sorry you cannot predict again, you have already met the prediction chances', category='error')
+        return redirect(url_for('.cs_dashboard'))

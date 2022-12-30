@@ -204,7 +204,6 @@ ul{
 /*BUTTON */
 .anchorCon{
   position: relative;
-  bottom: 30px;
   display: flex;
   column-gap: 35px;
   justify-content: center;
@@ -1241,7 +1240,7 @@ a{
           <!-- <button style="background: none; border: none" type="submit"><a href=""><h4 class="csDep"><i class="fas fa-bullseye"></i> Start Prediction</h4></a></button> -->
       </div>
     </div>
-
+  </form>
     <div>
       <button id="linkid" style="width: 0; display: none" data-popup-open="popupID"></button>
     </div>
@@ -1259,6 +1258,49 @@ a{
                 <div style="color: black;">
                   <center><h1><div style="color: green; display: inline; font-size: 40px">Please be informed</div></h1></center>
                   <center><p style="font-size: 20px">Select INC if the course is incomplete, or DRP if it has been dropped, unapproved, or authorized (UW or AW).</p></center>
+                  <div>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          {% if category == 'success_deletion' %}
+                            <div class="">
+                              <div class="">
+                                <div class="">
+                                  <div style="padding: 10%; color: rgb(47, 241, 47); font-size: 25px; font-weight: 700">
+                                    <center>
+                                      {{ message }}
+                                    </center>
+                                    <script>
+                                      window.setTimeout(function () {
+                                        window.location.reload();
+                                        }, 3000);
+                                    </script>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          {% elif category == 'error' %}
+                            <div class="">
+                              <div class="">
+                                <div class="">
+                                  <div style="padding: 10%; color: rgb(180, 29, 29); font-size: 25px; font-weight: 700">
+                                    <center>
+                                      {{ message }}
+                                    </center>
+                                    <script>
+                                      window.setTimeout(function () {
+                                        window.location.reload();
+                                      }, 3000);
+                                    </script>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+                  </div>
                   <center><p style="font-size: 20px">Proceed to (2nd Try) and enter the grades from the second attempt if the course has been dropped or is incomplete.</p></center>
                   <center><p style="font-size: 20px">INC = (0 / No Grade) and DRP / UW / AW = 5</p></center>
                 </div>
@@ -1268,8 +1310,6 @@ a{
         </div>
       </div>
     </div>
-
-  </form>
   <script>
     class Popup {
         classPopupShow =  'popup--show';

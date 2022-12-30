@@ -204,7 +204,6 @@ ul{
 /*BUTTON */
 .anchorCon{
   position: relative;
-  bottom: 30px;
   display: flex;
   column-gap: 35px;
   justify-content: center;
@@ -394,6 +393,52 @@ a{
 @media only screen and (max-width: 425px){
   /*Small smartphones [325px -> 425px]*/
 }
+ /* The Modal (background) */
+ .modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background: crimson; /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  border-radius: 10px;
+  float:left;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: rgb(219, 214, 214);
+  margin: 10% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius:10px;
+  width: 30%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user-info{
+  display:flex;
+  justify-content:center;
+
+}
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -405,19 +450,52 @@ a{
     <title>Information Technology Start</title>
 </head>
 <body>
-    
+          <!-- Modal -->
+				<!-- Trigger/Open The Modal -->
+
+				<!-- The Modal -->
+			<div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <center><h1><div style="color: green; display: inline; font-size: 40px">Student Profile</div></h1></center>
+            <div class="wrap" style="text-align: justify; margin-left: 40px; color: black;">
+              <div class="user-left">	
+                  <p style="font-size: 20px">Name: {{ auth_user.first_name }} {{ auth_user.middle_name }} {{ auth_user.last_name }}</p> 
+              </div>
+              <div class="user-right">
+                  <p style="font-size: 20px">Sex: {{ auth_user.sex }}</p>
+                  <p style="font-size: 20px">Email: {{ auth_user.email }}</p>
+                  <p style="font-size: 20px">Contact Number: {{ auth_user.contact_number }}</p>
+                  <p style="font-size: 20px">Department: {{ auth_user.department }}</p>
+                  <form action="/edit_profile" method="POST">
+                  <p style="font-size: 20px">Desired Career: 
+                      <select type="text" name="desiredCareer" id="drop-down" placeholder="Select career" required="">
+                        <option value="{{ auth_user.desired_career }}">{{ auth_user.desired_career }}</option>
+                        <option value="Software Engineer / Programmer">Software Engineer / Programmer</option>
+                        <option value="Technical Support Specialist">Technical Support Specialist</option>
+                        <option value="Academician">Academician</option>
+                        <option value="Administrative Assistant">Administrative Assistant</option>
+                      </select>
+                  </p>
+              </div>
+            </div>
+          <button type="submit">Save</button>
+        </form>
+    </div>
+  </div>
   <form action="{{ url_for('_route_it.predict_IT')}}"method="post">
 
     <div class="header">
       <div class="logo">
-        <h2>Welcome! <div style="color: white; display: inline">{{ auth_user.first_name }}</div></h2>
+        <h2>Welcome! <div style="color: white; display: inline"> {{ auth_user.first_name }}</div> <i class="fa fa-user-circle" aria-hidden="true" id="myBtn"></i></h2>
       </div>
     </div>
-
     <div class="grid-2">
         <br>
         <!-- <center><i><p>Note: If Incomplete select INC or else if Dropped select DRP respectively</p></i></center>
         <center><i><p>INC = (0 / No Grade) and DRP = 5</p></i></center> -->
+        
         <label for="username" style="position:relative; right:150px; color: black; margin-bottom: 20px; font-weight: bold; font-size: large">
           Basic Information :</label>
         <!-- <label class="custom-field two">
@@ -462,7 +540,7 @@ a{
                   </label>
                   <label class="custom-field two">
                       <select type="text" name="ComProg_1_2nd" style="width: 80px; margin-right: 40px" id="drop-down" placeholder="0" required="">
-                        <option value="0">Select</option>
+                        <option value="0">0</option>
                         <option value="0">No Grade</option>
                         <option value="0">INC</option>
                         <option value="5">DRP</option>
@@ -1177,6 +1255,49 @@ a{
                 <div style="color: black;">
                   <center><h1><div style="color: green; display: inline; font-size: 40px">Please be informed</div></h1></center>
                   <center><p style="font-size: 20px">Select INC if the course is incomplete, or DRP if it has been dropped, unapproved, or authorized (UW or AW).</p></center>
+                    <div>
+                      {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                          {% for category, message in messages %}
+                            {% if category == 'info' %}
+                              <div class="">
+                                <div class="">
+                                  <div class="">
+                                    <div style="padding: 10%; color: rgb(47, 241, 47); font-size: 25px; font-weight: 700">
+                                      <center>
+                                        {{ message }}
+                                      </center>
+                                      <script>
+                                        window.setTimeout(function () {
+                                          window.location.reload();
+                                          }, 3000);
+                                      </script>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            {% elif category == 'error' %}
+                              <div class="">
+                                <div class="">
+                                  <div class="">
+                                    <div style="padding: 10%; color: rgb(180, 29, 29); font-size: 25px; font-weight: 700">
+                                      <center>
+                                        {{ message }}
+                                      </center>
+                                      <script>
+                                        window.setTimeout(function () {
+                                          window.location.reload();
+                                        }, 3000);
+                                      </script>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            {% endif %}
+                          {% endfor %}
+                        {% endif %}
+                      {% endwith %}
+                    </div>
                   <center><p style="font-size: 20px">Proceed to (2nd Try) and enter the grades from the second attempt if the course has been dropped or is incomplete.</p></center>
                   <center><p style="font-size: 20px">INC = (0 / No Grade) and DRP / UW / AW = 5</p></center>
                 </div>
@@ -1188,6 +1309,34 @@ a{
     </div>
 
   </form>
+  <script>
+    // Modal
+    // Get the modal
+        var modal = document.getElementById("myModal");
+    
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+    
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+    
+        // When the user clicks on the button, open the modal
+          btn.onclick = function() {
+            modal.style.display = "block";
+        }
+    
+        // When the user clicks on <span> (x), close the modal
+          span.onclick = function() {
+            modal.style.display = "none";
+        }
+    
+          // When the user clicks anywhere outside of the modal, close it
+          window.onclick = function(event) {
+            if (event.target == modal) {
+          modal.style.display = "none";
+          }
+        }
+    </script>
   <script>
     class Popup {
         classPopupShow =  'popup--show';
