@@ -234,6 +234,18 @@ def predict_CS_():
         return render_template("CS/CSinputs.html")
     else:
         return redirect(url_for('_auth.index'))
+    
+@_route_cs.route("/edit_profile_cs", methods=['POST'])
+def edit_profile_cs():
+    auth_user=current_user
+    if auth_user.user_type == 1 and auth_user.department == "Computer Science":
+        career = User.query.filter_by(id=int(auth_user.id)).first()
+        career.desired_career = request.form['desiredCareer']
+        db.session.commit()
+        flash('Profile Successfully Modified', category='info')
+        return redirect(url_for('.cs_dashboard'))
+    else:
+        return redirect(url_for('_auth.index'))
 
 @_route_cs.route("/predict_CS", methods=["GET", "POST"])
 def predict_CS():

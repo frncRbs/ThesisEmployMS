@@ -211,18 +211,40 @@ def signupIT():
     except:
         flash('Invalid credentials', category='error')
         return redirect(url_for('.login_registerIT_view'))
-
-
+    
 @_route_it.route('/it_dashboard', methods=['GET'])
 @login_required
 def it_dashboard():
     auth_user=current_user
+    
     if auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Male":
-        sex = 0
-        return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex)
+        try:
+            # predResult = db.session.query(User, PredictionResult).filter(User.id == auth_user.user_id).filter(PredictionResult.user_id == auth_user.user_id).group_by(PredictionResult.result_id)
+            # predResult = PredictionResult.query.filter_by(result_id=auth_user.id).group_by(PredictionResult.result_id).all()
+            # fetchMainRank1 = predResult.main_rank
+            # fetchDatePred1 = predResult.date_created
+            # print(predResult)
+            sex = 0
+            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, 
+                                #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
+                                )
+        except:
+            flash('No prediction yet', category='info')
+            return redirect(url_for('.it_dashboard'))
     if auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Female":
-        sex = 1
-        return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex)
+        
+        try:
+            # predResult = db.session.query(User, PredictionResult).filter(User.id == auth_user.user_id).filter(PredictionResult.user_id == auth_user.user_id).group_by(PredictionResult.result_id)
+            # fetchMainRank1 = predResult.main_rank
+            # fetchDatePred1 = predResult.date_created
+            # print(predResult)
+            sex = 1
+            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, 
+                                #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
+                                   )
+        except:
+            flash('No prediction yet', category='info')
+            return redirect(url_for('.it_dashboard'))
     else:
         return redirect(url_for('_auth.index'))
     
@@ -236,8 +258,8 @@ def predict_IT_():
     else:
         return redirect(url_for('_auth.index'))
 
-@_route_it.route("/edit_profile", methods=['POST'])
-def edit_profile():
+@_route_it.route("/edit_profile_it", methods=['POST'])
+def edit_profile_it():
     auth_user=current_user
     if auth_user.user_type == 1 and auth_user.department == "Information Technology":
         career = User.query.filter_by(id=int(auth_user.id)).first()

@@ -412,7 +412,7 @@ a{
 /* Modal Content/Box */
 .modal-content {
   background-color: rgb(219, 214, 214);
-  margin: 10% auto; /* 15% from the top and centered */
+  margin: 5% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   border-radius:10px;
@@ -468,7 +468,7 @@ a{
                   <p style="font-size: 20px">Email: {{ auth_user.email }}</p>
                   <p style="font-size: 20px">Contact Number: {{ auth_user.contact_number }}</p>
                   <p style="font-size: 20px">Department: {{ auth_user.department }}</p>
-                  <form action="/edit_profile" method="POST">
+                  <form action="/edit_profile_it" method="POST">
                   <p style="font-size: 20px">Desired Career: 
                       <select type="text" name="desiredCareer" id="drop-down" placeholder="Select career" required="">
                         <option value="{{ auth_user.desired_career }}">{{ auth_user.desired_career }}</option>
@@ -478,6 +478,66 @@ a{
                         <option value="Administrative Assistant">Administrative Assistant</option>
                       </select>
                   </p>
+              </div>
+            </div>
+            <div style="display: flex;">
+              <div>
+                <!-- <table>
+                  <thead>
+                    <tr>
+                      <th>Full Name</th>
+                      <th>Sex</th>
+                      <th>Curriculum year</th>
+                      <th>Department</th>
+                      <th>Desired Career</th>
+                      <th>Prediction Results</th>
+                      <th>Date Predicted</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if predResult %}
+                      {% for user, pred_results in predResult.items %}
+                        <tr>
+                          <td>
+                            <span>{{ user.first_name }}</span>
+                            <span>{{ user.middle_name }}</span>
+                            <span>{{ user.last_name }} </span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px;">{{ user.sex }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px;">{{ user.curriculum_year }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px;">{{ user.department }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px;">{{ user.desired_career }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px;"> {{ pred_results.main_rank }} </span>
+                            <span style="margin: 5px;"> {{ pred_results.sub_rank1 }} </span>
+                            <span style="margin: 5px;"> {{ pred_results.sub_rank2 }} </span>
+                            <span style="margin: 5px;"> {{ pred_results.sub_rank3 }} </span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px;">{{ pred_results.date_created }}</span>
+                          </td>
+                          <td>
+                            <div>
+                              <form action="/delete_results" method="POST">
+                                <input type="hidden" name="user_id" value="{{ pred_results.result_id }}">
+                                <button type="submit" class="hybridBtn"> Delete</button>
+                              </form>
+                            </div>
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                  </tbody>
+                </table> -->
               </div>
             </div>
           <button type="submit">Save</button>
@@ -1336,7 +1396,7 @@ a{
           modal.style.display = "none";
           }
         }
-    </script>
+  </script>
   <script>
     class Popup {
         classPopupShow =  'popup--show';

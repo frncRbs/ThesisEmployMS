@@ -213,7 +213,7 @@ def delete_results():
 
         predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
         Val = predict_iter.predict_no
-        predict_iter.predict_no = (Val - 1)
+        predict_iter.predict_no = (int(Val) - 1)
         db.session.commit()
 
         flash('History successfully deleted', category='success_deletion')
