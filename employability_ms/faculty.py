@@ -203,17 +203,16 @@ def view_results():
 
     return render_template("Faculty/faculty_view.html", view_pred_result=view_pred_result, auth_user=auth_user)
 
-@_faculty.route('/delete_results', methods=["GET", "POST"])
+@_faculty.route('/delete_results', methods=['POST'])
 @login_required
 def delete_results():
-    auth_user=current_user
     try:
-        delete_pred_result = delete(PredictionResult).where(PredictionResult.result_id == request.form['user_id'])
+        delete_pred_result = delete(PredictionResult).where(PredictionResult.result_id == request.form['result_id'])
         db.session.execute(delete_pred_result)
-
-        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
-        Val = predict_iter.predict_no
-        predict_iter.predict_no = (int(Val) - 1)
+        
+        predict_iter = User.query.filter_by(id=int(request.form['user_id'])).first()
+        val = predict_iter.predict_no
+        predict_iter.predict_no = (val - 1)
         db.session.commit()
 
         flash('History successfully deleted', category='success_deletion')

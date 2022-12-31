@@ -760,8 +760,9 @@ nav .content .links{
                         -->
                         <div>
                           <form action="/delete_results" method="POST">
-                            <input type="hidden" name="user_id" value="{{ pred_results.result_id }}">
-                            <button type="submit" class="hybridBtn"> Delete</button>
+                            <input type="hidden" name="result_id" value="{{ pred_results.result_id }}">
+                            <input type="hidden" name="user_id" value="{{ pred_results.user_id }}">
+                            <button type="submit" class="hybridBtn" id="hybridBtn"> Delete</button>
                           </form>
                         </div>
                       </td>
