@@ -219,13 +219,11 @@ def it_dashboard():
     
     if auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Male":
         try:
-            # predResult = db.session.query(User, PredictionResult).filter(User.id == auth_user.user_id).filter(PredictionResult.user_id == auth_user.user_id).group_by(PredictionResult.result_id)
-            # predResult = PredictionResult.query.filter_by(result_id=auth_user.id).group_by(PredictionResult.result_id).all()
-            # fetchMainRank1 = predResult.main_rank
-            # fetchDatePred1 = predResult.date_created
-            # print(predResult)
             sex = 0
-            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, 
+            predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+            remaining_attempt = int(predict_iter.predict_no)
+            
+            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt
                                 #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
                                 )
         except:
@@ -239,7 +237,10 @@ def it_dashboard():
             # fetchDatePred1 = predResult.date_created
             # print(predResult)
             sex = 1
-            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, 
+            predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+            remaining_attempt = int(predict_iter.predict_no)
+            
+            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt
                                 #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
                                    )
         except:

@@ -218,10 +218,16 @@ def cs_dashboard():
     auth_user=current_user
     if auth_user.user_type == 1 and auth_user.department == "Computer Science" and auth_user.sex == "Male":
         sex = 0
-        return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex)
+        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+        remaining_attempt = int(predict_iter.predict_no)
+        
+        return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt)
     elif auth_user.user_type == 1 and auth_user.department == "Computer Science" and auth_user.sex == "Female":
         sex = 1
-        return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex)
+        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+        remaining_attempt = int(predict_iter.predict_no)
+        
+        return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt)
     else:
         return redirect(url_for('_auth.index'))
     

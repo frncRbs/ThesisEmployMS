@@ -413,7 +413,7 @@ a{
 /* Modal Content/Box */
 .modal-content {
   background-color: rgb(219, 214, 214);
-  margin: 5% auto; /* 15% from the top and centered */
+  margin: 10% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   border-radius:10px;
@@ -461,6 +461,7 @@ a{
               <p style="font-size: 20px">Name: {{ auth_user.first_name }} {{ auth_user.middle_name }} {{ auth_user.last_name }}</p> 
           </div>
           <div class="user-right">
+              <p style="font-size: 20px">Prediction Attempt : {{ remaining_attempt }} out of 2</p>
               <p style="font-size: 20px">Sex: {{ auth_user.sex }}</p>
               <p style="font-size: 20px">Email: {{ auth_user.email }}</p>
               <p style="font-size: 20px">Contact Number: {{ auth_user.contact_number }}</p>
