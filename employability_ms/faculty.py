@@ -125,6 +125,12 @@ def faculty_dashboard():
         
     female = User.query.filter(User.sex=='Female', User.user_type.like(1), User.is_approve.like(1)).count()
     
+    shiftee = User.query.filter(User.program=='Shiftee', User.user_type.like(1), User.is_approve.like(1)).count()
+    
+    transferee = User.query.filter(User.program=='Transferee', User.user_type.like(1), User.is_approve.like(1)).count()
+        
+    regular = User.query.filter(User.program=='Regular', User.user_type.like(1), User.is_approve.like(1)).count()
+    
     registered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(1)).count()
     
     unregistered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(0)).count() 
@@ -140,6 +146,9 @@ def faculty_dashboard():
         
         department = request.args.getlist('department')
         department = (','.join(department))
+        
+        program = request.args.getlist('program')
+        program = (','.join(program))
         
         sex = request.args.getlist('sex')
         sex = (','.join(sex))
@@ -164,6 +173,10 @@ def faculty_dashboard():
                 students_record = db.session.query(User).filter(User.is_approve == 1, User.department != 'Faculty')\
                     .filter((User.department.like('%' + department + '%')))\
                     .paginate(page=page, per_page=5)# fetch department only
+            elif program:
+                students_record = db.session.query(User).filter(User.is_approve == 1, User.department != 'Faculty')\
+                    .filter((User.program.like('%' + program + '%')))\
+                    .paginate(page=page, per_page=5)# fetch program only
             elif sex:
                 students_record = db.session.query(User).filter(User.is_approve == 1, User.department != 'Faculty')\
                     .filter((User.sex==sex))\
@@ -181,27 +194,39 @@ def faculty_dashboard():
         else:
             return redirect(url_for('_auth.index'))
         
-        return render_template("Faculty/facultyEnd.html", auth_user=auth_user, 
-                               students_record=students_record, 
-                               unapprove_account=unapprove_account, 
-                               count_unapprove=count_unapprove, search=search, 
-                               department=department, sex=sex, curriculum_year=curriculum_year, 
-                               software_engineer_programmer=json.dumps(software_engineer_programmer), technical_support_specialist=json.dumps(technical_support_specialist),
-                               academician=json.dumps(academician), administrative_assistant=json.dumps(administrative_assistant),
-                               male=json.dumps(male), female=json.dumps(female), registered_students=registered_students,
-                               unregistered_students=unregistered_students, first_SE=json.dumps(first_SE), first_TSS=json.dumps(first_TSS),
-                               first_A=json.dumps(first_A), first_AA=json.dumps(first_AA), cs_students = json.dumps(cs_students),
-                               it_students = json.dumps(it_students)
-                               )
+    else:  
+        return redirect(url_for('_auth.index'))
+    
+    return render_template("Faculty/facultyEnd.html", auth_user=auth_user, 
+                            students_record=students_record, 
+                            unapprove_account=unapprove_account, 
+                            count_unapprove=count_unapprove, search=search, 
+                            department=department, sex=sex, curriculum_year=curriculum_year, 
+                            software_engineer_programmer=json.dumps(software_engineer_programmer), technical_support_specialist=json.dumps(technical_support_specialist),
+                            academician=json.dumps(academician), administrative_assistant=json.dumps(administrative_assistant),
+                            male=json.dumps(male), female=json.dumps(female), registered_students=registered_students,
+                            unregistered_students=unregistered_students, first_SE=json.dumps(first_SE), first_TSS=json.dumps(first_TSS),
+                            first_A=json.dumps(first_A), first_AA=json.dumps(first_AA), cs_students = json.dumps(cs_students),
+                            it_students = json.dumps(it_students), shiftee = json.dumps(shiftee), transferee = json.dumps(transferee),
+                            regular = json.dumps(regular)
+                            )
 
 @_faculty.route('/view_results', methods=['POST'])
 @login_required
 def view_results():
-    auth_user=current_user
-    page = request.args.get('page', 1, type=int)
-    view_pred_result = db.session.query(User, PredictionResult).filter(User.id == int(request.form['user_id'])).filter(PredictionResult.user_id == int(request.form['user_id'])).group_by(PredictionResult.result_id).paginate(page=page, per_page=5)
-
-    return render_template("Faculty/faculty_view.html", view_pred_result=view_pred_result, auth_user=auth_user)
+    try:
+        auth_user=current_user
+        page = request.args.get('page', 1, type=int)
+        
+        view_pred_result = db.session.query(User, PredictionResult).filter(User.id == int(request.form['user_id'])).filter(PredictionResult.user_id == int(request.form['user_id'])).group_by(PredictionResult.result_id).paginate(page=page, per_page=5)
+        
+        return render_template("Faculty/faculty_view.html", view_pred_result=view_pred_result, auth_user=auth_user)
+    
+    except:
+        flash('System error cannot delete data', category='error')
+        return redirect(url_for('.faculty_dashboard'))
+    
+    
 
 @_faculty.route('/delete_results', methods=['POST'])
 @login_required
@@ -279,7 +304,7 @@ def approve_account():
 @login_required
 def signup_Superadmin():
     try:
-        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], '-------', request.form['contact_number'], request.form['email'], 'Faculty',  'Faculty', (generate_password_hash(request.form['password'], method="sha256")), True, 0)
+        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], '-------', request.form['contact_number'], request.form['email'], 'Faculty',  'Faculty', 'Regular', (generate_password_hash(request.form['password'], method="sha256")), True, 0)
         db.session.add(new_user)
         db.session.commit()
         flash('Account successfully created', category='success_register')

@@ -202,15 +202,15 @@ def login_CS():
 
 @_route_cs.route('/signupCS', methods=['POST'])
 def signupCS():
-    # try:
-        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Computer Science', (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
+    try:
+        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Computer Science', request.form['program'], (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
         db.session.add(new_user)
         db.session.commit()
         flash('Account successfully created', category='success_register')
         return redirect(url_for('.login_registerCS_view'))
-    # except:
-    #     flash('Invalid credentials', category='error')
-    #     return redirect(url_for('.login_registerCS_view'))
+    except:
+         flash('Invalid credentials', category='error')
+         return redirect(url_for('.login_registerCS_view'))
     
 @_route_cs.route('/cs_dashboard', methods=['GET'])
 @login_required

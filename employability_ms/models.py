@@ -7,7 +7,7 @@ from marshmallow import Schema, fields
 
 class UserSchema(marsh.Schema):
     class Meta:
-        fields = ('id', 'first_name', 'middle_name', 'last_name', 'sex', 'curriculum_year', 'contact_number', 'email', 'desired_career', 'department', 'password', 'is_approve', 'predict_no', 'user_type')
+        fields = ('id', 'first_name', 'middle_name', 'last_name', 'sex', 'curriculum_year', 'contact_number', 'email', 'desired_career', 'department', 'program', 'password', 'is_approve', 'predict_no', 'user_type')
     
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,7 +19,8 @@ class User(db.Model, UserMixin):
     contact_number = db.Column(db.String(15), nullable=False)
     email = db.Column(db.String(150), unique=True, nullable=False)
     desired_career = db.Column(db.String(150), nullable=False) 
-    department = db.Column(db.String(150), nullable=False) 
+    department = db.Column(db.String(150), nullable=False)
+    program = db.Column(db.String(150), nullable=False)  
     password = db.Column(db.String(255), nullable=False)
     is_approve = db.Column(db.Boolean, nullable=False, default=0)
     predict_no = db.Column(db.SmallInteger, nullable=False, default=1)
@@ -27,7 +28,7 @@ class User(db.Model, UserMixin):
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
     pred_results = db.relationship('PredictionResult', backref='user', uselist=False)
 
-    def __init__(self, first_name, middle_name, last_name, sex, curriculum_year, contact_number, email, desired_career, department, password, is_approve, predict_no, user_type):
+    def __init__(self, first_name, middle_name, last_name, sex, curriculum_year, contact_number, email, desired_career, department, program, password, is_approve, predict_no, user_type):
         self.first_name = first_name
         self.middle_name = middle_name
         self.last_name = last_name
@@ -37,11 +38,11 @@ class User(db.Model, UserMixin):
         self.email = email
         self.desired_career = desired_career 
         self.department = department 
+        self.program = program
         self.password = password
         self.is_approve = is_approve
         self.predict_no = predict_no
         self.user_type = user_type
-
 
 class PredictionResultSchema(marsh.Schema):
     class Meta:

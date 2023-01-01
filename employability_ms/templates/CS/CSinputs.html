@@ -545,7 +545,7 @@ a{
   <form action="{{ url_for('_route_cs.predict_CS')}}"method="post">
     <div class="header">
       <div class="logo">
-        <h2>Welcome! <div style="color: white; display: inline">{{ auth_user.first_name }}</div> <i class="fa fa-user-circle" aria-hidden="true" id="myBtn"></i></h2>
+        <h2>Welcome! <div style="color: white; display: inline; cursor: pointer; text-decoration: underline" id="myBtnName">{{ auth_user.first_name }}</div> <i class="fa fa-user-circle" aria-hidden="true" id="myBtn" style="cursor: pointer;"></i></h2>
       </div>
     </div>
     <div class="grid-2">
@@ -1454,6 +1454,7 @@ a{
       
           // Get the button that opens the modal
           var btn = document.getElementById("myBtn");
+          var btnName = document.getElementById("myBtnName");
       
           // Get the <span> element that closes the modal
           var span = document.getElementsByClassName("close")[0];
@@ -1461,6 +1462,9 @@ a{
           // When the user clicks on the button, open the modal
             btn.onclick = function() {
               modal.style.display = "block";
+          }
+            btnName.onclick = function() {
+            modal.style.display = "block";
           }
       
           // When the user clicks on <span> (x), close the modal

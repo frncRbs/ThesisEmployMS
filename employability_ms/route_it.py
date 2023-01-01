@@ -203,7 +203,7 @@ def login_IT():
 @_route_it.route('/signupIT', methods=['POST'])
 def signupIT():
     try:
-        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Information Technology', (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
+        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Information Technology', request.form['program'], (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
         db.session.add(new_user)
         db.session.commit()
         flash('Account successfully created', category='success_register')
@@ -216,39 +216,57 @@ def signupIT():
 @login_required
 def it_dashboard():
     auth_user=current_user
+    students_record = db.session.query(PredictionResult).filter(PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id)
     
     if auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Male":
-        try:
-            sex = 0
-            predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
-            remaining_attempt = int(predict_iter.predict_no)
-            
-            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt
-                                #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
-                                )
-        except:
-            flash('No prediction yet', category='info')
-            return redirect(url_for('.it_dashboard'))
-    if auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Female":
         
-        try:
-            # predResult = db.session.query(User, PredictionResult).filter(User.id == auth_user.user_id).filter(PredictionResult.user_id == auth_user.user_id).group_by(PredictionResult.result_id)
-            # fetchMainRank1 = predResult.main_rank
-            # fetchDatePred1 = predResult.date_created
-            # print(predResult)
-            sex = 1
-            predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
-            remaining_attempt = int(predict_iter.predict_no)
+        if request.method == 'GET':
+            try:
+                sex = 0
+                predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+                remaining_attempt = int(predict_iter.predict_no)
+                
+                students_record = db.session.query(PredictionResult).filter(PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id)
             
-            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt
-                                #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
-                                   )
-        except:
+                print(students_record)
+                return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt, 
+                                    students_record=students_record
+                                    #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
+                                    )
+            except:
+                flash('No prediction yet', category='info')
+                return redirect(url_for('.it_dashboard'))
+        else:
             flash('No prediction yet', category='info')
             return redirect(url_for('.it_dashboard'))
-    else:
-        return redirect(url_for('_auth.index'))
     
+    elif auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Female":
+        
+        if request.method == 'GET':
+            try:
+                sex = 0
+                predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+                remaining_attempt = int(predict_iter.predict_no)
+
+                students_record = db.session.query(PredictionResult).filter(PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id)
+            
+                print(students_record)
+                return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt, 
+                                    students_record=students_record
+                                    #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
+                                    )
+            except:
+                flash('No prediction yet', category='info')
+                return redirect(url_for('.it_dashboard'))
+        else:
+            flash('No prediction yet', category='info')
+            return redirect(url_for('.it_dashboard'))
+        
+    return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt, 
+                                    students_record=students_record
+                                    #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
+                                    )
+ 
     # return render_template("IT/ITinputs.html", auth_user=auth_user)
 
 @_route_it.route("/ITinputs_", methods=['GET'])

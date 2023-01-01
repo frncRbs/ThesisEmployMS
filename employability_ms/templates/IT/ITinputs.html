@@ -481,75 +481,45 @@ a{
                   </p>
               </div>
             </div>
-            <div style="display: flex;">
-              <div>
-                <!-- <table>
-                  <thead>
-                    <tr>
-                      <th>Full Name</th>
-                      <th>Sex</th>
-                      <th>Curriculum year</th>
-                      <th>Department</th>
-                      <th>Desired Career</th>
-                      <th>Prediction Results</th>
-                      <th>Date Predicted</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% if predResult %}
-                      {% for user, pred_results in predResult.items %}
-                        <tr>
-                          <td>
-                            <span>{{ user.first_name }}</span>
-                            <span>{{ user.middle_name }}</span>
-                            <span>{{ user.last_name }} </span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px;">{{ user.sex }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px;">{{ user.curriculum_year }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px;">{{ user.department }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px;">{{ user.desired_career }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px;"> {{ pred_results.main_rank }} </span>
-                            <span style="margin: 5px;"> {{ pred_results.sub_rank1 }} </span>
-                            <span style="margin: 5px;"> {{ pred_results.sub_rank2 }} </span>
-                            <span style="margin: 5px;"> {{ pred_results.sub_rank3 }} </span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px;">{{ pred_results.date_created }}</span>
-                          </td>
-                          <td>
-                            <div>
-                              <form action="/delete_results" method="POST">
-                                <input type="hidden" name="user_id" value="{{ pred_results.result_id }}">
-                                <button type="submit" class="hybridBtn"> Delete</button>
-                              </form>
-                            </div>
-                          </td>
-                        </tr>
-                      {% endfor %}
-                    {% endif %}
-                  </tbody>
-                </table> -->
-              </div>
-            </div>
           <button type="submit">Save</button>
         </form>
+        <div style="display: flex;">
+          <div>
+            <table>
+              <thead>
+                <tr>
+                  <th style="text-align: center">Prediction</th>
+                  <th style="text-align: center">Curriculum year</th>
+                  <th style="text-align: center">Date Registered</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% if students_record %}
+                  {% for pred_result in students_record.items %}
+                    <tr>
+                      <td>
+                        <span>{{ pred_result.main_rank }}</span>
+                        <span>{{ pred_result.sub_rank1 }}</span>
+                        <span>{{ pred_result.sub_rank2 }}</span>
+                        <span>{{ pred_result.sub_rank3 }}</span>
+                      </td>
+                      <td>
+                        <span style="margin: 5px">{{ pred_result.date_created }}</span>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </div>
     </div>
   </div>
   <form action="{{ url_for('_route_it.predict_IT')}}"method="post">
 
     <div class="header">
       <div class="logo">
-        <h2>Welcome! <div style="color: white; display: inline"> {{ auth_user.first_name }}</div> <i class="fa fa-user-circle" aria-hidden="true" id="myBtn"></i></h2>
+        <h2>Welcome! <div style="color: white; display: inline; cursor: pointer; text-decoration: underline" id="myBtnName"> {{ auth_user.first_name }}</div> <i class="fa fa-user-circle" aria-hidden="true" id="myBtn" style="cursor: pointer;"></i></h2>
       </div>
     </div>
     <div class="grid-2">
@@ -1377,6 +1347,7 @@ a{
     
         // Get the button that opens the modal
         var btn = document.getElementById("myBtn");
+        var btnName = document.getElementById("myBtnName");
     
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
@@ -1384,6 +1355,9 @@ a{
         // When the user clicks on the button, open the modal
           btn.onclick = function() {
             modal.style.display = "block";
+        }
+          btnName.onclick = function() {
+          modal.style.display = "block";
         }
     
         // When the user clicks on <span> (x), close the modal

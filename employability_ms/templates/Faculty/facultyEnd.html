@@ -803,12 +803,20 @@ nav .content .links{
         <!-- HERO SECTION -->
         <div>
           
-          <div style="width: 43%; height: auto; position: absolute; left: 40%; bottom: 72%; display: flex; background: rgba(255, 255, 255, 0.404)">
+          <div style="width: 50%; height: auto; position: absolute; left: 40%; bottom: 72%; display: flex; background: rgba(255, 255, 255, 0.404)">
             <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
               <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
                 <option value="">Department</option>
                 <option value="information technology">Information Technology</option>
                 <option value="computer science">Computer Science</option>
+              </select>
+            </form>
+            <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
+              <select style="display: inline; z-index: 0" type="text" name="program" id="drop-down" placeholder="Program" required="" onchange="this.form.submit()">
+                <option value="">Program</option>
+                <option value="Shiftee">Shiftee</option>
+                <option value="Transferee">Transferee</option>
+                <option value="Regular">Regular</option>
               </select>
             </form>
             <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
@@ -886,8 +894,10 @@ nav .content .links{
                       <th style="text-align: center">Sex</th>
                       <th style="text-align: center">Curriculum year</th>
                       <th style="text-align: center">Department</th>
+                      <th style="text-align: center">Program</th>
                       <th style="text-align: center">Contact Number</th>
                       <th style="text-align: center">Email</th>
+                      <th style="text-align: center">Number of Prediction</th>
                       <th style="text-align: center">Date Registered</th>
                       <!-- <th style="text-align: center">Desired Career</th>
                       <th style="text-align: center">Prediction Results</th>
@@ -914,10 +924,16 @@ nav .content .links{
                             <span style="margin: 5px">{{ user.department }}</span>
                           </td>
                           <td>
+                            <span style="margin: 5px">{{ user.program }}</span>
+                          </td>
+                          <td>
                             <span style="margin: 5px">{{ user.contact_number }}</span>
                           </td>
                           <td>
                             <span style="margin: 5px">{{ user.email }}</span>
+                          </td>
+                          <td>
+                            <span style="margin: 5px">{{ user.predict_no }}</span>
                           </td>
                           <td>
                             <span style="margin: 5px">{{ user.date_created }}</span>
@@ -987,11 +1003,7 @@ nav .content .links{
       <center><div><h1>Data Visualization</h1></div></center>
       <hr>
       <div style="display: flex; flex-direction: row; align-items: center">
-        <div style="display: flex; flex-direction: row; width: 100%; justify-content: flex-end">
-            <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px; border-radius: 10px" ><canvas id="mypieChartDep"></canvas></div>
-            <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px; border-radius: 10px" ><canvas id="mypieChartSex"></canvas></div>
-        </div>
-        <div style="display: flex; flex-direction: column; width: 100%; justify-content: center">
+        <div style="display: flex; flex-direction: column; width: 50%; justify-content: center">
           <div style="width: 90%; height: 150px; text-align: center; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; border-radius: 10px; margin: 20px">
             <h2>Number of Registered Student</h2>
             <h1>{{ registered_students }}</h1>
@@ -1000,6 +1012,11 @@ nav .content .links{
             <h2>Number of Pending Student Account</h2>
             <h1>{{ unregistered_students }}</h1>
           </div>
+        </div>
+        <div style="display: flex; flex-direction: row; width: 100%; justify-content: flex-end">
+            <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px; border-radius: 10px" ><canvas id="mypieChartDep"></canvas></div>
+            <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px; border-radius: 10px" ><canvas id="mypieChartSex"></canvas></div>
+            <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px; border-radius: 10px" ><canvas id="mypieChartProgram"></canvas></div>
         </div>
       </div>
       <div style="margin: 10px; display: flex; justify-content: center">
@@ -1058,13 +1075,16 @@ nav .content .links{
         administrative_assistant = JSON.parse({{ administrative_assistant  | tojson}})
         male = JSON.parse({{ male  | tojson}})
         female = JSON.parse({{ female  | tojson}})
+        shiftee = JSON.parse({{ shiftee  | tojson}})
+        transferee = JSON.parse({{ transferee  | tojson}})
+        regular = JSON.parse({{ regular  | tojson}})
 
         new Chart(ctx, {
           type: 'bar',
           data: {
             labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
             datasets: [{
-              label: '# of Students Desired Career',
+              label: '# of Student Desired Career',
               data: [software_engineer_programmer, technical_support_specialist, academician, administrative_assistant],
               borderWidth: 1
             }]
@@ -1083,7 +1103,7 @@ nav .content .links{
           data: {
             labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
             datasets: [{
-              label: '# of Overall Predictions',
+              label: '# of Prediction',
               data: [first_SE, first_TSS, first_A, first_AA],
               borderWidth: 1,
             }]
@@ -1158,7 +1178,7 @@ nav .content .links{
         options: {
                 title: {
                     display: true,
-                        text: "Male and Female",
+                        text: "Information Technology and Computer Science",
                             fontSize: 20,
                             fontColor: "white"
                 },
@@ -1176,16 +1196,56 @@ nav .content .links{
         }
     })
 
+    let pieChartProgram = new Chart(mypieChartProgram, {
+      type: 'pie',
+      data: {
+      labels: ['Shiftee', 'Transferee', 'Regular'],
+          datasets: [{
+              label: "# of Student",
+              data: [shiftee, transferee, regular],
+              backgroundColor: ['#5DA5DA', '#FAA43A', '#55a82f',
+                  '#B276B2', '#E16851', '#FB8267'],
+
+              fontColor: "white",
+              borderWidth: 1,
+              hoverBorderColor: "black",
+              hoverBorderWidth: 2,
+              hoverBackgroundColor: 'rgba(154, 245, 140)',
+              pointHoverRadius: 5
+          }],
+      },
+      options: {
+              title: {
+                  display: true,
+                      text: "Shiftee, Transferee and Regular",
+                          fontSize: 20,
+                          fontColor: "white"
+              },
+              legend: {
+                  position: "right",
+                      labels: {
+                      fontColor: "white"
+                  },
+                  display: true,
+              },
+
+              elements: {
+                  hitRadius: 3,
+              }
+      }
+  })
+
+
     </script>
-    <!-- <style>
+    <style>
       .anchorCon{
+        background: #60BD68;
         background: #55a82f;
-        background: #979994;
         background: #912121;
         background: #B276B2;
         background: #E16851;
         background: #FB8267;
       }
-    </style> -->
+    </style>
 </body>
 </html>
