@@ -439,6 +439,60 @@ a{
   justify-content:center;
 
 }
+/*-- Tooltip Start --*/
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background: linear-gradient(to bottom, #497a25b9, #4a852ee8, #497a25b9);
+  color: #fff;
+  font-size: medium;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  text-decoration: none;
+  /* Position the tooltip */
+  position: absolute;
+  right: 20px;
+  top: 50px;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+/* Tooltip Name */
+
+.tooltipName {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltipName .tooltipNametext {
+  visibility: hidden;
+  width: 120px;
+  background: linear-gradient(to bottom, #497a25b9, #4a852ee8, #497a25b9);
+  color: #fff;
+  font-size: medium;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  text-decoration: none;
+  /* Position the tooltipName */
+  position: absolute;
+  right: 20px;
+  top: 60px;
+  z-index: 1;
+}
+
+.tooltipName:hover .tooltipNametext {
+  visibility: visible;
+}
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -519,7 +573,8 @@ a{
 
     <div class="header">
       <div class="logo">
-        <h2>Welcome! <div style="color: white; display: inline; cursor: pointer; text-decoration: underline" id="myBtnName"> {{ auth_user.first_name }}</div> <i class="fa fa-user-circle" aria-hidden="true" id="myBtn" style="cursor: pointer;"></i></h2>
+        <h2>Welcome! <div style="color: white; display: inline; cursor: pointer; text-decoration: underline" id="myBtnName" class="tooltipName">{{ auth_user.first_name }}<span class="tooltipNametext">Show Profile</span></div> <i class="fa fa-user-circle" aria-hidden="true" id="myBtn" style="cursor: pointer;"></i> <div onclick="window.location='/logout'" class="tooltip" style="display: inline-block; position: relative; left: 520px; cursor: pointer">
+          <span class="tooltiptext">Logout</span><i class="fa fa-undo" aria-hidden="true"></i></div></h2>
       </div>
     </div>
     <div class="grid-2">
@@ -1263,7 +1318,7 @@ a{
         </label>
       </div>
           <div class="anchorCon">
-            <button type="button" onclick="window.location='/logout'"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Home</button>
+            <button type="button" onclick="window.location='/'"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Home</button>
             <button type="submit"><i class="fas fa-bullseye"></i> Start Prediction</button>
             <!-- <a href="/logout"><h4 class="itDep"><i class="fas fa-home"></i> Home</h4></a> -->
             <!-- <button style="background: none; border: none" type="submit"><a href=""><h4 class="csDep"><i class="fas fa-bullseye"></i> Start Prediction</h4></a></button> -->
