@@ -309,6 +309,33 @@ button:active {
   align-items: center;
   display: inline-block;
 }
+/* Tooltip Name */
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background: linear-gradient(to bottom, #497a25b9, #4a852ee8, #497a25b9);
+  color: #fff;
+  font-size: medium;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  text-decoration: none;
+  /* Position the tooltip */
+  position: absolute;
+  left: 20px;
+  bottom: 30px;
+  z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
 </style>
 <hr>  
   <main>
@@ -331,7 +358,8 @@ button:active {
       </div>
       <div class="left">
           <div class="center-div">
-            <div class="infoIT"><button class="btn" data-popup-open="popupID" >?</button></div>
+            <div class="tooltip"><button class="btn" data-popup-open="popupID" >?</button>
+            <span class="tooltiptext">Career Information</span></div>
             <hr>
             
             <center><p class="job_label2">{{ job_label2 }}</p></center>

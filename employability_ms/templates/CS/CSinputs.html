@@ -413,7 +413,7 @@ a{
 /* Modal Content/Box */
 .modal-content {
   background-color: rgb(219, 214, 214);
-  margin: 10% auto; /* 15% from the top and centered */
+  margin: 8% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   border-radius:10px;
@@ -495,6 +495,7 @@ a{
 .tooltipName:hover .tooltipNametext {
   visibility: visible;
 }
+
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -522,87 +523,35 @@ a{
               <p style="font-size: 20px">Contact Number: {{ auth_user.contact_number }}</p>
               <p style="font-size: 20px">Department: {{ auth_user.department }}</p>
               <form action="/edit_profile_cs" method="POST">
-              <p style="font-size: 20px">Desired Career: 
-                  <select type="text" name="desiredCareer" id="drop-down" placeholder="Select career" required="">
-                    <option value="{{ auth_user.desired_career }}">{{ auth_user.desired_career }}</option>
-                    <option value="Software Engineer / Programmer">Software Engineer / Programmer</option>
-                    <option value="Technical Support Specialist">Technical Support Specialist</option>
-                    <option value="Academician">Academician</option>
-                    <option value="Administrative Assistant">Administrative Assistant</option>
-                  </select>
+              <p style="font-size: 20px">Desired Career:
+                <select style="border-radius: 0;
+                              border-top-left-radius: 3px;
+                              border-top-right-radius: 3px;
+                              background:
+                  linear-gradient(90deg, green, green) center bottom/0 0.30em no-repeat,
+                  linear-gradient(90deg, #ccc, #ccc) left bottom/100% 0.30em no-repeat,
+                  linear-gradient(90deg, #fafafa, #fafafa) left bottom/100% no-repeat;
+                transition: background-size 0.3s ease;
+                padding: 5px" type="text" name="desiredCareer" id="drop-down" placeholder="Select career" required="">
+                  <option value="{{ auth_user.desired_career }}">{{ auth_user.desired_career }}</option>
+                  <option value="Software Engineer / Programmer">Software Engineer / Programmer</option>
+                  <option value="Technical Support Specialist">Technical Support Specialist</option>
+                  <option value="Academician">Academician</option>
+                  <option value="Administrative Assistant">Administrative Assistant</option>
+                </select>
               </p>
           </div>
         </div>
-        <div style="display: flex;">
-          <div>
-            <!-- <table>
-              <thead>
-                <tr>
-                  <th>Full Name</th>
-                  <th>Sex</th>
-                  <th>Curriculum year</th>
-                  <th>Department</th>
-                  <th>Desired Career</th>
-                  <th>Prediction Results</th>
-                  <th>Date Predicted</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% if predResult %}
-                  {% for user, pred_results in predResult.items %}
-                    <tr>
-                      <td>
-                        <span>{{ user.first_name }}</span>
-                        <span>{{ user.middle_name }}</span>
-                        <span>{{ user.last_name }} </span>
-                      </td>
-                      <td>
-                        <span style="margin: 5px;">{{ user.sex }}</span>
-                      </td>
-                      <td>
-                        <span style="margin: 5px;">{{ user.curriculum_year }}</span>
-                      </td>
-                      <td>
-                        <span style="margin: 5px;">{{ user.department }}</span>
-                      </td>
-                      <td>
-                        <span style="margin: 5px;">{{ user.desired_career }}</span>
-                      </td>
-                      <td>
-                        <span style="margin: 5px;"> {{ pred_results.main_rank }} </span>
-                        <span style="margin: 5px;"> {{ pred_results.sub_rank1 }} </span>
-                        <span style="margin: 5px;"> {{ pred_results.sub_rank2 }} </span>
-                        <span style="margin: 5px;"> {{ pred_results.sub_rank3 }} </span>
-                      </td>
-                      <td>
-                        <span style="margin: 5px;">{{ pred_results.date_created }}</span>
-                      </td>
-                      <td>
-                        <div>
-                          <form action="/delete_results" method="POST">
-                            <input type="hidden" name="user_id" value="{{ pred_results.result_id }}">
-                            <button type="submit" class="hybridBtn"> Delete</button>
-                          </form>
-                        </div>
-                      </td>
-                    </tr>
-                  {% endfor %}
-                {% endif %}
-              </tbody>
-            </table> -->
-          </div>
-        </div>
-      <button class="hybridBtn" type="submit">Save</button>
+      <center><button class="hybridBtn" style="margin: 10px; width: 90%" type="submit">Save</button></center>
     </form>
+    <center><button class="hybridBtn" style="margin: 10px; width: 90%" onclick="window.location='/logout'" type="submit">Sign Out</button></center>
 </div>
 </div>
   <form action="{{ url_for('_route_cs.predict_CS')}}"method="post">
     <div class="header">
       <div class="logo">
         <div class="logo">
-          <h2>Welcome! <div style="color: white; display: inline; cursor: pointer; text-decoration: underline" id="myBtnName" class="tooltipName">{{ auth_user.first_name }}<span class="tooltipNametext">Show Profile</span></div> <i class="fa fa-user-circle" aria-hidden="true" id="myBtn" style="cursor: pointer;"></i> <div onclick="window.location='/logout'" class="tooltip" style="display: inline-block; position: relative; left: 520px; cursor: pointer">
-            <span class="tooltiptext">Logout</span><i class="fa fa-undo" aria-hidden="true"></i></div></h2>
+          <h2>Welcome! <div style="color: white; display: inline; cursor: pointer; text-decoration: underline" id="myBtnName" class="tooltipName">{{ auth_user.first_name }}<span class="tooltipNametext">Show Profile</span></div> <i class="fa fa-address-card" aria-hidden="true" id="myBtn" style="cursor: pointer;"></i></h2>
         </div>
       </div>
     </div>
@@ -651,7 +600,7 @@ a{
                   <label class="custom-field two">
                       <select type="text" style="width: 250px;" name="ComProg_1_1st" id="drop-down" placeholder="0" required="">
                         <option value="0">0</option>
-                <option value="0">INC</option>
+                        <option value="0">INC</option>
                         <option value="5">DRP</option>
                         <option value="1">1</option>
                         <option value="1.25">1.25</option>
@@ -1428,7 +1377,7 @@ a{
         </label>
       </div>
         <div class="anchorCon">
-          <button type="button" onclick="window.location='/logout'" class="hybridBtn"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Home</button>
+          <button type="button" onclick="window.location='/'" class="hybridBtn"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Home</button>
           <!-- <a href="/logout" class="hybridBtn"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Home</a> -->
           <button type="submit" class="hybridBtn"><i class="fas fa-bullseye"></i> Start Prediction</button>
           <!-- <a href="/logout"><h4 class="itDep"><i class="fas fa-home"></i> Home</h4></a> -->

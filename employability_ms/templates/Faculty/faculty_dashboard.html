@@ -5,7 +5,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background: linear-gradient(to bottom, #18290c, #3d632b, #2a3e24);
+    background: rgb(20, 20, 20);
     color: #c2c8cf;
   }
   table {
@@ -171,7 +171,7 @@
     -webkit-text-stroke: .1px black;
     position: relative;
     display: flex;
-    margin-left: 70px;
+    margin-left: 60px;
     right: 10%;
     font-size: 24px;
     color: #F9FAF8;
@@ -498,12 +498,17 @@
   
   nav .content{
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
+    justify-content: center;
   }
   nav .content .links{
     margin-left: 70px;
+    position: relative;
+    flex-wrap: wrap;
     display: flex;
   }
+
   .content .logo a{
     color: #fff;
     font-size: 30px;
@@ -746,10 +751,10 @@
           </div>
             <ul class="links">
                 <li>
-                  <a href="/register_faculty" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-registered" aria-hidden="true"></i> Register Faculty</h2></a>
+                  <a href="/register_faculty" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Faculty</h2></a>
                 </li>
                 <li>
-                  <a href="/faculty_dashboard" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-user-circle" aria-hidden="true"></i> Registered Student</h2></a>
+                  <a href="/faculty_dashboard" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-users" aria-hidden="true"></i> Registered Student</h2></a>
                 </li>
                 <li>
                   <a href="/faculty_dashboard" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Back</h2></a>
