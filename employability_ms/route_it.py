@@ -269,20 +269,16 @@ def it_dashboard():
  
     # return render_template("IT/ITinputs.html", auth_user=auth_user)
 
-@_route_it.route("/ITinputs_", methods=['GET'])
-def predict_IT_():
-    auth_user=current_user
-    if auth_user.user_type == 1 and auth_user.department == "Information Technology":
-        return render_template("IT/ITinputs.html")
-    else:
-        return redirect(url_for('_auth.index'))
-
 @_route_it.route("/edit_profile_it", methods=['POST'])
 def edit_profile_it():
     auth_user=current_user
     if auth_user.user_type == 1 and auth_user.department == "Information Technology":
         career = User.query.filter_by(id=int(auth_user.id)).first()
         career.desired_career = request.form['desiredCareer']
+        
+        # job = PredictionResult.query.filter_by(user_id=int(auth_user.id)).first()
+        job = db.session.query(PredictionResult).filter(PredictionResult.result_id == int(auth_user.id))
+        job.desired_job = request.form['desiredCareer']
         db.session.commit()
         flash('Profile Successfully Modified', category='info')
         return redirect(url_for('.it_dashboard'))
@@ -400,7 +396,11 @@ def predict_IT():
                 pred4 = "No Result" if fetch4 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred4 == '0' else "{}".format(f"{prediction[K-3]} : {fetch4}%")
                 pred1 = "No Result" if fetch1 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred1 == '0' else "{}".format(f"{prediction[K]} : {fetch1}%")
                 
-                new_pred = PredictionResult(fetchPred2, pred2, pred4, pred3, pred1, current_user.id, date_created=date_predicted)
+                job = User.query.filter_by(id=int(auth_user.id)).first()
+                val = job.desired_career
+                job_desired = val
+                
+                new_pred = PredictionResult(job_desired, fetchPred2, pred2, pred4, pred3, pred1, auth_user.id, date_created=date_predicted)
                 db.session.add(new_pred)
                 
                 predict_iter = User.query.filter_by(id=int(auth_user.id)).first()

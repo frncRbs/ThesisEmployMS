@@ -99,17 +99,17 @@ button:hover{
 				
 				<form action="{{ url_for('_faculty.signup_Superadmin') }}" method="POST">
 					<label for="chk" aria-hidden="true" class="SignupLabel">Sign up</label>
-					<input type="text" name="first_name" placeholder="first name" required autocomplete="off">
-					<input type="text" name="middle_name" placeholder="middle name" autocomplete="off">
-					<input type="text" name="last_name" placeholder="last name" required autocomplete="off">
-					<select type="text" name="sex" id="drop-down" placeholder="sex" required="">
-						<option value="">sex</option>
+					<input type="text" name="first_name" placeholder="First Name" required autocomplete="off">
+					<input type="text" name="middle_name" placeholder="Middle Name" autocomplete="off">
+					<input type="text" name="last_name" placeholder="Last Name" required autocomplete="off">
+					<select type="text" name="sex" id="drop-down" placeholder="Sex" required="">
+						<option value="">Sex</option>
 						<option value="Male">Male</option>
 						<option value="Female">Female</option>
 					</select>
-					<input type="number" name="contact_number" placeholder="contact number" required>
-					<input type="email" name="email" placeholder="email" required>
-					<input type="password" name="password" placeholder="password" required>
+					<input type="number" name="contact_number" placeholder="Contact Number" required autocomplete="off">
+					<input type="email" name="email" placeholder="Email" required autocomplete="off">
+					<input type="password" name="password" placeholder="Password" required autocomplete="off">
 					<input type="text" name="department" placeholder="Department" value="faculty" readonly>
 					<div>
 						{% with messages = get_flashed_messages(with_categories=true) %}

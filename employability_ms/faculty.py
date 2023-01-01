@@ -304,7 +304,7 @@ def approve_account():
 @login_required
 def signup_Superadmin():
     try:
-        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], '-------', request.form['contact_number'], request.form['email'], 'Faculty',  'Faculty', 'Regular', (generate_password_hash(request.form['password'], method="sha256")), True, 0)
+        new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], '-------', request.form['contact_number'], request.form['email'], 'Faculty',  'Faculty', 'Not Applicable', (generate_password_hash(request.form['password'], method="sha256")), True, 0, 0)
         db.session.add(new_user)
         db.session.commit()
         flash('Account successfully created', category='success_register')
