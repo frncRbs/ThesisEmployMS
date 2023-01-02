@@ -206,7 +206,7 @@ def signupCS():
         new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Computer Science', request.form['program'], (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
         db.session.add(new_user)
         db.session.commit()
-        flash('Account successfully created', category='success_register')
+        flash('Account successfully created. Registration feedback will be sent soon via email -support@wetechsupport.online', category='success_register_cs')
         return redirect(url_for('.login_registerCS_view'))
     except:
          flash('Invalid credentials', category='error')
@@ -221,13 +221,24 @@ def cs_dashboard():
         predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
         remaining_attempt = int(predict_iter.predict_no)
         
-        return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt)
+        if auth_user.program == "Shiftee" or auth_user.program == "Transferee":
+            program = 1
+            return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
+        elif auth_user.program == "Regular":
+            program = 0
+            return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
+            
     elif auth_user.user_type == 1 and auth_user.department == "Computer Science" and auth_user.sex == "Female":
         sex = 1
         predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
         remaining_attempt = int(predict_iter.predict_no)
         
-        return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt)
+        if auth_user.program == "Shiftee" or auth_user.program == "Transferee":
+            program = 1
+            return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
+        elif auth_user.program == "Regular":
+            program = 0
+            return render_template("CS/CSinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
     else:
         return redirect(url_for('_auth.index'))
     

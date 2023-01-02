@@ -117,8 +117,12 @@ button:active {
   z-index: 1;
 }
 .popup__close {
+  font-size: 28px;
+  font-weight: bold;
+  color: #000;
   text-align: right;
-  margin-bottom: 1rem;
+  margin: 0;
+  padding: 0;
   font-size: 1.5rem;
 }
 
@@ -142,7 +146,7 @@ button:active {
 /*PopUp End*/
 
 .grid-2{
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://i.ytimg.com/vi/jh7ejR4v2Gw/maxresdefault.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://i.ibb.co/GMg5Hzy/maxresdefault.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -413,7 +417,7 @@ a{
 /* Modal Content/Box */
 .modal-content {
   background-color: rgb(219, 214, 214);
-  margin: 8% auto; /* 15% from the top and centered */
+  margin: 5% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   border-radius:10px;
@@ -521,6 +525,7 @@ a{
               <p style="font-size: 20px">Sex: {{ auth_user.sex }}</p>
               <p style="font-size: 20px">Email: {{ auth_user.email }}</p>
               <p style="font-size: 20px">Contact Number: {{ auth_user.contact_number }}</p>
+              <p style="font-size: 20px">Program: {{ auth_user.program }}</p>
               <p style="font-size: 20px">Department: {{ auth_user.department }}</p>
               <form action="/edit_profile_cs" method="POST">
               <p style="font-size: 20px">Desired Career:
@@ -573,9 +578,7 @@ a{
         </label>
         <label class="custom-field two" style="margin-bottom: 20px;">
             <select type="text" name="Shiftee" id="drop-down" placeholder="Select program" required="">
-              <option value="0">Select program</option>
-              <option value="1">Shiftee</option>
-              <option value="0">Regular</option>
+              <option value="{{ program }}">{{ auth_user.program }}</option>
             </select>
             <span class="placeholder" style="padding-bottom: 5px; color:black; font-weight: bolder; font-size: 15px">Shiftee or Regular</span>
         </label>
@@ -1392,16 +1395,16 @@ a{
     <div class="popup" id="popupID">
       <div class="popup__inner">
         <div class="popup__container">
-          <!-- <div class="popup__close popup-close" data-popup-close>
-            <div class="svg-icon">&#10006;</div>
-          </div> -->
           <div class="popup__content">
             <!-- your content -->
             <div class="form">
+              <div class="popup__close popup-close" data-popup-close>
+                <div class="svg-icon">&#10006;</div>
+              </div>
               <div class="anchorCon">
                 <div style="color: black;">
-                  <center><h1><div style="color: green; display: inline; font-size: 40px">Please be informed</div></h1></center>
-                  <center><p style="font-size: 20px">Select INC if the course is incomplete, or DRP if it has been dropped, unapproved, or authorized (UW or AW).</p></center>
+                  <center><h1><div style="color: green; display: inline; font-size: 40px">NOTICE!</div></h1></center>
+                  <center><p style="font-size: 20px">Select INC if the course is incomplete, or DRP if it has been dropped, unapproved, or authorized (UW or AW)</p></center>
                   <div>
                     {% with messages = get_flashed_messages(with_categories=true) %}
                       {% if messages %}
@@ -1410,7 +1413,7 @@ a{
                             <div class="">
                               <div class="">
                                 <div class="">
-                                  <div style="padding: 10%; color: rgb(47, 241, 47); font-size: 25px; font-weight: 700">
+                                  <div style="padding: 10%; color: green; font-size: 25px; font-weight: 700">
                                     <center>
                                       {{ message }}
                                     </center>
@@ -1427,7 +1430,7 @@ a{
                             <div class="">
                               <div class="">
                                 <div class="">
-                                  <div style="padding: 10%; color: rgb(180, 29, 29); font-size: 25px; font-weight: 700">
+                                  <div style="padding: 10%; color: red; font-size: 25px; font-weight: 700">
                                     <center>
                                       {{ message }}
                                     </center>
@@ -1445,8 +1448,10 @@ a{
                       {% endif %}
                     {% endwith %}
                   </div>
-                  <center><p style="font-size: 20px">Proceed to (2nd Try) and enter the grades from the second attempt if the course has been dropped or is incomplete.</p></center>
-                  <center><p style="font-size: 20px">INC = (0 / No Grade) and DRP / UW / AW = 5</p></center>
+                  <center><p style="font-size: 20px">Proceed to (2nd Try) and enter the grades if the course has been dropped or incomplete.</p></center>
+                  <center><p style="font-size: 20px">You can change your desired career just by clicking on the below profile card icon</center>
+                  <center><p style="font-size: 20px">Grades will not be save upon prediction</center>
+                  <center><p style="font-size: 20px">You can only predict twice</center>
                 </div>
               </div>
             </div>

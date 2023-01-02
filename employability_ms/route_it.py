@@ -206,7 +206,7 @@ def signupIT():
         new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Information Technology', request.form['program'], (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
         db.session.add(new_user)
         db.session.commit()
-        flash('Account successfully created', category='success_register')
+        flash('Account successfully created. Registration feedback will be sent soon via email -support@wetechsupport.online', category='success_register_it')
         return redirect(url_for('.login_registerIT_view'))
     except:
         flash('Invalid credentials', category='error')
@@ -228,7 +228,7 @@ def it_dashboard():
                 
                 students_record = db.session.query(PredictionResult).filter(PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id)
             
-                print(students_record)
+                # print(students_record)
                 return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt, 
                                     students_record=students_record
                                     #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
