@@ -216,56 +216,31 @@ def signupIT():
 @login_required
 def it_dashboard():
     auth_user=current_user
-    students_record = db.session.query(PredictionResult).filter(PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id)
-    
     if auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Male":
+        sex = 0
+        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+        remaining_attempt = int(predict_iter.predict_no)
         
-        if request.method == 'GET':
-            try:
-                sex = 0
-                predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
-                remaining_attempt = int(predict_iter.predict_no)
-                
-                students_record = db.session.query(PredictionResult).filter(PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id)
+        if auth_user.program == "Shiftee" or auth_user.program == "Transferee":
+            program = 1
+            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
+        elif auth_user.program == "Regular":
+            program = 0
+            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
             
-                # print(students_record)
-                return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt, 
-                                    students_record=students_record
-                                    #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
-                                    )
-            except:
-                flash('No prediction yet', category='info')
-                return redirect(url_for('.it_dashboard'))
-        else:
-            flash('No prediction yet', category='info')
-            return redirect(url_for('.it_dashboard'))
-    
     elif auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Female":
+        sex = 1
+        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+        remaining_attempt = int(predict_iter.predict_no)
         
-        if request.method == 'GET':
-            try:
-                sex = 0
-                predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
-                remaining_attempt = int(predict_iter.predict_no)
-
-                students_record = db.session.query(PredictionResult).filter(PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id)
-            
-                print(students_record)
-                return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt, 
-                                    students_record=students_record
-                                    #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
-                                    )
-            except:
-                flash('No prediction yet', category='info')
-                return redirect(url_for('.it_dashboard'))
-        else:
-            flash('No prediction yet', category='info')
-            return redirect(url_for('.it_dashboard'))
-        
-    return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, remaining_attempt=remaining_attempt, 
-                                    students_record=students_record
-                                    #   predResult=predResult, fetchMainRank1=fetchMainRank1, fetchDatePred1=fetchDatePred1
-                                    )
+        if auth_user.program == "Shiftee" or auth_user.program == "Transferee":
+            program = 1
+            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
+        elif auth_user.program == "Regular":
+            program = 0
+            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
+    else:
+        return redirect(url_for('_auth.index'))
  
     # return render_template("IT/ITinputs.html", auth_user=auth_user)
 

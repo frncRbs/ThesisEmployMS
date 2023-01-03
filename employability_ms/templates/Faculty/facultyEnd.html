@@ -486,6 +486,7 @@ box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
   background: linear-gradient(to bottom, #18290c, #3d632b, #2a3e24);
   position: fixed;
   width: 100%;
+  margin: 0;
 }
 .wrapper nav{
   position: relative;
@@ -496,17 +497,15 @@ box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
   align-items: center;
   justify-content: space-between;
 }
-
 nav .content{
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
+  margin: 0;
   justify-content: center;
 }
 nav .content .links{
-  margin-left: 70px;
+  margin: 0;
   position: relative;
-  flex-wrap: wrap;
   display: flex;
 }
 .content .logo a{
@@ -753,13 +752,19 @@ nav .content .links{
           </div>
             <ul class="links">
                 <li>
+                  <div>
                   <a href="/register_faculty" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Faculty</h2></a>
+                  </div>
                 </li>
                 <li>
+                  <div>
                   <a href="/faculty_dash" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-users" aria-hidden="true"></i> Registered Faculty</h2></a>
+                  </div>
                 </li>
                 <li>
+                  <div>
                   <a href="/logout" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Logout</h2></a>
+                  </div>
                 </li>
               </li>
             </ul>
@@ -804,7 +809,7 @@ nav .content .links{
         <!-- HERO SECTION -->
         <div>
           
-          <div style="width: 50%; height: auto; position: absolute; left: 40%; bottom: 72%; display: flex; background: rgba(255, 255, 255, 0.404)">
+          <div style="width: 50%; height: 60px; position: absolute; left: 450px; top: 160px; display: flex; background: rgba(255, 255, 255, 0.404)">
             <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
               <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
                 <option value="">Department</option>
@@ -852,7 +857,7 @@ nav .content .links{
                       <div class="">
                         <div class="">
                           <div class="">
-                            <div style="padding: 10%; color: green; font-size: 25px; font-weight: 700">
+                            <div style="padding: 10%; color: rgb(22, 202, 22); font-size: 25px; font-weight: 700">
                               <center>
                                 {{ message }}
                               </center>
@@ -1088,7 +1093,7 @@ nav .content .links{
           data: {
             labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
             datasets: [{
-              label: '# of Student Desired Career',
+              label: 'Number of Student Desired Career',
               data: [software_engineer_programmer, technical_support_specialist, academician, administrative_assistant],
               borderWidth: 1
             }]
@@ -1107,7 +1112,7 @@ nav .content .links{
           data: {
             labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
             datasets: [{
-              label: '# of Prediction',
+              label: 'Number of Prediction',
               data: [first_SE, first_TSS, first_A, first_AA],
               borderWidth: 1,
             }]
@@ -1241,15 +1246,6 @@ nav .content .links{
 
 
     </script>
-    <style>
-      .anchorCon{
-        background: #60BD68;
-        background: #55a82f;
-        background: #912121;
-        background: #B276B2;
-        background: #E16851;
-        background: #FB8267;
-      }
-    </style>
+
 </body>
 </html>

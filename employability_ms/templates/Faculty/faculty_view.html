@@ -5,7 +5,7 @@ body{
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-  background: rgb(20, 20, 20);
+  background: linear-gradient(to bottom, #0f1a07, #1a380c, #22331c);
   color: #c2c8cf;
 }
 table {
@@ -398,14 +398,14 @@ ul {
 
 nav .content{
   display: flex;
-  flex-wrap: wrap;
+  
   align-items: center;
   justify-content: center;
 }
 nav .content .links{
-  margin-left: 70px;
+  margin: 0;
   position: relative;
-  flex-wrap: wrap;
+  
   display: flex;
 }
 .content .logo a{
@@ -680,7 +680,7 @@ nav .content .links{
                       <div class="">
                         <div class="">
                           <div class="">
-                            <div style="padding: 10%; color: green; font-size: 25px; font-weight: 700">
+                            <div style="padding: 10%; color: rgb(22, 202, 22); font-size: 25px; font-weight: 700">
                               <center>
                                 {{ message }}
                               </center>

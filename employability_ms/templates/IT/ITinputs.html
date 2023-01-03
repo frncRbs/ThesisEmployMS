@@ -417,7 +417,7 @@ a{
 /* Modal Content/Box */
 .modal-content {
   background-color: rgb(219, 214, 214);
-  margin: 8% auto; /* 15% from the top and centered */
+  margin: 5% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   border-radius:10px;
@@ -524,28 +524,29 @@ a{
               </div>
               <div class="user-right">
                   <p style="font-size: 20px">Prediction Attempt : {{ remaining_attempt }} out of 2</p>
-                  <p style="font-size: 20px">Sex : {{ auth_user.sex }}</p>
-                  <p style="font-size: 20px">Email : {{ auth_user.email }}</p>
-                  <p style="font-size: 20px">Contact Number : {{ auth_user.contact_number }}</p>
-                  <p style="font-size: 20px">Department : {{ auth_user.department }}</p>
+                  <p style="font-size: 20px">Sex: {{ auth_user.sex }}</p>
+                  <p style="font-size: 20px">Email: {{ auth_user.email }}</p>
+                  <p style="font-size: 20px">Contact Number: {{ auth_user.contact_number }}</p>
+                  <p style="font-size: 20px">Program: {{ auth_user.program }}</p>
+                  <p style="font-size: 20px">Department: {{ auth_user.department }}</p>
                   <form action="/edit_profile_it" method="POST">
-                    <p style="font-size: 20px">Desired Career:
-                      <select style="border-radius: 0;
-                                    border-top-left-radius: 3px;
-                                    border-top-right-radius: 3px;
-                                    background:
-                        linear-gradient(90deg, green, green) center bottom/0 0.30em no-repeat,
-                        linear-gradient(90deg, #ccc, #ccc) left bottom/100% 0.30em no-repeat,
-                        linear-gradient(90deg, #fafafa, #fafafa) left bottom/100% no-repeat;
-                      transition: background-size 0.3s ease;
-                      padding: 5px" type="text" name="desiredCareer" id="drop-down" placeholder="Select career" required="">
-                        <option value="{{ auth_user.desired_career }}">{{ auth_user.desired_career }}</option>
-                        <option value="Software Engineer / Programmer">Software Engineer / Programmer</option>
-                        <option value="Technical Support Specialist">Technical Support Specialist</option>
-                        <option value="Academician">Academician</option>
-                        <option value="Administrative Assistant">Administrative Assistant</option>
-                      </select>
-                    </p>
+                  <p style="font-size: 20px">Desired Career:
+                    <select style="border-radius: 0;
+                                  border-top-left-radius: 3px;
+                                  border-top-right-radius: 3px;
+                                  background:
+                      linear-gradient(90deg, green, green) center bottom/0 0.30em no-repeat,
+                      linear-gradient(90deg, #ccc, #ccc) left bottom/100% 0.30em no-repeat,
+                      linear-gradient(90deg, #fafafa, #fafafa) left bottom/100% no-repeat;
+                    transition: background-size 0.3s ease;
+                    padding: 5px" type="text" name="desiredCareer" id="drop-down" placeholder="Select career" required="">
+                      <option value="{{ auth_user.desired_career }}">{{ auth_user.desired_career }}</option>
+                      <option value="Software Engineer / Programmer">Software Engineer / Programmer</option>
+                      <option value="Technical Support Specialist">Technical Support Specialist</option>
+                      <option value="Academician">Academician</option>
+                      <option value="Administrative Assistant">Administrative Assistant</option>
+                    </select>
+                  </p>
                 </div>
               </div>
             <center><button class="hybridBtn" style="margin: 10px; width: 90%" type="submit">Save</button></center>
@@ -609,9 +610,7 @@ a{
         </label>
         <label class="custom-field two" style="margin-bottom: 20px;">
             <select type="text" name="Shiftee" id="drop-down" placeholder="Select program" required="">
-              <option value="">Select program</option>
-              <option value="1">Shiftee</option>
-              <option value="0">Regular</option>
+              <option value="{{ program }}">{{ auth_user.program }}</option>
             </select>
             <span class="placeholder" style="padding-bottom: 5px; color:black; font-weight: bolder; font-size: 15px; font-size: 15px">Shiftee or Regular</span>
         </label>
@@ -1356,7 +1355,7 @@ a{
               <div class="anchorCon">
                 <div style="color: black;">
                   <center><h1><div style="color: green; display: inline; font-size: 40px">NOTICE!</div></h1></center>
-                  <center><p style="font-size: 20px">Select INC if the course is incomplete, or DRP if it has been dropped, unapproved, or authorized (UW or AW).</p></center>
+                  <center><p style="font-size: 20px">⚫ Select INC if the course is incomplete, or DRP if it has been dropped, unapproved, or authorized (UW or AW).</p></center>
                     <div>
                       {% with messages = get_flashed_messages(with_categories=true) %}
                         {% if messages %}
@@ -1400,10 +1399,10 @@ a{
                         {% endif %}
                       {% endwith %}
                     </div>
-                  <center><p style="font-size: 20px">Proceed to (2nd Try) and enter the grades if the course has been dropped or incomplete.</p></center>
-                  <center><p style="font-size: 20px">You can change your desired career just by clicking on the below profile card icon</center>
-                  <center><p style="font-size: 20px">Grades will not be saved nor disseminated upon prediction</center>
-                  <center><p style="font-size: 20px">You an only predict twice</center>
+                  <center><p style="font-size: 20px">⚫ Proceed to (2nd Try) and enter the grades if the course has been dropped or incomplete.</p></center>
+                  <center><p style="font-size: 20px">⚫ You can change your desired career just by clicking on the below profile card icon</center>
+                  <center><p style="font-size: 20px">⚫ Grades will not be saved nor disseminated upon prediction</center>
+                  <center><p style="font-size: 20px">⚫ You an only predict twice</center>
                 </div>
               </div>
             </div>

@@ -5,7 +5,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
-    background: rgb(20, 20, 20);
+    background: linear-gradient(to bottom, #0f1a07, #1a380c, #22331c);
     color: #c2c8cf;
   }
   table {
@@ -498,14 +498,14 @@
   
   nav .content{
     display: flex;
-    flex-wrap: wrap;
+    
     align-items: center;
     justify-content: center;
   }
   nav .content .links{
-    margin-left: 70px;
+    margin: 0;
     position: relative;
-    flex-wrap: wrap;
+    
     display: flex;
   }
 
@@ -768,7 +768,7 @@
     <main>
         <!-- HERO SECTION -->
         <div>
-          <div style="position: absolute; left: 62%; bottom: 72%; display: flex; width: 20%; height: auto; background: rgba(255, 255, 255, 0.404)">
+          <div style="width: 20%; height: 60px; position: absolute; left: 650px; top: 160px; display: flex; background: rgba(255, 255, 255, 0.404)">
             <form action="{{ url_for('_faculty.faculty_dash') }}" method="GET">
               <select style="display: inline; z-index: 0" type="text" name="sex" id="drop-down" placeholder="Sex" required="" onchange="this.form.submit()">
                 <option value="">Sex</option>
@@ -791,7 +791,7 @@
                       <div class="">
                         <div class="">
                           <div class="">
-                            <div style="padding: 10%; color: green; font-size: 25px; font-weight: 700">
+                            <div style="padding: 10%; color: rgb(22, 202, 22); font-size: 25px; font-weight: 700">
                               <center>
                                 {{ message }}
                               </center>
