@@ -31,10 +31,10 @@ body{
 }
 .SignupLabel{
 	color: #fff;
-	font-size: 2.3em;
+	font-size: 2.5em;
 	justify-content: center;
 	display: flex;
-	margin: 10px 30px 10px 30px;
+	margin: 10px 30px 0 30px;
 	font-weight: bold;
 	cursor: pointer;
 	transition: .5s ease-in-out;
@@ -65,7 +65,7 @@ input{
 	background: #e0dede;
 	justify-content: center;
 	display: flex;
-	margin: 20px auto;
+	margin: 5px auto;
 	padding: 10px;
 	border: none;
 	outline: none;
@@ -77,7 +77,7 @@ select{
 	background: #e0dede;
 	justify-content: center;
 	display: flex;
-	margin: 20px auto;
+	margin: 5px auto;
 	padding: 10px;
 	border: none;
 	outline: none;
@@ -107,7 +107,7 @@ button:hover{
 	height: 600px;
 	background: #eee;
 	border-radius: 60% / 10%;
-	transform: translateY(-110px);
+	transform: translateY(-60px);
 	transition: .8s ease-in-out;
 }
 .login label{
@@ -128,16 +128,26 @@ button:hover{
 		<input type="checkbox" id="chk" aria-hidden="true">
 		<div class="signup">
 			<form action="{{ url_for('_route_it.signupIT') }}" method="POST">
-				<label for="chk" aria-hidden="true" class="SignupLabel">Sign up</label>
+				<label for="chk" aria-hidden="true" class="SignupLabel">Sign up for IT</label>
+				
+				<label for="first_name" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">First Name :
 				<input type="text" name="first_name" placeholder="First Name" required autocomplete="off">
+
+				<label for="middle_name" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Middle Name :</label>
 				<input type="text" name="middle_name" placeholder="Middle Name" autocomplete="off">
+
+				<label for="last_name" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Last Name :</label>
 				<input type="text" name="last_name" placeholder="Last Name" required autocomplete="off">
-				<select type="text" name="sex" id="drop-down" placeholder="Sex" required="" autocomplete="off">
+
+				<label for="sex" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Sex :</label>
+				<select type="text" name="sex" id="drop-down" placeholder="Sex" required="">
 					<option value="">Sex</option>
 					<option value="Male">Male</option>
 					<option value="Female">Female</option>
 				</select>
-				<select type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum year" required="" autocomplete="off">
+
+				<label for="curriculum_year" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Curriculum Year :</label>
+				<select type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum year" required="">
 					<option value="" >Curriculum Year</option>
 					<option value="2007 - 2008">2007 - 2008</option>
 					<option value="2016 - 2017">2016 - 2017</option>
@@ -186,7 +196,7 @@ button:hover{
 									<div class="">
 										<div class="">
 											<div class="">
-												<div style="padding: 10%; color: green;	 font-size: 25px; font-weight: 700">
+												<div style="padding: 10%; color: green; font-size: 25px; font-weight: 700">
 													<center>
 														{{ message }}
 													</center>
@@ -204,11 +214,18 @@ button:hover{
 						{% endif %}
 					{% endwith %}
 				</div>
+
+				<label for="contact_number" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Contact Number :</label>
 				<input type="number" name="contact_number" placeholder="Contact Number" required>
+
+				<label for="email" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Email :</label>
 				<input type="email" name="email" placeholder="Email" required>
 
-				<input type="password" name="password" placeholder="Password" required autocomplete="off">
-				<select type="text" name="desired_career" id="drop-down" placeholder="Select career" required="" autocomplete="off">
+                <label for="password" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Password :</label>
+				<input type="password" name="password" placeholder="Password" required>
+
+				<label for="desired_career" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Select Career :</label>
+				<select type="text" name="desired_career" id="drop-down" placeholder="Select career" required="">
 					<option value="">Desired Career</option>
 					<option value="Software Engineer / Programmer">Software Engineer / Programmer</option>
 					<option value="Technical Support Specialist">Technical Support Specialist</option>
@@ -216,14 +233,15 @@ button:hover{
 					<option value="Administrative Assistant">Administrative Assistant</option>
 				</select>
 
-				<select type="text" name="program" id="drop-down" placeholder="Select Program" required="" autocomplete="off">
-					<option value="">Program</option>
+                <label for="program" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Select Status :</label>
+				<select type="text" name="program" id="drop-down" placeholder="Select Status" required="">
+					<option value="">Status</option>
 					<option value="Shiftee">Shiftee</option>
 					<option value="Transferee">Transferee</option>
 					<option value="Regular">Regular</option>
 				</select>
 
-				<input type="text" name="department" placeholder="Department" value="Information Technology" readonly>
+				<!-- <input type="text" name="department" placeholder="Department" value="Information Technology" readonly> -->
 				
 				<center>
 					<div style="position: relative; bottom: 20px">

@@ -897,14 +897,14 @@ nav .content .links{
                   <thead>
                     <tr>
                       <th style="text-align: center">Full Name</th>
+                      <th style="text-align: center">Desired Career</th>
+                      <th style="text-align: center">Top 1 Prediction</th>
                       <th style="text-align: center">Sex</th>
                       <th style="text-align: center">Curriculum year</th>
                       <th style="text-align: center">Department</th>
                       <th style="text-align: center">Program</th>
                       <th style="text-align: center">Contact Number</th>
                       <th style="text-align: center">Email</th>
-                      <th style="text-align: center">Number of Prediction</th>
-                      <th style="text-align: center">Date Registered</th>
                       <!-- <th style="text-align: center">Desired Career</th>
                       <th style="text-align: center">Prediction Results</th>
                       <th style="text-align: center">Date Predicted</th> -->
@@ -913,7 +913,7 @@ nav .content .links{
                   </thead>
                   <tbody>
                     {% if students_record %}
-                      {% for user in students_record.items %}
+                      {% for user, pred_result in students_record.items %}
                         <tr>
                           <td>
                             <span>{{ user.first_name }}</span>
@@ -921,28 +921,28 @@ nav .content .links{
                             <span>{{ user.last_name }} </span>
                           </td>
                           <td>
-                            <span style="margin: 5px">{{ user.sex }}</span>
+                            <span style="margin: 5px; text-align: center">{{ pred_result.desired_job }}</span>
                           </td>
                           <td>
-                            <span style="margin: 5px">{{ user.curriculum_year }}</span>
+                            <span style="margin: 5px; text-align: center">{{ pred_result.main_rank }}</span>
                           </td>
                           <td>
-                            <span style="margin: 5px">{{ user.department }}</span>
+                            <span style="margin: 5px; text-align: center">{{ user.sex }}</span>
                           </td>
                           <td>
-                            <span style="margin: 5px">{{ user.program }}</span>
+                            <span style="margin: 5px; text-align: center">{{ user.curriculum_year }}</span>
                           </td>
                           <td>
-                            <span style="margin: 5px">{{ user.contact_number }}</span>
+                            <span style="margin: 5px; text-align: center">{{ user.department }}</span>
                           </td>
                           <td>
-                            <span style="margin: 5px">{{ user.email }}</span>
+                            <span style="margin: 5px; text-align: center">{{ user.program }}</span>
                           </td>
                           <td>
-                            <span style="margin: 5px">{{ user.predict_no }}</span>
+                            <span style="margin: 5px; text-align: center">{{ user.contact_number }}</span>
                           </td>
                           <td>
-                            <span style="margin: 5px">{{ user.date_created }}</span>
+                            <span style="margin: 5px; text-align: center">{{ user.email }}</span>
                           </td>
                           <td>
                             <!-- 
@@ -1090,18 +1090,27 @@ nav .content .links{
 
         new Chart(ctx, {
           type: 'bar',
+          
           data: {
             labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
             datasets: [{
               label: 'Number of Student Desired Career',
               data: [software_engineer_programmer, technical_support_specialist, academician, administrative_assistant],
-              borderWidth: 1
+              borderWidth: 1,
+              ticks: {
+                beginAtZero: true,
+                callback: function(value) {if (value % 1 === 0) {return value;}}
+              },
             }]
           },
           options: {
             scales: {
               y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback: function(value) {if (value % 1 === 0) {return value;}}
+                }
               }
             }
           }
@@ -1109,18 +1118,23 @@ nav .content .links{
 
         new Chart(chartR, {
           type: "line",
+          
           data: {
             labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
             datasets: [{
               label: 'Number of Prediction',
               data: [first_SE, first_TSS, first_A, first_AA],
-              borderWidth: 1,
+              borderWidth: 1
             }]
           },
           options: {
             scales: {
               y: {
                 beginAtZero: true,
+                ticks: {
+                  beginAtZero: true,
+                  callback: function(value) {if (value % 1 === 0) {return value;}}
+                }
 
               }
             }
