@@ -5,6 +5,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from sqlalchemy import delete
 from sqlalchemy import select
+import datetime
+from datetime import datetime
 import json
 
 from .auth import send_link, send_link_disapproved # for email message
@@ -184,7 +186,9 @@ def faculty_dashboard():
         print(search, department, sex, curriculum_year)
         # Data for filter department
         # Return Data for template
+        
         if auth_user.user_type == -1 or auth_user.user_type == 0:
+            
             if search:
                 students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == User.id).group_by(User.id)\
                     .filter((User.first_name.like('%' + search + '%'))      |
@@ -213,8 +217,11 @@ def faculty_dashboard():
                     .paginate(page=page, per_page=5)# fetch curriculum year only
             else:
                 students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == User.id).group_by(User.id).paginate(page=page, per_page=5)# fetch user students only
-
+                
+                
             auth_user=current_user
+            curriculum_input = db.session.query(CurriculumResult).all()
+            curriculum_record = db.session.query(CurriculumResult).paginate(page=page)
             unapprove_account = User.query.filter_by(is_approve = False, user_type = 1).all()
             count_unapprove = User.query.filter_by(is_approve = False, user_type = 1).count()
         else:
@@ -226,8 +233,8 @@ def faculty_dashboard():
     return render_template("Faculty/facultyEnd.html", auth_user=auth_user, 
                             students_record=students_record, 
                             unapprove_account=unapprove_account, 
-                            count_unapprove=count_unapprove, search=search, 
-                            department=department, sex=sex, curriculum_year=curriculum_year, 
+                            count_unapprove=count_unapprove, search=search, curriculum_input=curriculum_input, 
+                            department=department, sex=sex, curriculum_year=curriculum_year, curriculum_record=curriculum_record,
                             software_engineer_programmer=json.dumps(software_engineer_programmer), technical_support_specialist=json.dumps(technical_support_specialist),
                             academician=json.dumps(academician), administrative_assistant=json.dumps(administrative_assistant),
                             male=json.dumps(male), female=json.dumps(female), registered_students=registered_students,
@@ -325,6 +332,36 @@ def approve_account():
         return redirect(url_for('.faculty_dashboard'))
 
     return redirect(url_for('_faculty.faculty_dashboard'))
+
+@_faculty.route('/delete_curriculum_year', methods=['POST'])
+@login_required
+def delete_curriculum_year():
+    try:
+        delete_result = delete(CurriculumResult).where(CurriculumResult.curriculum_id == request.form['curriculum_identity'])
+        db.session.execute(delete_result)
+        db.session.commit()
+        flash('Curriculum Year successfully deleted', category='success_deletion')
+        return redirect(url_for('.faculty_dashboard'))
+    except:
+        flash('Failed to deleted Curriculum Year', category='error')
+        return redirect(url_for('.faculty_dashboard'))
+
+@_faculty.route('/add_curriculum_year', methods=['POST'])
+@login_required
+def add_curriculum_year():
+    auth_user=current_user
+    date_added = datetime.now()
+    get_created_by = User.query.filter_by(id=int(auth_user.id)).first()
+    admin_created_by = get_created_by.first_name
+    try:
+        new_year = CurriculumResult(request.form['add_curriculum'], admin_created_by, date_created=date_added)
+        db.session.add(new_year)
+        db.session.commit()
+        flash('Curriculum Year successfully created', category='success_deletion')
+        return redirect(url_for('.faculty_dashboard'))
+    except:
+        flash('Failed to add Curriculum Year', category='error')
+        return redirect(url_for('.faculty_dashboard'))
 
 @_faculty.route('/signup_Superadmin', methods=['POST'])
 @login_required

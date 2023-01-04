@@ -169,12 +169,13 @@ def Home():
 @_route_it.route('/login_register_IT', methods=['GET'])
 def login_registerIT_view():
     auth_user=current_user
+    curriculum_input = db.session.query(CurriculumResult).all()
     if auth_user.is_authenticated:
         if auth_user.user_type == 1 and auth_user.department == "Information Technology":
             return redirect(url_for('.it_dashboard'))
         else:
             return redirect(url_for('_auth.index'))
-    return render_template("IT/login_registerIT.html")
+    return render_template("IT/login_registerIT.html", curriculum_input=curriculum_input)
 
 @_route_it.route('/login_IT', methods=['GET', 'POST'])
 def login_IT():

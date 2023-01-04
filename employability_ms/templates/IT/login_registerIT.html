@@ -147,12 +147,13 @@ button:hover{
 				</select>
 
 				<label for="curriculum_year" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Curriculum Year :</label>
-				<select type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum year" required="">
-					<option value="" >Curriculum Year</option>
-					<option value="2007 - 2008">2007 - 2008</option>
-					<option value="2016 - 2017">2016 - 2017</option>
-					<option value="2018 - 2019">2018 - 2019</option>
-					<option value="2020 - 2022">2020 - 2022(Present)</option>
+				<select type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" autocomplete="off">
+					<option value="">Curriculum Year</option>
+					{% if curriculum_input %}
+                    	{% for curriculum in curriculum_input %}
+							<option value="{{ curriculum.curriculum_year }}">{{ curriculum.curriculum_year }}</option>
+                    	{% endfor %}
+                  	{% endif %}
 				</select>
 				<div>
 					{% with messages = get_flashed_messages(with_categories=true) %}
@@ -256,7 +257,7 @@ button:hover{
 			
 			<form action="{{ url_for('_route_it.login_IT') }}" method="POST">
 				<a href="/" for="chk" aria-hidden="true" class="HomeLabel"></a>
-				<center><label for="email" class="LoginLabel">Login</label></center>
+				<center><label for="email" class="LoginLabel">Login for IT</label></center>
 				<input type="email" name="email" placeholder="Email" required="" autocomplete="off">
 				<input type="password" name="password" placeholder="Password" required="" autocomplete="off">
 				<button type="submit">Login</button>

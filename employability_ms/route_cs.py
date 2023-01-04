@@ -169,12 +169,13 @@ def Home():
 @_route_cs.route('/login_register_CS', methods=['GET'])
 def login_registerCS_view():
     auth_user=current_user
+    curriculum_input = db.session.query(CurriculumResult).all()
     if auth_user.is_authenticated:
         if auth_user.user_type == 1 and auth_user.department == "Computer Science":
             return redirect(url_for('.cs_dashboard'))
         else:
             return redirect(url_for('_auth.index'))
-    return render_template("CS/login_registerCS.html")
+    return render_template("CS/login_registerCS.html", curriculum_input=curriculum_input)
 
 @_route_cs.route('/login_CS', methods=['GET', 'POST'])
 def login_CS():
@@ -202,6 +203,7 @@ def login_CS():
 
 @_route_cs.route('/signupCS', methods=['POST'])
 def signupCS():
+    
     try:
         new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Computer Science', request.form['program'], (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
         db.session.add(new_user)

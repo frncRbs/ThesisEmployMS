@@ -68,3 +68,18 @@ class PredictionResult(db.Model):
         self.sub_rank3 = sub_rank3
         self.user_id = user_id
         self.date_created = date_created
+        
+class CurriculumSchema(marsh.Schema):
+    class Meta:
+        fields = ('curriculum_id', 'curriculum_year', 'created_by')
+        
+class CurriculumResult(db.Model):
+    curriculum_id = db.Column(db.Integer, primary_key=True)
+    curriculum_year = db.Column(db.String(150), nullable=True)
+    created_by = db.Column(db.String(150), nullable=True)
+    date_created = db.Column(db.DateTime(timezone=True), default=func.now())
+
+    def __init__(self, curriculum_year, created_by, date_created):
+        self.curriculum_year = curriculum_year
+        self.created_by = created_by
+        self.date_created = date_created

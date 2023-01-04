@@ -723,6 +723,55 @@ nav .content .links{
   }
 }
 
+  /* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background: crimson; /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  border-radius: 10px;
+  float:left;
+
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: rgb(219, 214, 214);
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius:10px;
+  width: 30%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.user-info{
+  display:flex;
+  justify-content:center;
+
+}
+</style>
+
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -801,7 +850,7 @@ nav .content .links{
                       </li>
                     {% endfor %}
                   {% endif %}
-                </ul>
+              </ul>
           </nav>
         <hr>
       </div>
@@ -809,14 +858,17 @@ nav .content .links{
         <!-- HERO SECTION -->
         <div>
           
-          <div style="width: 50%; height: 60px; position: absolute; left: 450px; top: 160px; display: flex; background: rgba(255, 255, 255, 0.404)">
-            <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-              <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
-                <option value="">Department</option>
-                <option value="information technology">Information Technology</option>
-                <option value="computer science">Computer Science</option>
-              </select>
-            </form>
+          <div style="width: 55%; height: 60px; position: absolute; left: 450px; top: 160px; display: flex; background: rgba(255, 255, 255, 0.404)">
+            <div style="background: rgba(255, 255, 255, 0.500); display: flex; border-radius: 10px;">
+              <button style="margin: 0; padding: 5px; border-radius: 20px; width: 30px; height: 30px; position: relative; top: 13px; background: green; color: white; font-weight: bold" id="myBtn"> + </button>
+              <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
+                <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
+                  <option value="">Department</option>
+                  <option value="information technology">Information Technology</option>
+                  <option value="computer science">Computer Science</option>
+                </select>
+              </form>
+            </div>
             <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
               <select style="display: inline; z-index: 0" type="text" name="program" id="drop-down" placeholder="Program" required="" onchange="this.form.submit()">
                 <option value="">Program</option>
@@ -833,20 +885,84 @@ nav .content .links{
               </select>
             </form>
             <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-              <select style="display: inline; z-index: 0" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
+              <select  style="display: inline; z-index: 0" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
+                <option value="">Curriculum Year</option>
+                {% if curriculum_input %}
+                  {% for curriculum in curriculum_input %}
+                    <option value="{{ curriculum.curriculum_year }}">{{ curriculum.curriculum_year }}</option>
+                  {% endfor %}
+                {% endif %}
+              </select>
+              <!-- <select style="display: inline; z-index: 0" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
                 <option value="">Curriculum Year</option>
                 <option value="2007 - 2008">2007 - 2008</option>
                 <option value="2016 - 2017">2016 - 2017</option>
                 <option value="2018 - 2019">2018 - 2019</option>
                 <option value="2020 - 2022(Present)">2020 - 2022(Present)</option>
-              </select>
+              </select> -->
             </form>
             <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
               <input style="display: inline; z-index: 0" type="search" value="{{ search }}" name="search" placeholder="Enter first name, last name, etc." autocomplete="off">
               <!-- <button type="submit" style="display: inline-block;">Search</button>   -->
             </form>
           </div>
-          
+        
+
+				<div id="myModal" class="modal">
+					<!-- Modal content -->
+					<div class="modal-content">
+						<span class="close">&times;</span>
+						<div class="wrap" style="text-align: justify; margin-left: 40px; color: black;">
+							<div class="user-left">
+                <center><h1><div style="color: green; display: inline; font-size: 40px">Add Curriculum</div></h1></center>
+							</div>
+						</div>
+            <table style="font-size: 14px;">
+              <thead style="display: block;">
+                <tr>
+                  <th style="text-align: center">Created By</th>
+                  <th style="text-align: center">Curriculum Year</th>
+                  <th style="text-align: center">Date Created</th>
+                  <th style="text-align: center">Action</th>
+                </tr>
+              </thead>
+              <tbody style="display: block; height: 150px; overflow-y: auto; overflow-x: hidden;">
+                {% if curriculum_record %}
+                  {% for curriculum_yr in curriculum_record.items %}
+                    <tr>
+                      <td>
+                        <span>{{ curriculum_yr.created_by }}</span>
+                      </td>
+                      <td>
+                        <span style="margin: 5px; text-align: center">{{ curriculum_yr.curriculum_year }}</span>
+                      </td>
+                      <td>
+                        <span style="margin: 5px; text-align: center">{{ curriculum_yr.date_created }}</span>
+                      </td>
+                      <td>
+                        <div style="display: flex">
+                          <form action="{{ url_for('_faculty.delete_curriculum_year') }}" method="POST">
+                            <input type="hidden" name="curriculum_identity" value="{{ curriculum_yr.curriculum_id }}">
+                            <button type="submit" style="padding: 10px; margin: 5px" class="hybridBtn"> Delete </button>
+                          </form>
+                        </div>
+                      </td>
+                    </tr>
+                  {% endfor %}
+                {% endif %}
+              </tbody>
+            </table>
+            
+            <div class="user-right" style="color: #000;">
+              <label for="add_curriculum">Add Curriculum Year: </label>
+              <form action="{{ url_for('_faculty.add_curriculum_year') }}" method="POST">
+              <input type="text" name="add_curriculum" placeholder="Example: 2007 - 2008">
+            </div>
+						<center><button class="hybridBtn" style="margin: 10px; width: 90%" type="submit">Add</button></center>
+            </form>
+					</div>
+				</div>
+        
         <div class="hero">
           <div style="background-color: #6b915954;">
             <div>
@@ -1032,33 +1148,6 @@ nav .content .links{
         <div style="background: rgba(255, 255, 255, 0.795); width: 100%; height: auto; margin: 10px" ><canvas id="myChart"></canvas></div>
         <div style="background: rgba(255, 255, 255, 0.795); width: 100%; height: auto; margin: 10px" ><canvas id="myRank"></canvas></div>
       </div>
-
-        <div class="popup" id="popupID">
-          <div class="popup__inner">
-            <div class="popup__container">
-              <!-- <div class="popup__close popup-close" data-popup-close>
-                <div class="svg-icon">&#10006;</div>
-              </div> -->
-              <div class="popup__content">
-                <!-- your content -->
-                <div class="form">
-                  <div class="anchorCon">
-                    <ul style="color: black;">
-                      <center><h1 style="color: white; font-weight: 900; -webkit-text-stroke: .1px black;">Career Description</h1></center>
-                      <li><div style="font-weight: 700; font-size: 20px; display: inline">Technical Support Specialist</div>  is responsible for offering support for hardware and software difficulties in relation to technology. They are professionals at troubleshooting and can resolve a wide range of technological issues, including connectivity problems and non-responsive software.</li>
-                      <br>
-                      <li><div style="font-weight: 700; font-size: 20px; display: inline">Software Engineer / Programmer</div> creates computer operating systems and software. They collaborate with system programmers, analysts, and other engineers to design systems, project capabilities, and choose performance interfaces.</li>
-                      <br>
-                      <li><div style="font-weight: 700; font-size: 20px; display: inline">Academician</div> is an IT/CS Professor, Lecturer or Teacher that entails sharing knowledge with individuals in a classroom.</li>
-                      <br>
-                      <li><div style="font-weight: 700; font-size: 20px; display: inline">Administrative Assistant</div> a person who is engaged by an individual or in an office to help with paperwork, keep records, set appointments, and do related chores.</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </main>
 
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -1122,7 +1211,7 @@ nav .content .links{
           data: {
             labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
             datasets: [{
-              label: 'Number of Prediction',
+              label: 'Number of Top 1 Prediction',
               data: [first_SE, first_TSS, first_A, first_AA],
               borderWidth: 1
             }]
@@ -1258,8 +1347,35 @@ nav .content .links{
       }
   })
 
+		// Modal
+				// Get the modal
+	var modal = document.getElementById("myModal");
+	
+			// Get the button that opens the modal
+	var btn = document.getElementById("myBtn");
+	
+			// Get the <span> element that closes the modal
+	var span = document.getElementsByClassName("close")[0];
+	
+			// When the user clicks on the button, open the modal
+	btn.onclick = function() {
+		modal.style.display = "block";
+	}
+	
+	// When the user clicks on <span> (x), close the modal
+	span.onclick = function() {
+		modal.style.display = "none";
+		}
+	
+			// When the user clicks anywhere outside of the modal, close it
+	window.onclick = function(event) {
+		if (event.target == modal) {
+			modal.style.display = "none";
+		}
+	}
 
-    </script>
+
+  </script>
 
 </body>
 </html>
