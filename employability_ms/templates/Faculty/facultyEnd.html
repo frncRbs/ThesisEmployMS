@@ -861,11 +861,15 @@ nav .content .links{
           <div style="width: 55%; height: 60px; position: absolute; left: 450px; top: 160px; display: flex; background: rgba(255, 255, 255, 0.404)">
             <div style="background: rgba(255, 255, 255, 0.500); display: flex; border-radius: 10px;">
               <button style="margin: 0; padding: 5px; border-radius: 20px; width: 30px; height: 30px; position: relative; top: 13px; background: green; color: white; font-weight: bold" id="myBtn"> + </button>
+            
               <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-                <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
-                  <option value="">Department</option>
-                  <option value="information technology">Information Technology</option>
-                  <option value="computer science">Computer Science</option>
+                <select style="display: inline; z-index: 0; width: 150px" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
+                  <option value="">Curriculum Year</option>
+                  {% if curriculum_input %}
+                    {% for curriculum in curriculum_input %}
+                      <option value="{{ curriculum.curriculum_year }}">{{ curriculum.curriculum_year }}</option>
+                    {% endfor %}
+                  {% endif %}
                 </select>
               </form>
             </div>
@@ -885,21 +889,11 @@ nav .content .links{
               </select>
             </form>
             <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-              <select  style="display: inline; z-index: 0" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
-                <option value="">Curriculum Year</option>
-                {% if curriculum_input %}
-                  {% for curriculum in curriculum_input %}
-                    <option value="{{ curriculum.curriculum_year }}">{{ curriculum.curriculum_year }}</option>
-                  {% endfor %}
-                {% endif %}
+              <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
+                <option value="">Department</option>
+                <option value="information technology">Information Technology</option>
+                <option value="computer science">Computer Science</option>
               </select>
-              <!-- <select style="display: inline; z-index: 0" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
-                <option value="">Curriculum Year</option>
-                <option value="2007 - 2008">2007 - 2008</option>
-                <option value="2016 - 2017">2016 - 2017</option>
-                <option value="2018 - 2019">2018 - 2019</option>
-                <option value="2020 - 2022(Present)">2020 - 2022(Present)</option>
-              </select> -->
             </form>
             <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
               <input style="display: inline; z-index: 0" type="search" value="{{ search }}" name="search" placeholder="Enter first name, last name, etc." autocomplete="off">
