@@ -217,33 +217,41 @@ def signupIT():
 @login_required
 def it_dashboard():
     auth_user=current_user
-    if auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Male":
-        sex = 0
-        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
-        remaining_attempt = int(predict_iter.predict_no)
+    
+    if request.method == 'GET':
+        if auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Male":
+            sex = 0
+            student_predictions = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id).all()
+            predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+            remaining_attempt = int(predict_iter.predict_no)
         
-        if auth_user.program == "Shiftee" or auth_user.program == "Transferee":
-            program = 1
-            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
-        elif auth_user.program == "Regular":
-            program = 0
-            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
+            if auth_user.program == "Shiftee" or auth_user.program == "Transferee":
+                program = 1
+                
+                return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt, student_predictions=student_predictions)
+            elif auth_user.program == "Regular":
+                program = 0
+                
+                return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt, student_predictions=student_predictions)
+                
+        elif auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Female":
+            sex = 1
+            student_predictions = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id).all()
+            predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+            remaining_attempt = int(predict_iter.predict_no)
             
-    elif auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Female":
-        sex = 1
-        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
-        remaining_attempt = int(predict_iter.predict_no)
+            if auth_user.program == "Shiftee" or auth_user.program == "Transferee":
+                program = 1
+                    
+                return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt, student_predictions=student_predictions)
+            elif auth_user.program == "Regular":
+                program = 0
+                
+                return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt, student_predictions=student_predictions)
+        else:
+            return redirect(url_for('_auth.index'))
         
-        if auth_user.program == "Shiftee" or auth_user.program == "Transferee":
-            program = 1
-            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
-        elif auth_user.program == "Regular":
-            program = 0
-            return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt)
-    else:
-        return redirect(url_for('_auth.index'))
- 
-    # return render_template("IT/ITinputs.html", auth_user=auth_user)
+    return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt, student_predictions=student_predictions)
 
 @_route_it.route("/edit_profile_it", methods=['POST'])
 def edit_profile_it():
@@ -361,7 +369,6 @@ def predict_IT():
                 fetchPred4 = prediction[-3]
                 
                 
-                
                 '''
                     ADD NEW RECORD TO DATABASE
                 '''
@@ -371,6 +378,7 @@ def predict_IT():
                 pred3 = "No Result" if fetch3 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred3 == '0' else "{}".format(f"{prediction[K-2]} : {fetch3}%"),
                 pred4 = "No Result" if fetch4 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred4 == '0' else "{}".format(f"{prediction[K-3]} : {fetch4}%")
                 pred1 = "No Result" if fetch1 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred1 == '0' else "{}".format(f"{prediction[K]} : {fetch1}%")
+                
                 
                 job = User.query.filter_by(id=int(auth_user.id)).first()
                 val = job.desired_career

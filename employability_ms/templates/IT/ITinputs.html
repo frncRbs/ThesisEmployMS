@@ -29,6 +29,53 @@ button:hover {
 button:active {
   box-shadow: rgba(0, 0, 0, 0.8) 0px 4px 20px -5px, rgba(0, 0, 0, 0.7) 0px 8px 16px -8px;
 } */
+table {
+  background: #012B39;
+  border-radius: 0.25em;
+  border-collapse: collapse;
+  margin: 1em;
+}
+th {
+  border-bottom: 1px solid #364043;
+  color: #E2B842;
+  font-size: 0.85em;
+  font-weight: 600;
+  padding: 0.5em 1em;
+  text-align: left;
+}
+td {
+  color: #fff;
+  font-weight: 400;
+  padding: 0.65em 1em;
+}
+.disabled td {
+  color: #4F5F64;
+}
+tbody tr {
+  transition: background 0.25s ease;
+}
+tbody tr:hover {
+  background: #014055;
+}
+.main {
+  width: 100vw;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.job_label1{
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1em;
+  color: white;
+}
+.job_label2{
+  font-size: 38px;
+  font-weight: 1000;
+  line-height: 1em;
+  color: black;
+}
 button{
   width: 60%;
   height: 40px;
@@ -549,7 +596,35 @@ a{
                   </p>
                 </div>
               </div>
-              
+              <table style="font-size: 14px;">
+                <thead>
+                  <tr>
+                    <th style="text-align: center">Desired Career</th>
+                    <th style="text-align: center">Predictions</th>
+                    <th style="text-align: center">Date Predicted</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% if student_predictions %}
+                    {% for user, student_pred_res in student_predictions %}
+                      <tr>
+                        <td>
+                          <span>{{ student_pred_res.desired_job }}</span>
+                        </td>
+                        <td>
+                          <span style="margin: 5px; text-align: center">{{ student_pred_res.main_rank }}</span>
+                          <span style="margin: 5px; text-align: center">{{ student_pred_res.sub_rank1 }}</span>
+                          <span style="margin: 5px; text-align: center">{{ student_pred_res.sub_rank2 }}</span>
+                          <span style="margin: 5px; text-align: center">{{ student_pred_res.sub_rank3 }}</span>
+                        </td>
+                        <td>
+                          <span style="margin: 5px; text-align: center">{{ student_pred_res.date_created }}</span>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  {% endif %}
+                </tbody>
+              </table>
             <center><button class="hybridBtn" style="margin: 10px; width: 90%" type="submit">Save</button></center>
           </form>
         <center><button class="hybridBtn" style="margin: 10px; width: 90%" onclick="window.location='/logout'" type="submit">Sign Out</button></center>

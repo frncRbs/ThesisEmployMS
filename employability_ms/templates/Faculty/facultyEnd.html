@@ -850,7 +850,7 @@ nav .content .links{
                       </li>
                     {% endfor %}
                   {% endif %}
-              </ul>
+                </ul>
           </nav>
         <hr>
       </div>
@@ -922,7 +922,7 @@ nav .content .links{
               </thead>
               <tbody style="display: block; height: 150px; overflow-y: auto; overflow-x: hidden;">
                 {% if curriculum_record %}
-                  {% for curriculum_yr in curriculum_record.items %}
+                  {% for curriculum_yr in curriculum_record %}
                     <tr>
                       <td>
                         <span>{{ curriculum_yr.created_by }}</span>
@@ -934,7 +934,13 @@ nav .content .links{
                         <span style="margin: 5px; text-align: center">{{ curriculum_yr.date_created }}</span>
                       </td>
                       <td>
-                        <div style="display: flex">
+                        <!-- <div style="display: flex">
+                          <form action="{{ url_for('_faculty.delete_curriculum_year') }}" method="POST">
+                            <input type="hidden" name="curriculum_identity" value="{{ curriculum_yr.curriculum_id }}">
+                            <button type="submit" style="padding: 10px; margin: 5px" class="hybridBtn"> Delete </button>
+                          </form>
+                        </div> -->
+                        <div style="display: inline-block; display: flex">
                           <form action="{{ url_for('_faculty.delete_curriculum_year') }}" method="POST">
                             <input type="hidden" name="curriculum_identity" value="{{ curriculum_yr.curriculum_id }}">
                             <button type="submit" style="padding: 10px; margin: 5px" class="hybridBtn"> Delete </button>
@@ -946,11 +952,10 @@ nav .content .links{
                 {% endif %}
               </tbody>
             </table>
-            
             <div class="user-right" style="color: #000;">
               <label for="add_curriculum">Add Curriculum Year: </label>
               <form action="{{ url_for('_faculty.add_curriculum_year') }}" method="POST">
-              <input type="text" name="add_curriculum" placeholder="Example: 2007 - 2008">
+              <input style="background: rgb(255, 255, 255)" type="text" name="add_curriculum" placeholder="Example: 2007 - 2008">
             </div>
 						<center><button class="hybridBtn" style="margin: 10px; width: 90%" type="submit">Add</button></center>
             </form>
@@ -1091,20 +1096,20 @@ nav .content .links{
                                   <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
                                 {% endif %}
 
-                              {% else %}
-                                {% if search  %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
-                                {% elif department %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
-                                {% elif sex %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
-                                {% elif curriculum_year %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
                                 {% else %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
+                                  {% if search  %}
+                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
+                                  {% elif department %}
+                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
+                                  {% elif sex %}
+                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
+                                  {% elif curriculum_year %}
+                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
+                                  {% else %}
+                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
+                                  {% endif %}
                                 {% endif %}
-                              {% endif %}
-                          {% else %}
+                            {% else %}
                               ...
                           {% endif %}
                       {% endfor %}

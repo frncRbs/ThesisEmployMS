@@ -13,7 +13,7 @@ body{
 	background: linear-gradient(to bottom, #18290c, #3d632b, #2a3e24);
 }
 .main{
-	width: 400px;
+	width: 450px;
 	height: 850px;
 	background: rgb(0, 255, 34);
 	overflow: hidden;
@@ -30,7 +30,7 @@ body{
 	height: 100%;
 }
 .SignupLabel{
-	color: #fff;
+	color: #3b8a3f;
 	font-size: 2.5em;
 	justify-content: center;
 	display: flex;
@@ -72,7 +72,7 @@ input{
 	border-radius: 5px;
 }
 select{
-	width: 66%;
+	width: 64%;
 	height: 40px;
 	background: #e0dede;
 	justify-content: center;
@@ -124,11 +124,12 @@ button:hover{
 	transform: scale(.6);
 }
 </style>
+
 	<div class="main">  	
 		<input type="checkbox" id="chk" aria-hidden="true">
 		<div class="signup">
 			
-			<form action="{{ url_for('_route_cs.signupCS') }}" method="POST">
+			<form id="form" action="{{ url_for('_route_cs.signupCS') }}" method="POST">
 				<label for="chk" aria-hidden="true" class="SignupLabel">Sign up for CS</label>
 				
 				<label for="first_name" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">First Name :
@@ -146,7 +147,9 @@ button:hover{
 					<option value="Male">Male</option>
 					<option value="Female">Female</option>
 				</select>
-				
+
+				<div id="error"></div>
+
 				<label for="curriculum_year" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Curriculum Year :</label>
 				<select type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" autocomplete="off">
 					<option value="">Curriculum Year</option>
@@ -220,10 +223,10 @@ button:hover{
 				<input type="number" name="contact_number" placeholder="Contact Number" required>
 
 				<label for="email" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Email :</label>
-				<input type="email" name="email" placeholder="Email" required>
+				<input type="email" name="email" placeholder="Email" id="email" required>
 
                 <label for="password" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Password :</label>
-				<input type="password" name="password" placeholder="Password" required>
+				<input type="password" name="password" placeholder="Password" id="password" required="">
 
 				<label for="desired_career" style="color: white; font-size: 14px; margin-left: 75px; padding: 0;">Select Career :</label>
 				<select type="text" name="desired_career" id="drop-down" placeholder="Select career" required="">
@@ -247,7 +250,7 @@ button:hover{
 				<center>
 					<div style="position: relative; bottom: 20px">
 						<label for="chk" style="display: inline-block; color: white; padding: 0; margin: 0" aria-hidden="true" class="HomeLabel">Login</label>
-						<button style="display: inline-block; width: 30%" type="submit">Sign up</button>
+						<button onclick="validate()" style="display: inline-block; width: 30%" type="submit">Sign up</button>
 					</div>
 				</center>
 			</form>
@@ -265,4 +268,29 @@ button:hover{
 			<button onclick="window.location='/'"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Home</button>
 		</div>
 	</div>
+
+<!-- <script>
+
+const Email = document.getElementById("email")
+const Password = document.getElementById("password")
+const form = document.getElementById('form')
+
+form.addEventListener('submit', (e) =>{
+	var regX = /^([a-zA-Z0-9]+)@([wmsu]).([edu]))(.[ph])$/
+	let messages = []
+
+	if (Password.value.length <=6){
+		messages.push('Password must be longer than 6 characters')
+	}
+
+	if (Password.value.length >=20){
+		messages.push('Password must be less than 20 characters')
+	}
+
+	if(messages.length > 0){
+		e.preventDefault()
+		errorElement.innerText = messages.join(', ')
+	}
+})
+</script> -->
 {% endblock %}
