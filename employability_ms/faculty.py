@@ -111,13 +111,21 @@ def faculty_dashboard():
 
     # it_students = User.query.filter(User.department.like('Information Technology'), User.user_type.like(1), User.is_approve.like(1)).count()
 
-    first_SE = PredictionResult.query.filter(PredictionResult.chart_rank.like('Software Engineer / Programmer')).count()
+    first_SE = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, PredictionResult.chart_rank == 'Software Engineer / Programmer', PredictionResult.user_id == User.id).group_by(User.id).count()
+    
+    first_TSS = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, PredictionResult.chart_rank == 'Technical Support Specialist', PredictionResult.user_id == User.id).group_by(User.id).count()
+    
+    first_A = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, PredictionResult.chart_rank == 'Academician', PredictionResult.user_id == User.id).group_by(User.id).count()
+    
+    first_AA = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, PredictionResult.chart_rank == 'Administrative Assistant', PredictionResult.user_id == User.id).group_by(User.id).count()
+    
+    # first_SE = PredictionResult.query.filter(PredictionResult.chart_rank.like('Software Engineer / Programmer')).count()
 
-    first_TSS = PredictionResult.query.filter(PredictionResult.chart_rank.like('Technical Support Specialist')).count()
+    # first_TSS = PredictionResult.query.filter(PredictionResult.chart_rank.like('Technical Support Specialist')).count()
 
-    first_A = PredictionResult.query.filter(PredictionResult.chart_rank.like('Academician')).count()
+    # first_A = PredictionResult.query.filter(PredictionResult.chart_rank.like('Academician')).count()
 
-    first_AA = PredictionResult.query.filter(PredictionResult.chart_rank.like('Administrative Assistant')).count()
+    # first_AA = PredictionResult.query.filter(PredictionResult.chart_rank.like('Administrative Assistant')).count()
 
     software_engineer_programmer = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.desired_career == 'Software Engineer / Programmer', PredictionResult.user_id == User.id).group_by(User.id).count()
 
