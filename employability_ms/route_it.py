@@ -233,7 +233,7 @@ def it_dashboard():
                 program = 0
                 
                 return render_template("IT/ITinputs.html", auth_user=auth_user, sex=sex, program=program, remaining_attempt=remaining_attempt, student_predictions=student_predictions)
-                
+                  
         elif auth_user.user_type == 1 and auth_user.department == "Information Technology" and auth_user.sex == "Female":
             sex = 1
             student_predictions = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == int(auth_user.id)).group_by(PredictionResult.result_id).all()

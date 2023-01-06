@@ -780,12 +780,16 @@ nav .content .links{
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="shsa384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
-    <link rel="stylesheet" href="style.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <!-- <script defer src="https://unpkg.com/alpinejs@3.10.5/dist/cdn.min.js"></script> -->
+    <script defer src="../../static/alpine.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/chart.min.js" integrity="sha512-MC1YbhseV2uYKljGJb7icPOjzF2k6mihfApPyPhEAo3NsLUW0bpgtL4xYWK1B+1OuSrUkfOTfhxrRKCz/Jp3rQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.1/chart.min.js" integrity="sha512-MC1YbhseV2uYKljGJb7icPOjzF2k6mihfApPyPhEAo3NsLUW0bpgtL4xYWK1B+1OuSrUkfOTfhxrRKCz/Jp3rQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"> -->
     <!-- <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> -->
+    <link rel="stylesheet" href="../../static/app.css" />
+    
     <title>CCS Faculty Dashboard</title>
 </head>
 <body>
@@ -1079,7 +1083,7 @@ nav .content .links{
                     {% endif %}
                   </tbody>
                 </table>
-                <div class="" style="color: white; margin-left: 50%">
+                <div class="" style="color: white; margin-left: 50%;">
                   {% if students_record %}
                       {% for page_num in students_record.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                           {% if page_num  %}
@@ -1121,35 +1125,215 @@ nav .content .links{
       </div>
 
       <hr>
-      <center><div><h1 style="color: #fff;">DATA STATISTICS</h1></div></center>
-      <hr>
-      <div style="display: flex; flex-direction: row; align-items: center; ">
-        <div style="display: flex; flex-direction: column; width: 50%; justify-content: center; background:rgba(255, 255, 255, 0.233); margin: 10px">
-          <div style="width: 90%; height: 150px; text-align: center; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; margin: 20px">
-            <h2>Number of Registered Student</h2>
-            <h1>{{ registered_students }}</h1>
+      <div x-data="faculty_end" x-init="display_graph()">
+        <center><div><h1 style="color: #fff;">DATA STATISTICS</h1></div></center>
+        <hr>
+        <div style="display: flex; flex-direction: row; align-items: center; ">
+          <div style="display: flex; flex-direction: column; width: 50%; justify-content: center; background:rgba(255, 255, 255, 0.233); margin: 10px">
+            <div style="width: 90%; height: 150px; text-align: center; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; margin: 20px">
+              <h2>Number of Registered Student</h2>
+              <h1>{{ registered_students }}</h1>
+            </div>
+            <div style="width: 90%; height: 150px; text-align: center; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; margin: 20px">
+              <h2>Number of Pending Student Account</h2>
+              <h1>{{ unregistered_students }}</h1>
+            </div>
           </div>
-          <div style="width: 90%; height: 150px; text-align: center; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; margin: 20px">
-            <h2>Number of Pending Student Account</h2>
-            <h1>{{ unregistered_students }}</h1>
+          <!-- <div style="display: flex; flex-direction: row; width: 100%; justify-content: flex-end; background:rgba(255, 255, 255, 0.233)">
+              <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px" >
+                <canvas id="mypieChartDep"></canvas>
+              </div>
+              
+              <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px" hidden>
+                <canvas id="mypieChartSex"></canvas>
+              </div>
+              
+              <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px" hidden>
+                <canvas id="mypieChartProgram"></canvas>
+              </div>
+          </div> -->
+          <div class="w-full flex flex-row items-center justify-center space-x-3 overflow-y-auto p-3" style="background:rgba(255, 255, 255, 0.233); height: 380px;">
+            <div class="w-auto">
+              <canvas id="main_pie" x-ref="pie_main" class="h-full w-auto"></canvas>
+            </div>
+            <div class="w-auto bg-red-100">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="text-align: center">Full Name</th>
+                    <th style="text-align: center">Desired Career</th>
+                    <th style="text-align: center">Top 1 Prediction</th>
+                  </tr>
+                </thead>
+                <tbody>
+                      <tr>
+                        <td>
+                          <span>France</span>
+                          <span>Leoniel</span>
+                          <span>Rebollos</span>
+                        </td>
+                        <td>
+                          <span style="margin: 5px; text-align: center">Software Engineer / Programmer</span>
+                        </td>
+                        <td>
+                          <span style="margin: 5px; text-align: center">Software Engineer / Programmer : 100%</span>
+                        </td>
+                      </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-        <div style="display: flex; flex-direction: row; width: 100%; justify-content: flex-end; background:rgba(255, 255, 255, 0.233)">
-            
-            <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px" ><canvas id="mypieChartDep"></canvas></div>
-            
-            <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px" ><canvas id="mypieChartSex"></canvas></div>
-            
-            <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px" ><canvas id="mypieChartProgram"></canvas></div>
+        <div style="margin: 10px; display: flex; justify-content: center; background:rgba(255, 255, 255, 0.233)">
+          <!-- <div style="background: rgba(255, 255, 255, 0.795); width: 100%; height: auto; margin: 10px" ><canvas id="myChart"></canvas></div>
+          <div style="background: rgba(255, 255, 255, 0.795); width: 100%; height: auto; margin: 10px" ><canvas id="myRank"></canvas></div> -->
         </div>
       </div>
-      <div style="margin: 10px; display: flex; justify-content: center; background:rgba(255, 255, 255, 0.233)">
-        <div style="background: rgba(255, 255, 255, 0.795); width: 100%; height: auto; margin: 10px" ><canvas id="myChart"></canvas></div>
-        <div style="background: rgba(255, 255, 255, 0.795); width: 100%; height: auto; margin: 10px" ><canvas id="myRank"></canvas></div>
-      </div>
-      </main>
-
+    </main>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      <!-- <script src="../../static/alpine.js"></script> -->
+      <script>
+        let counter = 0;
+        let main_pie = null;
+        let dept = null;
+        let stat = null;
+
+        it_students = JSON.parse({{ it_students | tojson}})
+        cs_students = JSON.parse({{ cs_students | tojson}})
+        first_SE = JSON.parse({{ first_SE | tojson}})
+        first_TSS = JSON.parse({{ first_TSS | tojson}})
+        first_A = JSON.parse({{ first_A | tojson}})
+        first_AA = JSON.parse({{ first_AA | tojson}})
+        software_engineer_programmer = JSON.parse({{ software_engineer_programmer  | tojson}})
+        technical_support_specialist = JSON.parse({{ technical_support_specialist  | tojson}})
+        academician = JSON.parse({{ academician  | tojson}})
+        administrative_assistant = JSON.parse({{ administrative_assistant  | tojson}})
+        male = JSON.parse({{ male  | tojson}})
+        female = JSON.parse({{ female  | tojson}})
+        shiftee = JSON.parse({{ shiftee  | tojson}})
+        transferee = JSON.parse({{ transferee  | tojson}})
+        regular = JSON.parse({{ regular  | tojson}})
+
+        document.addEventListener('alpine:init', () => {
+          Alpine.data('faculty_end', () => ({
+            'canvas_id': 0,
+            generate_id(){
+              this.canvas_id = '_'+counter.toString();
+              return (this.canvas_id.toString());
+            },
+            display_graph(default_labels = ['Computer Science', 'Information Technology'], default_data = [cs_students, it_students]){
+              if(main_pie!=null){
+                main_pie.destroy();
+              }
+
+              var cht = document.getElementById(this.$refs.pie_main.id).getContext('2d');
+              main_pie = new Chart(cht, {
+                type: 'pie',
+                data: {
+                    labels: default_labels,
+                    datasets: [{
+                        label:  ["# of Students"],
+                        backgroundColor: ['#5DA5DA ', '#FAA43A', '#60BD68', '#B276B2', '#E16851', '#FB8267'],
+                        borderColor: 'rgba(154, 241, 140)',
+                        pointBackgroundColor: 'rgba(154, 245, 140)',
+                        data: default_data,
+                        borderWidth: 1.5,
+                        tension: 0.3,
+                        fill: true,
+                    }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  onClick: (e, activeEls) => {
+                    let datasetIndex = activeEls[0].datasetIndex;
+                    let dataIndex = activeEls[0].index;
+                    let datasetLabel = e.chart.data.datasets[datasetIndex].label;
+                    let value = e.chart.data.datasets[datasetIndex].data[dataIndex];
+                    let label = e.chart.data.labels[dataIndex];
+                    counter++;
+                    this.expand_data(label);
+                  },
+                  //onClick: function(e){
+                  //  var activePoints = this.getElementsAtEvent(e, main_pie); 
+                  //  var selectedIndex = activePoints[0]._index; 
+                  //  alert(this.data.datasets[0].data[selectedIndex]);
+                  //},
+                  title: {
+                      display: true,
+                      text: 'Item Something'
+                  },
+                  plugins: {
+                      legend: false,
+                      tooltip: true,
+                  },
+                  hover: {
+                      mode: 'index',
+                      intersect: true
+                  }
+                }
+              });
+            },
+            async expand_data(_val){
+              let default_labels = null;
+              let default_data = null;
+              if(_val.toLowerCase() == 'Information Technology'.toLowerCase() || _val.toLowerCase() == 'Computer Science'.toLowerCase()){
+                let form = new FormData;
+                
+                if(_val.toLowerCase() == 'Information Technology'.toLowerCase()){
+                  dept = _val;
+                  form.append('department', dept);
+                  await axios.post('/change_data_status', form)
+                  .then((response) => {
+                    default_labels = Object.keys(response.data);
+                    default_data = Object.values(response.data);
+                  },
+                  (error) => {
+                    console.log(error);
+                  });
+                }
+                else if(_val.toLowerCase() == 'Computer Science'.toLowerCase()){
+                  dept = _val;
+                  form.append('department', dept);
+                  await axios.post('/change_data_status', form)
+                  .then((response) => {
+                    default_labels = Object.keys(response.data);
+                    default_data = Object.values(response.data);
+                  },
+                  (error) => {
+                    console.log(error);
+                  });
+                }
+              }
+              else if(_val.toLowerCase() == 'Shiftee'.toLowerCase() || _val.toLowerCase() == 'Transferee'.toLowerCase() || _val.toLowerCase() == 'Regular'.toLowerCase()){
+                stat = _val;
+
+                let form = new FormData;
+                form.append('department', dept);
+                form.append('status', stat);
+                await axios.post('/change_data_sex', form)
+                .then((response) => {
+                  default_labels = Object.keys(response.data);
+                  default_data = Object.values(response.data);
+                },
+                (error) => {
+                  console.log(error);
+                });
+              }
+              else if(_val.toLowerCase() == 'Female'.toLowerCase() || _val.toLowerCase() == 'Male'.toLowerCase()){
+                console.log(_val);
+              }
+              
+              if(_val != 'Female' && _val != 'Male'){
+                this.display_graph(default_labels, default_data);
+              }
+            },
+            display_names(){
+
+            }
+          }));
+        });
+      </script>
       <script>
         $(document).ready(function() {
           $(".notification-drop .item").on('click',function() {
@@ -1157,7 +1341,7 @@ nav .content .links{
           });
         });
 
-        const ctx = document.getElementById('myChart');
+        /*const ctx = document.getElementById('myChart');
         const chartR = document.getElementById('myRank');
         
         it_students = JSON.parse({{ it_students  | tojson}})
@@ -1344,7 +1528,7 @@ nav .content .links{
                   hitRadius: 3,
               }
       }
-  })
+  })*/
 
 		// Modal
 				// Get the modal

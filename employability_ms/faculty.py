@@ -170,7 +170,6 @@ def faculty_dashboard():
     # registered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(1)).count()
     
     # unregistered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(0)).count() 
-    
     if request.method == 'GET':
         # Current Logged User
         auth_user=current_user
@@ -202,9 +201,11 @@ def faculty_dashboard():
                     .filter((User.first_name.like('%' + search + '%'))      |
                     (User.middle_name.like('%' + search + '%'))     |
                     (User.last_name.like('%' + search + '%'))       |
-                    (User.desired_career.like('%' + search + '%'))         |
+                    (PredictionResult.desired_job.like('%' + search + '%'))|
+                    (PredictionResult.main_rank.like('%' + search + '%'))|
                     (User.contact_number.like('%' + search + '%'))  |
                     (User.department.like('%' + search + '%'))    |
+                    (User.curriculum_year.like('%' + search + '%'))    |
                     (User.email.like('%' + search + '%')))\
                     .paginate(page=page, per_page=5)# fetch user students only
             elif department:
@@ -382,3 +383,36 @@ def signup_Superadmin():
     except:
         flash('Invalid credentials', category='error')
         return redirect(url_for('.register_faculty'))
+
+
+
+# ROUTE FOR PIE CHART
+@_faculty.route('/change_data_status', methods=['POST'])
+@login_required
+def change_data_status():
+    status = db.session.query(User).filter(User.program != 'Not Applicable').group_by(User.program).all()
+    data_dict_stat = {}
+    for s in status:
+        fetch_data = db.session.query(User)\
+                    .filter(User.program == s.program)\
+                    .filter(User.is_approve == 1, User.user_type == 1)\
+                    .filter(User.department == request.form['department']).all()
+        data_dict_stat.update({s.program: len(fetch_data)})
+    return data_dict_stat
+
+@_faculty.route('/change_data_sex', methods=['POST'])
+@login_required
+def change_data_sex():
+    sex = db.session.query(User).group_by(User.sex).all()
+    data_dict_sex = {}
+    for s in sex:
+        fetch_data = db.session.query(User)\
+                    .filter(User.program == request.form['status'])\
+                    .filter(User.sex == s.sex)\
+                    .filter(User.is_approve == 1, User.user_type == 1)\
+                    .filter(User.department == request.form['department']).all()
+        data_dict_sex.update({s.sex: len(fetch_data)})
+    return data_dict_sex
+    
+    return 'user_schema.dump(fetch_data)'
+    
