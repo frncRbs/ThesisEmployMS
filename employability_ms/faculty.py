@@ -413,6 +413,19 @@ def change_data_sex():
                     .filter(User.department == request.form['department']).all()
         data_dict_sex.update({s.sex: len(fetch_data)})
     return data_dict_sex
+
+@_faculty.route('/generate_names', methods=['POST'])
+@login_required
+def generate_names():
+    data_dict_names = {}
+    fetch_data = db.session.query(User)\
+                .filter(User.program == request.form['status'])\
+                .filter(User.sex == request.form['sex'])\
+                .filter(User.is_approve == 1, User.user_type == 1)\
+                .filter(User.department == request.form['department']).all()
     
-    return 'user_schema.dump(fetch_data)'
-    
+    for name in fetch_data:
+        fetch_result = db.session.query(PredictionResult)\
+                .filter(PredictionResult.user_id == name.id).first()
+        data_dict_names.update({name.id: {'fullname': str(name.first_name +' '+name.middle_name+' '+ name.last_name), 'desired_career': fetch_result.desired_job, 'main_rank': fetch_result.main_rank}})
+    return data_dict_names

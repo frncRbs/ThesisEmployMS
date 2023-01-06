@@ -1152,11 +1152,11 @@ nav .content .links{
                 <canvas id="mypieChartProgram"></canvas>
               </div>
           </div> -->
-          <div class="w-full flex flex-row items-center justify-center space-x-3 overflow-y-auto p-3" style="background:rgba(255, 255, 255, 0.233); height: 380px;">
-            <div class="w-auto">
+          <div class="relative w-full flex flex-col m-auto lg:flex-row items-center justify-center space-y-3 lg:space-x-3 overflow-y-auto p-3" style="background:rgba(255, 255, 255, 0.233); height: 380px;">
+            <div class="w-auto mt-24 lg:mt-0">
               <canvas id="main_pie" x-ref="pie_main" class="h-full w-auto"></canvas>
             </div>
-            <div class="w-auto bg-red-100">
+            <div class="w-auto bg-red-100" x-show="show_names">
               <table>
                 <thead>
                   <tr>
@@ -1166,19 +1166,22 @@ nav .content .links{
                   </tr>
                 </thead>
                 <tbody>
-                      <tr>
-                        <td>
-                          <span>France</span>
-                          <span>Leoniel</span>
-                          <span>Rebollos</span>
-                        </td>
-                        <td>
-                          <span style="margin: 5px; text-align: center">Software Engineer / Programmer</span>
-                        </td>
-                        <td>
-                          <span style="margin: 5px; text-align: center">Software Engineer / Programmer : 100%</span>
-                        </td>
-                      </tr>
+                      
+                      <template x-if="list_of_names">
+                        <template x-for="name_record in list_of_names">
+                          <tr>
+                            <td>
+                              <span x-text="name_record.fullname"></span>
+                            </td>
+                            <td>
+                              <span style="margin: 5px; text-align: center" x-text="name_record.desired_career"></span>
+                            </td>
+                            <td>
+                              <span style="margin: 5px; text-align: center" x-text="name_record.main_rank"></span>
+                            </td>
+                          </tr>
+                        </template>
+                      </template>
                 </tbody>
               </table>
             </div>
@@ -1197,6 +1200,7 @@ nav .content .links{
         let main_pie = null;
         let dept = null;
         let stat = null;
+        let sex = null;
 
         it_students = JSON.parse({{ it_students | tojson}})
         cs_students = JSON.parse({{ cs_students | tojson}})
@@ -1217,6 +1221,8 @@ nav .content .links{
         document.addEventListener('alpine:init', () => {
           Alpine.data('faculty_end', () => ({
             'canvas_id': 0,
+            'show_names': false,
+            'list_of_names': [],
             generate_id(){
               this.canvas_id = '_'+counter.toString();
               return (this.canvas_id.toString());
@@ -1321,7 +1327,25 @@ nav .content .links{
                 });
               }
               else if(_val.toLowerCase() == 'Female'.toLowerCase() || _val.toLowerCase() == 'Male'.toLowerCase()){
-                console.log(_val);
+                sex = _val;
+                let form = new FormData;
+                form.append('department', dept);
+                form.append('status', stat);
+                form.append('sex', sex);
+                
+                await axios.post('/generate_names', form)
+                .then((response) => {
+                  console.log(Object.values(response.data));
+                  this.list_of_names = Object.values(response.data);
+                  //default_labels = Object.keys(response.data);
+                  //default_data = Object.values(response.data);
+                },
+                (error) => {
+                  console.log(error);
+                });
+
+                this.show_names = true;
+                this.display_names;
               }
               
               if(_val != 'Female' && _val != 'Male'){
@@ -1329,7 +1353,7 @@ nav .content .links{
               }
             },
             display_names(){
-
+              
             }
           }));
         });
