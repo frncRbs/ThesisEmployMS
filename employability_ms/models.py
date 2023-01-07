@@ -7,7 +7,7 @@ from marshmallow import Schema, fields
 
 class UserSchema(marsh.Schema):
     class Meta:
-        fields = ('id', 'first_name', 'middle_name', 'last_name', 'sex', 'curriculum_year', 'contact_number', 'email', 'desired_career', 'department', 'program', 'password', 'is_approve', 'predict_no', 'user_type')
+        fields = ('id', 'first_name', 'middle_name', 'last_name', 'sex', 'curriculum_year', 'contact_number', 'email', 'desired_career', 'department', 'program', 'top_rank', 'password', 'is_approve', 'predict_no', 'user_type')
     
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,7 +20,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(150), unique=True, nullable=False)
     desired_career = db.Column(db.String(150), nullable=False) 
     department = db.Column(db.String(150), nullable=False)
-    program = db.Column(db.String(150), nullable=False)  
+    program = db.Column(db.String(150), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     is_approve = db.Column(db.Boolean, nullable=False, default=0)
     predict_no = db.Column(db.SmallInteger, nullable=False, default=1)
@@ -46,12 +46,12 @@ class User(db.Model, UserMixin):
 
 class PredictionResultSchema(marsh.Schema):
     class Meta:
-        fields = ('result_id', 'desired_job','chart_rank', 'main_rank', 'sub_rank1', 'sub_rank2', 'sub_rank3', 'user_id', 'date_created')
+        fields = ('result_id', 'desired_job', 'top_rank', 'main_rank', 'sub_rank1', 'sub_rank2', 'sub_rank3', 'user_id', 'date_created')
 
 class PredictionResult(db.Model):
     result_id = db.Column(db.Integer, primary_key=True)
     desired_job = db.Column(db.String(150), nullable=True)
-    chart_rank = db.Column(db.String(255), nullable=False)
+    top_rank = db.Column(db.String(150), nullable=False)    
     main_rank = db.Column(db.String(255), nullable=False)
     sub_rank1 = db.Column(db.String(255), nullable=False)
     sub_rank2 = db.Column(db.String(255), nullable=False)
@@ -59,9 +59,9 @@ class PredictionResult(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
 
-    def __init__(self, desired_job, chart_rank, main_rank, sub_rank1, sub_rank2, sub_rank3, user_id, date_created):
+    def __init__(self, desired_job, top_rank, main_rank, sub_rank1, sub_rank2, sub_rank3, user_id, date_created):
         self.desired_job = desired_job
-        self.chart_rank = chart_rank
+        self.top_rank = top_rank
         self.main_rank = main_rank
         self.sub_rank1 = sub_rank1
         self.sub_rank2 = sub_rank2

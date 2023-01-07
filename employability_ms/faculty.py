@@ -103,73 +103,41 @@ def faculty_dash():
 @login_required
 def faculty_dashboard():
     
-    cs_students = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.department == 'Computer Science', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    it_students = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.department == 'Information Technology', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    # cs_students = User.query.filter(User.department.like('Computer Science'), User.user_type.like(1), User.is_approve.like(1)).count()
-
-    # it_students = User.query.filter(User.department.like('Information Technology'), User.user_type.like(1), User.is_approve.like(1)).count()
-
-    first_SE = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, PredictionResult.chart_rank == 'Software Engineer / Programmer', PredictionResult.user_id == User.id).group_by(User.id).count()
+    no_studs_desired_job_1 = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.desired_job == 'Software Engineer / Programmer', PredictionResult.user_id == User.id).group_by(User.id).count()
+    no_studs_desired_job_2 = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.desired_job == 'Technical Support Specialist', PredictionResult.user_id == User.id).group_by(User.id).count()
+    no_studs_desired_job_3 = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.desired_job == 'Academician', PredictionResult.user_id == User.id).group_by(User.id).count()
+    no_studs_desired_job_4 = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.desired_job == 'Administrative Assistant', PredictionResult.user_id == User.id).group_by(User.id).count()
+    overall_studs_desired_job = int(no_studs_desired_job_1 + no_studs_desired_job_2 + no_studs_desired_job_3 + no_studs_desired_job_4)
     
-    first_TSS = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, PredictionResult.chart_rank == 'Technical Support Specialist', PredictionResult.user_id == User.id).group_by(User.id).count()
+    no_studs_top_1_prediction_1 = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.top_rank == 'Software Engineer / Programmer', PredictionResult.user_id == User.id).group_by(User.id).count()
+    no_studs_top_1_prediction_2 = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.top_rank == 'Technical Support Specialist', PredictionResult.user_id == User.id).group_by(User.id).count()
+    no_studs_top_1_prediction_3 = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.top_rank == 'Academician', PredictionResult.user_id == User.id).group_by(User.id).count()
+    no_studs_top_1_prediction_4 = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.top_rank == 'Administrative Assistant', PredictionResult.user_id == User.id).group_by(User.id).count()
+    overall_studs_top_1_prediction = int(no_studs_top_1_prediction_1 + no_studs_top_1_prediction_2 + no_studs_top_1_prediction_3 + no_studs_top_1_prediction_4)
     
-    first_A = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, PredictionResult.chart_rank == 'Academician', PredictionResult.user_id == User.id).group_by(User.id).count()
+    cs_students = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, User.department == 'Computer Science', PredictionResult.user_id == User.id).group_by(User.id).count()
+    it_students = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, User.department == 'Information Technology', PredictionResult.user_id == User.id).group_by(User.id).count()
     
-    first_AA = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, PredictionResult.chart_rank == 'Administrative Assistant', PredictionResult.user_id == User.id).group_by(User.id).count()
+    first_SE = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.predict_no >=1, User.user_type == 1, PredictionResult.top_rank == 'Software Engineer / Programmer', PredictionResult.user_id == User.id).group_by(User.id).count()
+    first_TSS = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.predict_no >=1, User.user_type == 1, PredictionResult.top_rank == 'Technical Support Specialist', PredictionResult.user_id == User.id).group_by(User.id).count()
+    first_A = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.predict_no >=1, User.user_type == 1, PredictionResult.top_rank == 'Academician', PredictionResult.user_id == User.id).group_by(User.id).count()
+    first_AA = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.predict_no >=1, User.user_type == 1, PredictionResult.top_rank == 'Administrative Assistant', PredictionResult.user_id == User.id).group_by(User.id).count()
     
-    # first_SE = PredictionResult.query.filter(PredictionResult.chart_rank.like('Software Engineer / Programmer')).count()
-
-    # first_TSS = PredictionResult.query.filter(PredictionResult.chart_rank.like('Technical Support Specialist')).count()
-
-    # first_A = PredictionResult.query.filter(PredictionResult.chart_rank.like('Academician')).count()
-
-    # first_AA = PredictionResult.query.filter(PredictionResult.chart_rank.like('Administrative Assistant')).count()
-
-    software_engineer_programmer = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.desired_career == 'Software Engineer / Programmer', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    technical_support_specialist = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.desired_career == 'Technical Support Specialist', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    academician = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.desired_career == 'Academician', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    administrative_assistant = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.desired_career == 'Administrative Assistant', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    # software_engineer_programmer = User.query.filter(User.desired_career.like('Software Engineer / Programmer'), User.user_type.like(1), User.is_approve.like(1)).count()
-
-    # technical_support_specialist = User.query.filter(User.desired_career.like('Technical Support Specialist'), User.user_type.like(1), User.is_approve.like(1)).count()
-
-    # academician = User.query.filter(User.desired_career.like('Academician'), User.user_type.like(1), User.is_approve.like(1)).count()
-
-    # administrative_assistant = User.query.filter(User.desired_career.like('Administrative Assistant'), User.user_type.like(1), User.is_approve.like(1)).count()
-
-    male = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.sex == 'Male', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    female = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.sex == 'Female', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    # male = User.query.filter(User.sex=='Male', User.user_type.like(1), User.is_approve.like(1)).count()
-
-    # female = User.query.filter(User.sex=='Female', User.user_type.like(1), User.is_approve.like(1)).count()
-
-    shiftee = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.program == 'Shiftee', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    transferee = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.program == 'Transferee', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    regular = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.program == 'Regular', PredictionResult.user_id == User.id).group_by(User.id).count()
-
-    # shiftee = User.query.filter(User.program=='Shiftee', User.user_type.like(1), User.is_approve.like(1)).count()
-
-    # transferee = User.query.filter(User.program=='Transferee', User.user_type.like(1), User.is_approve.like(1)).count()
-
-    # regular = User.query.filter(User.program=='Regular', User.user_type.like(1), User.is_approve.like(1)).count()
-
-    registered_students = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, PredictionResult.user_id == User.id).group_by(User.id).count()
-
+    software_engineer_programmer = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.predict_no >=1, User.user_type == 1, PredictionResult.desired_job == 'Software Engineer / Programmer', PredictionResult.user_id == User.id).group_by(User.id).count()
+    technical_support_specialist = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.predict_no >=1, User.user_type == 1, PredictionResult.desired_job == 'Technical Support Specialist', PredictionResult.user_id == User.id).group_by(User.id).count()
+    academician = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.desired_job == 'Academician', PredictionResult.user_id == User.id).group_by(User.id).count()
+    administrative_assistant = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.desired_job == 'Administrative Assistant', PredictionResult.user_id == User.id).group_by(User.id).count()
+    
+    male = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.sex == 'Male', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).count()
+    female = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.sex == 'Female', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).count()
+    
+    shiftee = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.program == 'Shiftee', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).count()
+    transferee = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.program == 'Transferee', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).count()
+    regular = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.program == 'Regular', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).count()
+    
+    registered_students = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).count()
     unregistered_students = db.session.query(User).filter(User.is_approve == 0, User.user_type == 1).count()
     
-    # registered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(1)).count()
-    
-    # unregistered_students =  User.query.filter(User.user_type.like(1), User.is_approve.like(0)).count() 
     if request.method == 'GET':
         # Current Logged User
         auth_user=current_user
@@ -197,35 +165,34 @@ def faculty_dashboard():
         if auth_user.user_type == -1 or auth_user.user_type == 0:
             
             if search:
-                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == User.id).group_by(User.id)\
+                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id)\
                     .filter((User.first_name.like('%' + search + '%'))      |
                     (User.middle_name.like('%' + search + '%'))     |
                     (User.last_name.like('%' + search + '%'))       |
                     (PredictionResult.desired_job.like('%' + search + '%'))|
-                    (PredictionResult.main_rank.like('%' + search + '%'))|
                     (User.contact_number.like('%' + search + '%'))  |
                     (User.department.like('%' + search + '%'))    |
                     (User.curriculum_year.like('%' + search + '%'))    |
                     (User.email.like('%' + search + '%')))\
                     .paginate(page=page, per_page=5)# fetch user students only
             elif department:
-                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == User.id).group_by(User.id)\
+                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).order_by(PredictionResult.date_created)\
                     .filter((User.department.like('%' + department + '%')))\
                     .paginate(page=page, per_page=5)# fetch department only
             elif program:
-                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == User.id).group_by(User.id)\
+                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).order_by(PredictionResult.date_created)\
                     .filter((User.program.like('%' + program + '%')))\
                     .paginate(page=page, per_page=5)# fetch program only
             elif sex:
-                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == User.id).group_by(User.id)\
+                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).order_by(PredictionResult.date_created)\
                     .filter((User.sex==sex))\
                     .paginate(page=page, per_page=5)# fetch sex only
             elif curriculum_year:
-                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == User.id).group_by(User.id)\
+                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).order_by(PredictionResult.date_created)\
                     .filter((User.curriculum_year.like('%' + curriculum_year + '%')))\
                     .paginate(page=page, per_page=5)# fetch curriculum year only
             else:
-                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', PredictionResult.user_id == User.id).group_by(User.id).paginate(page=page, per_page=5)# fetch user students only
+                students_record = db.session.query(User, PredictionResult).filter(User.is_approve == 1, User.department != 'Faculty', User.predict_no >=1, PredictionResult.user_id == User.id).group_by(User.id).order_by(PredictionResult.date_created).paginate(page=page, per_page=5)# fetch user students only
                 
             auth_user=current_user
             curriculum_input = db.session.query(CurriculumResult).all()
@@ -240,8 +207,9 @@ def faculty_dashboard():
     
     return render_template("Faculty/facultyEnd.html", auth_user=auth_user, 
                             students_record=students_record, 
-                            unapprove_account=unapprove_account, 
-                            count_unapprove=count_unapprove, search=search, curriculum_input=curriculum_input, 
+                            # rows_count=rows_count,
+                            unapprove_account=unapprove_account, overall_studs_desired_job=overall_studs_desired_job,
+                            count_unapprove=count_unapprove, search=search, curriculum_input=curriculum_input, overall_studs_top_1_prediction=overall_studs_top_1_prediction,
                             department=department, sex=sex, curriculum_year=curriculum_year, curriculum_record=curriculum_record,
                             software_engineer_programmer=json.dumps(software_engineer_programmer), technical_support_specialist=json.dumps(technical_support_specialist),
                             academician=json.dumps(academician), administrative_assistant=json.dumps(administrative_assistant),
@@ -390,12 +358,12 @@ def signup_Superadmin():
 @_faculty.route('/change_data_status', methods=['POST'])
 @login_required
 def change_data_status():
-    status = db.session.query(User).filter(User.program != 'Not Applicable').group_by(User.program).all()
+    status = db.session.query(User).filter(User.program != 'Not Applicable', User.predict_no >=1).group_by(User.program).all()
     data_dict_stat = {}
     for s in status:
         fetch_data = db.session.query(User)\
                     .filter(User.program == s.program)\
-                    .filter(User.is_approve == 1, User.user_type == 1)\
+                    .filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1)\
                     .filter(User.department == request.form['department']).all()
         data_dict_stat.update({s.program: len(fetch_data)})
     return data_dict_stat
@@ -403,13 +371,13 @@ def change_data_status():
 @_faculty.route('/change_data_sex', methods=['POST'])
 @login_required
 def change_data_sex():
-    sex = db.session.query(User).group_by(User.sex).all()
+    sex = db.session.query(User).filter(User.predict_no >=1).group_by(User.sex).all()
     data_dict_sex = {}
     for s in sex:
         fetch_data = db.session.query(User)\
                     .filter(User.program == request.form['status'])\
                     .filter(User.sex == s.sex)\
-                    .filter(User.is_approve == 1, User.user_type == 1)\
+                    .filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1)\
                     .filter(User.department == request.form['department']).all()
         data_dict_sex.update({s.sex: len(fetch_data)})
     return data_dict_sex
@@ -421,7 +389,7 @@ def generate_names():
     fetch_data = db.session.query(User)\
                 .filter(User.program == request.form['status'])\
                 .filter(User.sex == request.form['sex'])\
-                .filter(User.is_approve == 1, User.user_type == 1)\
+                .filter(User.is_approve == 1, User.user_type == 1, User.predict_no >=1)\
                 .filter(User.department == request.form['department']).all()
     
     for name in fetch_data:

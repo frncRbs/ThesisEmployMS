@@ -390,6 +390,7 @@ def predict_CS():
                 
                 predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
                 predict_iter.predict_no += 1
+                
                 db.session.commit()
                 
                 return render_template("/CS/CSPredRes.html", 

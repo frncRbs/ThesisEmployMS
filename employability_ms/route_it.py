@@ -379,7 +379,6 @@ def predict_IT():
                 pred4 = "No Result" if fetch4 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred4 == '0' else "{}".format(f"{prediction[K-3]} : {fetch4}%")
                 pred1 = "No Result" if fetch1 == 0 or fetch1 == 0 and fetch2 == 0 and fetch3 == 0 and fetch4 == 0 or fetch2 <= 100 and fetch1 == 0 and fetch3 == 0 and fetch4 == 0 and fetchPred2 == "Administrative Assistant" or fetchPred1 == '0' else "{}".format(f"{prediction[K]} : {fetch1}%")
                 
-                
                 job = User.query.filter_by(id=int(auth_user.id)).first()
                 val = job.desired_career
                 job_desired = val
@@ -389,6 +388,7 @@ def predict_IT():
                 
                 predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
                 predict_iter.predict_no += 1
+                
                 db.session.commit()
                     
                 return render_template("/IT/ITPredRes.html", 

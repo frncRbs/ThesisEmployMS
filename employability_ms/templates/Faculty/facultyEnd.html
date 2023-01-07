@@ -172,7 +172,7 @@ select{
   -webkit-text-stroke: .1px black;
   position: relative;
   display: flex;
-  margin-left: 60px;
+  margin-left: 160px;
   justify-content: space-between;
   right: 10%;
   font-size: 24px;
@@ -438,7 +438,7 @@ box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.5);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  padding: 15% 10% 2% 10%; 
+  padding: 10% 10% 2% 10%; 
   display: flex;
   z-index: 0;
   justify-content: center;
@@ -794,118 +794,41 @@ nav .content .links{
 </head>
 <body>
       <div class="wrapper" style="z-index: 1">
-        <nav>
-          <input type="checkbox" id="show-search">
-          <input type="checkbox" id="show-menu">
-          <label for="show-menu" class="menu-icon"><i class="fas fa-bars"></i></label>
-          <div class="content">
-          <div class="logo">
-            <img style="width: 100px; height: auto" src="https://i.ibb.co/hVNnnCf/312968052-2476337182505210-5876316929227327673-n.png" alt="312968052-2476337182505210-5876316929227327673-n" border="0">
-            <h2>Welcome {{ auth_user.first_name }}!</h2>
+        <div class="relative w-full flex flex-col m-auto lg:flex-row items-center justify-center space-y-3 lg:space-x-3 overflow-y-auto p-3">
+          <nav>
+            <input type="checkbox" id="show-search">
+            <input type="checkbox" id="show-menu">
+            <label for="show-menu" class="menu-icon"><i class="fas fa-bars"></i></label>
+            <div class="content">
+            <div class="logo">
+              <img style="width: 100px; height: auto" src="https://i.ibb.co/hVNnnCf/312968052-2476337182505210-5876316929227327673-n.png" alt="312968052-2476337182505210-5876316929227327673-n" border="0">
+              <div style="margin-top: 30px;"><h2>Welcome {{ auth_user.first_name }}!</h2></div>
+            </div>
+              <ul class="links">
+                  <li>
+                    <div>
+                    <a href="/register_faculty" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Faculty</h2></a>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                    <a href="/faculty_dash" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-users" aria-hidden="true"></i> Registered Faculty</h2></a>
+                    </div>
+                  </li>
+                  <li>
+                    <div>
+                    <a href="/logout" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Logout</h2></a>
+                    </div>
+                  </li>
+                </li>
+              </ul>
+            </nav>
           </div>
-            <ul class="links">
-                <li>
-                  <div>
-                  <a href="/register_faculty" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-user-plus" aria-hidden="true"></i> Register Faculty</h2></a>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                  <a href="/faculty_dash" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-users" aria-hidden="true"></i> Registered Faculty</h2></a>
-                  </div>
-                </li>
-                <li>
-                  <div>
-                  <a href="/logout" style="display: inline-block;"><h2  style="cursor: pointer; color: white; -webkit-text-stroke: .1px black;"><i class="fa fa-chevron-circle-left" aria-hidden="true"></i> Logout</h2></a>
-                  </div>
-                </li>
-              </li>
-            </ul>
-            <ul class="notification-drop">
-              <li class="item">
-                <i class="fa fa-bell" aria-hidden="true" style="color: white;"></i> <span class="btn__badge pulse-button ">{{ count_unapprove }}</span>     
-                <ul style="background-color: #294f0f; border-radius: 5px; overflow:scroll; height:250px; width: auto">
-                  {% if unapprove_account %}
-                    {% for unapprove in unapprove_account %}
-                        <li style="font-size: small; color: white; text-align: left; ">
-                          {{ unapprove.first_name }}
-                          {{ unapprove.middle_name }}
-                          {{ unapprove.last_name }}
-                          <div style="display: block">{{ unapprove.department }}</div>
-                          <div style="display: block">{{ unapprove.contact_number }}</div>
-                          <div style="display: inline-block">
-                            <form action="/approve_account" method="POST">
-                              <input type="hidden" name="user_id" value="{{ unapprove.id }}">
-                              <input type="hidden" name="user_email" value="{{ unapprove.email }}">
-                              <input type="hidden" name="user_department" value="{{ unapprove.department }}">
-                              <input type="hidden" name="approve_flag" value="1">
-                              <button type="submit"> Approve </button>
-                            </form>
-                          </div>
-                          <div style="display: inline-block">
-                            <form action="/approve_account" method="POST">
-                              <input type="hidden" name="user_id" value="{{ unapprove.id }}">
-                              <input type="hidden" name="user_email" value="{{ unapprove.email }}">
-                              <input type="hidden" name="user_department" value="{{ unapprove.department }}">
-                              <input type="hidden" name="approve_flag" value="0">
-                              <button type="submit"> Disapprove </button>
-                            </form>
-                          </div>
-                      </li>
-                    {% endfor %}
-                  {% endif %}
-                </ul>
-          </nav>
         <hr>
       </div>
     <main>
         <!-- HERO SECTION -->
-        <div>
-          
-          <div style="width: 55%; height: 60px; position: absolute; left: 450px; top: 160px; display: flex; background: rgba(255, 255, 255, 0.404)">
-            <div style="background: rgba(255, 255, 255, 0.500); display: flex; border-radius: 10px;">
-              <button style="margin: 0; padding: 5px; border-radius: 20px; width: 30px; height: 30px; position: relative; top: 13px; background: green; color: white; font-weight: bold" id="myBtn"> + </button>
-            
-              <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-                <select style="display: inline; z-index: 0; width: 150px" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
-                  <option value="">Curriculum Year</option>
-                  {% if curriculum_input %}
-                    {% for curriculum in curriculum_input %}
-                      <option value="{{ curriculum.curriculum_year }}">{{ curriculum.curriculum_year }}</option>
-                    {% endfor %}
-                  {% endif %}
-                </select>
-              </form>
-            </div>
-            <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-              <select style="display: inline; z-index: 0" type="text" name="program" id="drop-down" placeholder="Program" required="" onchange="this.form.submit()">
-                <option value="">Program</option>
-                <option value="Shiftee">Shiftee</option>
-                <option value="Transferee">Transferee</option>
-                <option value="Regular">Regular</option>
-              </select>
-            </form>
-            <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-              <select style="display: inline; z-index: 0" type="text" name="sex" id="drop-down" placeholder="Sex" required="" onchange="this.form.submit()">
-                <option value="">Sex</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-            </form>
-            <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-              <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
-                <option value="">Department</option>
-                <option value="information technology">Information Technology</option>
-                <option value="computer science">Computer Science</option>
-              </select>
-            </form>
-            <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-              <input style="display: inline; z-index: 0" type="search" value="{{ search }}" name="search" placeholder="Enter first name, last name, etc." autocomplete="off">
-              <!-- <button type="submit" style="display: inline-block;">Search</button>   -->
-            </form>
-          </div>
-        
-
+      <div class="relative w-full flex flex-col m-auto lg:flex-col items-center justify-center space-y-3 lg:space-x-3 overflow-y-auto p-3">
 				<div id="myModal" class="modal">
 					<!-- Modal content -->
 					<div class="modal-content">
@@ -915,6 +838,7 @@ nav .content .links{
                 <center><h1><div style="color: green; display: inline; font-size: 40px">Add Curriculum</div></h1></center>
 							</div>
 						</div>
+          <div class="relative w-full flex flex-col m-auto sm:flex-col justify-center">
             <table style="font-size: 14px;">
               <thead style="display: block;">
                 <tr>
@@ -964,7 +888,9 @@ nav .content .links{
 						<center><button class="hybridBtn" style="margin: 10px; width: 90%" type="submit">Add</button></center>
             </form>
 					</div>
+        </div>
 				</div>
+      </div>
         
         <div class="hero">
           <div style="background-color: #6b915954;">
@@ -1011,7 +937,84 @@ nav .content .links{
                 {% endif %}
               {% endwith %}
             </div>
-              <div>
+            <div class="relative w-full flex flex-col m-auto lg:flex-col items-center justify-center space-y-3 lg:space-x-3 overflow-y-auto p-3">
+                <div class="mx-auto"><h1 style="font-size: larger;">Registered Students Record</h1></div>
+              <div class="flex flex-row lg:flex-row justify-center" style="width: 70%; height: 60px; position: relative; display: flex; background: rgba(255, 255, 255, 0.404)">
+                  <div class="flex flex-row lg:flex-row mt-2 items-baseline">
+                      <button style="margin: 0; padding: 5px; border-radius: 20px; width: 30px; height: 30px; position: relative; background: green; color: white; font-weight: bold" id="myBtn"> + </button>
+                    
+                      <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
+                        <select style="display: inline; z-index: 0; width: 170px; margin-right: 10px" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
+                          <option value="">Curriculum Year</option>
+                          {% if curriculum_input %}
+                            {% for curriculum in curriculum_input %}
+                              <option value="{{ curriculum.curriculum_year }}">{{ curriculum.curriculum_year }}</option>
+                            {% endfor %}
+                          {% endif %}
+                        </select>
+                      </form>
+                      <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
+                        <select style="display: inline; z-index: 0; width: 120px; margin-right: 10px" type="text" name="program" id="drop-down" placeholder="Program" required="" onchange="this.form.submit()">
+                          <option value="">Program</option>
+                          <option value="Shiftee">Shiftee</option>
+                          <option value="Transferee">Transferee</option>
+                          <option value="Regular">Regular</option>
+                        </select>
+                      </form>
+                      <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
+                        <select style="display: inline; z-index: 0; width: 120px; margin-right: 10px" type="text" name="sex" id="drop-down" placeholder="Sex" required="" onchange="this.form.submit()">
+                          <option value="">Sex</option>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
+                      </form>
+                      <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
+                        <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
+                          <option value="">Department</option>
+                          <option value="information technology">Information Technology</option>
+                          <option value="computer science">Computer Science</option>
+                        </select>
+                      </form>
+                      <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
+                        <input style="display: inline; z-index: 0" type="search" value="{{ search }}" name="search" placeholder="Enter first name, last name, etc." autocomplete="off">
+                        <!-- <button type="submit" style="display: inline-block;">Search</button>   -->
+                      </form>
+                      <ul class="notification-drop">
+                        <li class="item">
+                          <i class="fa fa-bell" aria-hidden="true" style="color: white;"></i> <span class="btn__badge pulse-button ">{{ count_unapprove }}</span>     
+                          <ul style="background-color: #00000080; border-radius: 5px; overflow:scroll; height:250px; width: auto; overflow-y: auto; overflow-x: hidden;">
+                            {% if unapprove_account %}
+                              {% for unapprove in unapprove_account %}
+                                  <li style="font-size: small; color: white; text-align: left; ">
+                                    {{ unapprove.first_name }}
+                                    {{ unapprove.middle_name }}
+                                    {{ unapprove.last_name }}
+                                    <div style="display: block">{{ unapprove.department }}</div>
+                                    <div style="display: block">{{ unapprove.contact_number }}</div>
+                                    <div style="display: inline-block">
+                                      <form action="/approve_account" method="POST">
+                                        <input type="hidden" name="user_id" value="{{ unapprove.id }}">
+                                        <input type="hidden" name="user_email" value="{{ unapprove.email }}">
+                                        <input type="hidden" name="user_department" value="{{ unapprove.department }}">
+                                        <input type="hidden" name="approve_flag" value="1">
+                                        <button class="hybridBtn" type="submit"> Approve </button>
+                                      </form>
+                                    </div>
+                                    <div style="display: inline-block">
+                                      <form action="/approve_account" method="POST">
+                                        <input type="hidden" name="user_id" value="{{ unapprove.id }}">
+                                        <input type="hidden" name="user_email" value="{{ unapprove.email }}">
+                                        <input type="hidden" name="user_department" value="{{ unapprove.department }}">
+                                        <input type="hidden" name="approve_flag" value="0">
+                                        <button class="hybridBtn" type="submit"> Disapprove </button>
+                                      </form>
+                                    </div>
+                                </li>
+                              {% endfor %}
+                            {% endif %}
+                        </ul>
+                      </div>
+                </div>
                 <table>
                   <thead>
                     <tr>
@@ -1024,9 +1027,6 @@ nav .content .links{
                       <th style="text-align: center">Program</th>
                       <th style="text-align: center">Contact Number</th>
                       <th style="text-align: center">Email</th>
-                      <!-- <th style="text-align: center">Desired Career</th>
-                      <th style="text-align: center">Prediction Results</th>
-                      <th style="text-align: center">Date Predicted</th> -->
                       <th style="text-align: center">Action</th>
                     </tr>
                   </thead>
@@ -1043,7 +1043,7 @@ nav .content .links{
                             <span style="margin: 5px; text-align: center">{{ pred_result.desired_job }}</span>
                           </td>
                           <td>
-                            <span style="margin: 5px; text-align: center">{{ pred_result.main_rank }}</span>
+                            <span style="margin: 5px; text-align: center">{{ pred_result.top_rank }}</span>
                           </td>
                           <td>
                             <span style="margin: 5px; text-align: center">{{ user.sex }}</span>
@@ -1083,7 +1083,7 @@ nav .content .links{
                     {% endif %}
                   </tbody>
                 </table>
-                <div class="" style="color: white; margin-left: 50%;">
+                <div class="mx-auto">
                   {% if students_record %}
                       {% for page_num in students_record.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                           {% if page_num  %}
@@ -1125,18 +1125,26 @@ nav .content .links{
       </div>
 
       <hr>
-      <div x-data="faculty_end" x-init="display_graph()">
+      <div x-data="faculty_end" x-init="display_graph(), merge_two_charts()">
         <center><div><h1 style="color: #fff;">DATA STATISTICS</h1></div></center>
         <hr>
         <div style="display: flex; flex-direction: row; align-items: center; ">
           <div style="display: flex; flex-direction: column; width: 50%; justify-content: center; background:rgba(255, 255, 255, 0.233); margin: 10px">
             <div style="width: 90%; height: 150px; text-align: center; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; margin: 20px">
-              <h2>Number of Registered Student</h2>
-              <h1>{{ registered_students }}</h1>
+              <div class="mx-auto mt-10">
+                <h2 style="font-size: larger; font-weight: bolder">Number of Registered Students</h2>
+                <h1 style="font-size: larger; font-weight: bolder">{{ registered_students }}</h1>
+              </div>
             </div>
-            <div style="width: 90%; height: 150px; text-align: center; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; margin: 20px">
-              <h2>Number of Pending Student Account</h2>
-              <h1>{{ unregistered_students }}</h1>
+            <div style="width: 100%; height: 150px; text-align: center; display: flex">
+              <div class="mx-auto" style="width: 50%; height: auto; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; margin: 20px">
+                <h2 style="font-size: large; font-weight: bold">Number of Students Desired Career</h2>
+                <h1 style="font-size: large; font-weight: bold">{{ overall_studs_desired_job }}</h1>
+              </div>
+              <div class="mx-auto" style="width: 50%; height: auto; border: solid white 10px; background: rgba(255, 255, 255, 0.795); color: black; margin: 20px">
+                <h2 style="font-size: large; font-weight: bold">Number of Students Top 1 Prediction</h2>
+                <h1 style="font-size: large; font-weight: bold">{{ overall_studs_top_1_prediction }}</h1>
+              </div>
             </div>
           </div>
           <!-- <div style="display: flex; flex-direction: row; width: 100%; justify-content: flex-end; background:rgba(255, 255, 255, 0.233)">
@@ -1153,43 +1161,49 @@ nav .content .links{
               </div>
           </div> -->
           <div class="relative w-full flex flex-col m-auto lg:flex-row items-center justify-center space-y-3 lg:space-x-3 overflow-y-auto p-3" style="background:rgba(255, 255, 255, 0.233); height: 380px;">
-            <div class="w-auto mt-24 lg:mt-0">
+            <div class="w-auto mt-24 lg:mt-0 relative">
               <canvas id="main_pie" x-ref="pie_main" class="h-full w-auto"></canvas>
+              <button type="button" class="absolute top-0 mt-7 -ml-3 focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-1 mr-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                x-on:click="refresh_pie">
+                Refresh
+              </button>
             </div>
-            <div class="w-auto bg-red-100" x-show="show_names">
-              <table>
-                <thead>
+            <div class="w-auto bg-white-10" x-show="show_names">
+              <table style="font-size: 16px;">
+                <thead style="display: block;">
                   <tr>
                     <th style="text-align: center">Full Name</th>
                     <th style="text-align: center">Desired Career</th>
                     <th style="text-align: center">Top 1 Prediction</th>
                   </tr>
                 </thead>
-                <tbody>
-                      
-                      <template x-if="list_of_names">
-                        <template x-for="name_record in list_of_names">
-                          <tr>
-                            <td>
-                              <span x-text="name_record.fullname"></span>
-                            </td>
-                            <td>
-                              <span style="margin: 5px; text-align: center" x-text="name_record.desired_career"></span>
-                            </td>
-                            <td>
-                              <span style="margin: 5px; text-align: center" x-text="name_record.main_rank"></span>
-                            </td>
-                          </tr>
-                        </template>
-                      </template>
+                <tbody style="display: block; height: 300px; overflow-y: auto; overflow-x: hidden;">
+                  <template x-if="list_of_names">
+                    <template x-for="name_record in list_of_names">
+                      <tr>
+                        <td>
+                          <span x-text="name_record.fullname"></span>
+                        </td>
+                        <td>
+                          <span style="margin: 5px; text-align: center" x-text="name_record.desired_career"></span>
+                        </td>
+                        <td>
+                          <span style="margin: 5px; text-align: center" x-text="name_record.main_rank"></span>
+                        </td>
+                      </tr>
+                    </template>
+                  </template>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
-        <div style="margin: 10px; display: flex; justify-content: center; background:rgba(255, 255, 255, 0.233)">
+        <!-- <div style="margin: 10px; display: flex; justify-content: center; background:rgba(255, 255, 255, 0.233)"> -->
           <!-- <div style="background: rgba(255, 255, 255, 0.795); width: 100%; height: auto; margin: 10px" ><canvas id="myChart"></canvas></div>
           <div style="background: rgba(255, 255, 255, 0.795); width: 100%; height: auto; margin: 10px" ><canvas id="myRank"></canvas></div> -->
+        <!-- </div> -->
+        <div class="w-full flex flex-row justify-center items-center mb-3 mx-3" style="height: 400px;">
+          <canvas id="merge_chart" class="h-full w-auto"></canvas>
         </div>
       </div>
     </main>
@@ -1198,6 +1212,7 @@ nav .content .links{
       <script>
         let counter = 0;
         let main_pie = null;
+        let mixedChart = null;
         let dept = null;
         let stat = null;
         let sex = null;
@@ -1241,7 +1256,7 @@ nav .content .links{
                         label:  ["# of Students"],
                         backgroundColor: ['#5DA5DA ', '#FAA43A', '#60BD68', '#B276B2', '#E16851', '#FB8267'],
                         borderColor: 'rgba(154, 241, 140)',
-                        pointBackgroundColor: 'rgba(154, 245, 140)',
+                        color: "white",
                         data: default_data,
                         borderWidth: 1.5,
                         tension: 0.3,
@@ -1260,18 +1275,18 @@ nav .content .links{
                     counter++;
                     this.expand_data(label);
                   },
-                  //onClick: function(e){
-                  //  var activePoints = this.getElementsAtEvent(e, main_pie); 
-                  //  var selectedIndex = activePoints[0]._index; 
-                  //  alert(this.data.datasets[0].data[selectedIndex]);
-                  //},
                   title: {
                       display: true,
                       text: 'Item Something'
                   },
                   plugins: {
-                      legend: false,
-                      tooltip: true,
+                    tooltip: true,
+                      legend: {
+                        display: true,
+                        labels: {
+                          color: 'white'
+                        }
+                      },
                   },
                   hover: {
                       mode: 'index',
@@ -1337,24 +1352,49 @@ nav .content .links{
                 .then((response) => {
                   console.log(Object.values(response.data));
                   this.list_of_names = Object.values(response.data);
-                  //default_labels = Object.keys(response.data);
-                  //default_data = Object.values(response.data);
                 },
                 (error) => {
                   console.log(error);
                 });
 
                 this.show_names = true;
-                this.display_names;
               }
               
               if(_val != 'Female' && _val != 'Male'){
                 this.display_graph(default_labels, default_data);
               }
             },
-            display_names(){
-              
+            refresh_pie(){
+              this.show_names = false;
+              this.display_graph(default_labels = ['Computer Science', 'Information Technology'], default_data = [cs_students, it_students])
+            },
+            merge_two_charts(){
+              let ctx = document.getElementById('merge_chart').getContext('2d');
+              mixedChart = new Chart(ctx, {
+                data: {
+                    datasets: [{
+                        type: 'line',
+                        label: 'Students Desired Careers',
+                        data: [software_engineer_programmer, technical_support_specialist, academician, administrative_assistant]
+                    }, {
+                        type: 'line',
+                        label: 'Students Top 1 Predictions',
+                        data: [first_SE, first_TSS, first_A, first_AA],
+                    }],
+                    labels: ['Software Engineer Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant']
+                },
+                options: {
+                  scale: {
+                    ticks: {
+                      precision: 0
+                    }
+                  },
+                  responsive: true,
+                  maintainAspectRatio: false,
+                }
+              }); 
             }
+            
           }));
         });
       </script>
@@ -1364,196 +1404,6 @@ nav .content .links{
             $(this).find('ul').toggle();
           });
         });
-
-        /*const ctx = document.getElementById('myChart');
-        const chartR = document.getElementById('myRank');
-        
-        it_students = JSON.parse({{ it_students  | tojson}})
-        cs_students = JSON.parse({{ cs_students  | tojson}})
-        first_SE = JSON.parse({{ first_SE  | tojson}})
-        first_TSS = JSON.parse({{ first_TSS  | tojson}})
-        first_A = JSON.parse({{ first_A  | tojson}})
-        first_AA = JSON.parse({{ first_AA  | tojson}})
-        software_engineer_programmer = JSON.parse({{ software_engineer_programmer  | tojson}})
-        technical_support_specialist = JSON.parse({{ technical_support_specialist  | tojson}})
-        academician = JSON.parse({{ academician  | tojson}})
-        administrative_assistant = JSON.parse({{ administrative_assistant  | tojson}})
-        male = JSON.parse({{ male  | tojson}})
-        female = JSON.parse({{ female  | tojson}})
-        shiftee = JSON.parse({{ shiftee  | tojson}})
-        transferee = JSON.parse({{ transferee  | tojson}})
-        regular = JSON.parse({{ regular  | tojson}})
-
-        new Chart(ctx, {
-          type: 'bar',
-          
-          data: {
-            labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
-            datasets: [{
-              label: 'Number of Student Desired Career',
-              data: [software_engineer_programmer, technical_support_specialist, academician, administrative_assistant],
-              borderWidth: 1,
-              ticks: {
-                beginAtZero: true,
-                callback: function(value) {if (value % 1 === 0) {return value;}}
-              },
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  beginAtZero: true,
-                  callback: function(value) {if (value % 1 === 0) {return value;}}
-                }
-              }
-            }
-          }
-        });
-
-        new Chart(chartR, {
-          type: "line",
-          
-          data: {
-            labels: ['Software Engineer / Programmer', 'Technical Support Specialist', 'Academician', 'Administrative Assistant'],
-            datasets: [{
-              label: 'Number of Top 1 Prediction',
-              data: [first_SE, first_TSS, first_A, first_AA],
-              borderWidth: 1
-            }]
-          },
-          options: {
-            scales: {
-              y: {
-                beginAtZero: true,
-                ticks: {
-                  beginAtZero: true,
-                  callback: function(value) {if (value % 1 === 0) {return value;}}
-                }
-
-              }
-            }
-          }
-        });
-
-        let pieChartSex = new Chart(mypieChartSex, {
-          type: 'pie',
-          data: {
-          labels: ['Male', 'Female'],
-              datasets: [{
-                  label: "# of Student",
-                  data: [male, female],
-                  backgroundColor: ['#5DA5DA ', '#FAA43A', '#60BD68',
-                      '#B276B2', '#E16851', '#FB8267'],
-
-                  fontColor: "white",
-                  borderWidth: 1,
-                  hoverBorderColor: "black",
-                  hoverBorderWidth: 2,
-                  hoverBackgroundColor: 'rgba(154, 245, 140)',
-                  pointHoverRadius: 5
-              }],
-          },
-          options: {
-                  title: {
-                      display: true,
-                          text: "Male and Female",
-                              fontSize: 20,
-                              fontColor: "white"
-                  },
-                  legend: {
-                      position: "right",
-                          labels: {
-                          fontColor: "white"
-                      },
-                      display: true,
-                  },
-
-                  elements: {
-                      hitRadius: 3,
-                  }
-          }
-      })
-
-      let pieChartDep = new Chart(mypieChartDep, {
-        type: 'pie',
-        data: {
-        labels: ['Information Technology', 'Computer Science'],
-            datasets: [{
-                label: "# of Student",
-                data: [it_students, cs_students],
-                backgroundColor: ['#55a82f', '#979994', '#B276B2',
-                    '#B276B2', '#E16851', '#FB8267'],
-
-                fontColor: "white",
-                borderWidth: 1,
-                hoverBorderColor: "black",
-                hoverBorderWidth: 2,
-                hoverBackgroundColor: 'rgba(154, 245, 140)',
-                pointHoverRadius: 5
-            }],
-        },
-        options: {
-                title: {
-                    display: true,
-                        text: "Information Technology and Computer Science",
-                            fontSize: 20,
-                            fontColor: "white"
-                },
-                legend: {
-                    position: "right",
-                        labels: {
-                        fontColor: "white"
-                    },
-                    display: true,
-                },
-
-                elements: {
-                    hitRadius: 3,
-                }
-        }
-    })
-
-    let pieChartProgram = new Chart(mypieChartProgram, {
-      type: 'pie',
-      data: {
-      labels: ['Shiftee', 'Transferee', 'Regular'],
-          datasets: [{
-              label: "# of Student",
-              data: [shiftee, transferee, regular],
-              backgroundColor: ['#5DA5DA', '#FAA43A', '#55a82f',
-                  '#B276B2', '#E16851', '#FB8267'],
-
-              fontColor: "white",
-              borderWidth: 1,
-              hoverBorderColor: "black",
-              hoverBorderWidth: 2,
-              hoverBackgroundColor: 'rgba(154, 245, 140)',
-              pointHoverRadius: 5
-          }],
-      },
-      options: {
-              title: {
-                  display: true,
-                      text: "Shiftee, Transferee and Regular",
-                          fontSize: 20,
-                          fontColor: "white"
-              },
-              legend: {
-                  position: "right",
-                      labels: {
-                      fontColor: "white"
-                  },
-                  display: true,
-              },
-
-              elements: {
-                  hitRadius: 3,
-              }
-      }
-  })*/
-
 		// Modal
 				// Get the modal
 	var modal = document.getElementById("myModal");
@@ -1580,8 +1430,6 @@ nav .content .links{
 			modal.style.display = "none";
 		}
 	}
-
-
   </script>
 
 </body>
