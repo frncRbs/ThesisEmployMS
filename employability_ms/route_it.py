@@ -203,16 +203,25 @@ def login_IT():
 
 @_route_it.route('/signupIT', methods=['POST'])
 def signupIT():
+    first = request.form['first_name']
+    middle = request.form['middle_name']
+    last = request.form['last_name']
+    
     if (request.form['email'].__contains__('@wmsu.edu.ph')):
-        try:
-            new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Information Technology', request.form['program'], (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Account successfully created. Registration feedback will be sent soon via email -support@wetechsupport.online', category='success_register_it')
-            return redirect(url_for('.login_registerIT_view'))
-        except:
-            flash('Invalid credentials', category='error')
-            return redirect(url_for('.login_registerIT_view'))
+        if (first.isspace() != True or middle.isspace() != True or last.isspace() != True):
+            try:
+                new_user = User(request.form['first_name'], request.form['middle_name'], request.form['last_name'], request.form['sex'], request.form['curriculum_year'], request.form['contact_number'], request.form['email'], request.form['desired_career'],  'Information Technology', request.form['program'], (generate_password_hash(request.form['password'], method="sha256")), False, 0, 1)
+                db.session.add(new_user)
+                db.session.commit()
+                flash('Account successfully created. Registration feedback will be sent soon via email -support@wetechsupport.online', category='success_register_it')
+            except:
+                flash('Invalid credentials', category='error')
+        else:
+            flash('Please enter necessary data in fields', category='error')
+    else:
+        flash('Invalid Email. Outside WMSU email is not allowed', category='error')
+        
+    return redirect(url_for('.login_registerIT_view'))
     
 @_route_it.route('/it_dashboard', methods=['GET'])
 @login_required
