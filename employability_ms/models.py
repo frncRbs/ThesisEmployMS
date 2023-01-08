@@ -75,7 +75,7 @@ class CurriculumSchema(marsh.Schema):
         
 class CurriculumResult(db.Model):
     curriculum_id = db.Column(db.Integer, primary_key=True)
-    curriculum_year = db.Column(db.String(150), nullable=True)
+    curriculum_year = db.Column(db.String(150), unique=True, nullable=True)
     created_by = db.Column(db.String(150), nullable=True)
     date_created = db.Column(db.DateTime(timezone=True), default=func.now())
 

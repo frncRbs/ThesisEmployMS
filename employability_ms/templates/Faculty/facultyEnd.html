@@ -529,10 +529,7 @@ nav .content .links{
 .content .links li label{
   display: none;
 }
-.content .links li a:hover,
-.content .links li label:hover{
-  background: linear-gradient(to bottom, #18290c, #6b9159, #2a3e24);
-}
+
 .wrapper .search-icon,
 .wrapper .menu-icon{
   color: #fff;
@@ -938,13 +935,13 @@ nav .content .links{
               {% endwith %}
             </div>
             <div class="relative w-full flex flex-col m-auto lg:flex-col items-center justify-center space-y-3 lg:space-x-3 overflow-y-auto p-3">
-                <div class="mx-auto"><h1 style="font-size: larger;">Registered Students Record</h1></div>
+                <div class="mx-auto"><h1 style="font-size: larger; font-weight: bolder; color: #fff">Students Record</h1></div>
               <div class="flex flex-row lg:flex-row justify-center" style="width: 70%; height: 60px; position: relative; display: flex; background: rgba(255, 255, 255, 0.404)">
                   <div class="flex flex-row lg:flex-row mt-2 items-baseline">
                       <button style="margin: 0; padding: 5px; border-radius: 20px; width: 30px; height: 30px; position: relative; background: green; color: white; font-weight: bold" id="myBtn"> + </button>
                     
                       <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-                        <select style="display: inline; z-index: 0; width: 170px; margin-right: 10px" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
+                        <select style="display: inline; z-index: 0; width: 170px; margin-right: 10px; color: black" type="text" name="curriculum_year" id="drop-down" placeholder="Curriculum Year" required="" onchange="this.form.submit()">
                           <option value="">Curriculum Year</option>
                           {% if curriculum_input %}
                             {% for curriculum in curriculum_input %}
@@ -954,7 +951,7 @@ nav .content .links{
                         </select>
                       </form>
                       <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-                        <select style="display: inline; z-index: 0; width: 120px; margin-right: 10px" type="text" name="program" id="drop-down" placeholder="Program" required="" onchange="this.form.submit()">
+                        <select style="display: inline; z-index: 0; width: 120px; margin-right: 10px; color: black" type="text" name="program" id="drop-down" placeholder="Program" required="" onchange="this.form.submit()">
                           <option value="">Program</option>
                           <option value="Shiftee">Shiftee</option>
                           <option value="Transferee">Transferee</option>
@@ -962,21 +959,21 @@ nav .content .links{
                         </select>
                       </form>
                       <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-                        <select style="display: inline; z-index: 0; width: 120px; margin-right: 10px" type="text" name="sex" id="drop-down" placeholder="Sex" required="" onchange="this.form.submit()">
+                        <select style="display: inline; z-index: 0; width: 120px; margin-right: 10px; color: black" type="text" name="sex" id="drop-down" placeholder="Sex" required="" onchange="this.form.submit()">
                           <option value="">Sex</option>
                           <option value="Male">Male</option>
                           <option value="Female">Female</option>
                         </select>
                       </form>
                       <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-                        <select style="display: inline; z-index: 0" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
+                        <select style="display: inline; z-index: 0; color: black" type="text" name="department" id="drop-down" placeholder="Department" required="" onchange="this.form.submit()">
                           <option value="">Department</option>
                           <option value="information technology">Information Technology</option>
                           <option value="computer science">Computer Science</option>
                         </select>
                       </form>
                       <form action="{{ url_for('_faculty.faculty_dashboard') }}" method="GET">
-                        <input style="display: inline; z-index: 0" type="search" value="{{ search }}" name="search" placeholder="Enter first name, last name, etc." autocomplete="off">
+                        <input style="display: inline; z-index: 0; color: black" type="search" value="{{ search }}" name="search" placeholder="Enter first name, last name, etc." autocomplete="off">
                         <!-- <button type="submit" style="display: inline-block;">Search</button>   -->
                       </form>
                       <ul class="notification-drop">
@@ -1013,112 +1010,114 @@ nav .content .links{
                               {% endfor %}
                             {% endif %}
                         </ul>
-                      </div>
+                    </div>
                 </div>
-                <table>
-                  <thead>
-                    <tr>
-                      <th style="text-align: center">Full Name</th>
-                      <th style="text-align: center">Desired Career</th>
-                      <th style="text-align: center">Top 1 Prediction</th>
-                      <th style="text-align: center">Sex</th>
-                      <th style="text-align: center">Curriculum year</th>
-                      <th style="text-align: center">Department</th>
-                      <th style="text-align: center">Program</th>
-                      <th style="text-align: center">Contact Number</th>
-                      <th style="text-align: center">Email</th>
-                      <th style="text-align: center">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {% if students_record %}
-                      {% for user, pred_result in students_record.items %}
+              <div class="w-auto bg-white-10">
+                    <table>
+                      <thead>
                         <tr>
-                          <td>
-                            <span>{{ user.first_name }}</span>
-                            <span>{{ user.middle_name }}</span>
-                            <span>{{ user.last_name }} </span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px; text-align: center">{{ pred_result.desired_job }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px; text-align: center">{{ pred_result.top_rank }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px; text-align: center">{{ user.sex }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px; text-align: center">{{ user.curriculum_year }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px; text-align: center">{{ user.department }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px; text-align: center">{{ user.program }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px; text-align: center">{{ user.contact_number }}</span>
-                          </td>
-                          <td>
-                            <span style="margin: 5px; text-align: center">{{ user.email }}</span>
-                          </td>
-                          <td>
-                            <!-- 
-                              class should be inline
-                            -->
-                            <div style="display: flex">
-                              <form action="/view_results" method="POST">
-                                <input type="hidden" name="user_id" value="{{ user.id }}">
-                                <button type="submit" style="padding: 10px; margin: 5px" class="hybridBtn"> View </button>
-                              </form>
-                              <form action="/delete_student" method="POST">
-                                <input type="hidden" name="user_id" value="{{ user.id }}">
-                                <button type="submit" style="padding: 10px; margin: 5px" class="hybridBtn"> Delete </button>
-                              </form>
-                            </div>
-                          </td>
+                          <th style="text-align: center">Full Name</th>
+                          <th style="text-align: center">Desired Career</th>
+                          <th style="text-align: center">Top 1 Prediction</th>
+                          <th style="text-align: center">Sex</th>
+                          <th style="text-align: center">Curriculum year</th>
+                          <th style="text-align: center">Department</th>
+                          <th style="text-align: center">Status</th>
+                          <th style="text-align: center">Contact Number</th>
+                          <th style="text-align: center">Email</th>
+                          <th style="text-align: center">Action</th>
                         </tr>
-                      {% endfor %}
-                    {% endif %}
-                  </tbody>
-                </table>
-                <div class="mx-auto">
-                  {% if students_record %}
-                      {% for page_num in students_record.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
-                          {% if page_num  %}
-                              {% if students_record.page == page_num  %}
-                                {% if search  %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
-                                {% elif department %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
-                                {% elif sex %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
-                                {% elif curriculum_year %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
-                                {% else %}
-                                  <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
-                                {% endif %}
+                      </thead>
+                      <tbody>
+                        {% if students_record %}
+                          {% for user, pred_result in students_record.items %}
+                            <tr>
+                              <td>
+                                <span>{{ user.first_name }}</span>
+                                <span>{{ user.middle_name }}</span>
+                                <span>{{ user.last_name }} </span>
+                              </td>
+                              <td>
+                                <span style="margin: 5px; text-align: center">{{ user.desired_career }}</span>
+                              </td>
+                              <td>
+                                <span style="margin: 5px; text-align: center">{{ pred_result.main_rank }}</span>
+                              </td>
+                              <td>
+                                <span style="margin: 5px; text-align: center">{{ user.sex }}</span>
+                              </td>
+                              <td>
+                                <span style="margin: 5px; text-align: center">{{ user.curriculum_year }}</span>
+                              </td>
+                              <td>
+                                <span style="margin: 5px; text-align: center">{{ user.department }}</span>
+                              </td>
+                              <td>
+                                <span style="margin: 5px; text-align: center">{{ user.program }}</span>
+                              </td>
+                              <td>
+                                <span style="margin: 5px; text-align: center">{{ user.contact_number }}</span>
+                              </td>
+                              <td>
+                                <span style="margin: 5px; text-align: center">{{ user.email }}</span>
+                              </td>
+                              <td>
+                                <!-- 
+                                  class should be inline
+                                -->
+                                <div style="display: flex">
+                                  <form action="/view_results" method="POST">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <button type="submit" style="padding: 10px; margin: 5px" class="hybridBtn"> View </button>
+                                  </form>
+                                  <form action="/delete_student" method="POST">
+                                    <input type="hidden" name="user_id" value="{{ user.id }}">
+                                    <button type="submit" style="padding: 10px; margin: 5px" class="hybridBtn"> Delete </button>
+                                  </form>
+                                </div>
+                              </td>
+                            </tr>
+                          {% endfor %}
+                        {% endif %}
+                      </tbody>
+                    </table>
+                  </div>
+                    <div class="mx-auto" style="color: #fff;">
+                      {% if students_record %}
+                          {% for page_num in students_record.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                              {% if page_num  %}
+                                  {% if students_record.page == page_num  %}
+                                    {% if search  %}
+                                      <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
+                                    {% elif department %}
+                                      <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
+                                    {% elif sex %}
+                                      <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
+                                    {% elif curriculum_year %}
+                                      <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
+                                    {% else %}
+                                      <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
+                                    {% endif %}
 
+                                    {% else %}
+                                      {% if search  %}
+                                        <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
+                                      {% elif department %}
+                                        <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
+                                      {% elif sex %}
+                                        <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
+                                      {% elif curriculum_year %}
+                                        <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
+                                      {% else %}
+                                        <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
+                                      {% endif %}
+                                    {% endif %}
                                 {% else %}
-                                  {% if search  %}
-                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, search=search) }}">{{ page_num }}</a>
-                                  {% elif department %}
-                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, department=department) }}">{{ page_num }}</a>
-                                  {% elif sex %}
-                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, sex=sex) }}">{{ page_num }}</a>
-                                  {% elif curriculum_year %}
-                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num, curriculum_year=curriculum_year) }}">{{ page_num }}</a>
-                                  {% else %}
-                                    <a class="" href="{{ url_for('_faculty.faculty_dashboard', page=page_num) }}">{{ page_num }}</a>
-                                  {% endif %}
-                                {% endif %}
-                            {% else %}
-                              ...
-                          {% endif %}
-                      {% endfor %}
-                  {% endif %}
-              </div>
+                                  ...
+                              {% endif %}
+                          {% endfor %}
+                      {% endif %}
+                  </div>
             </div>
           </div>
         </div>
@@ -1147,19 +1146,7 @@ nav .content .links{
               </div>
             </div>
           </div>
-          <!-- <div style="display: flex; flex-direction: row; width: 100%; justify-content: flex-end; background:rgba(255, 255, 255, 0.233)">
-              <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px" >
-                <canvas id="mypieChartDep"></canvas>
-              </div>
-              
-              <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px" hidden>
-                <canvas id="mypieChartSex"></canvas>
-              </div>
-              
-              <div style="background: rgba(255, 255, 255, 0.795); width: 50%; height: auto; margin: 10px" hidden>
-                <canvas id="mypieChartProgram"></canvas>
-              </div>
-          </div> -->
+
           <div class="relative w-full flex flex-col m-auto lg:flex-row items-center justify-center space-y-3 lg:space-x-3 overflow-y-auto p-3" style="background:rgba(255, 255, 255, 0.233); height: 380px;">
             <div class="w-auto mt-24 lg:mt-0 relative">
               <canvas id="main_pie" x-ref="pie_main" class="h-full w-auto"></canvas>
