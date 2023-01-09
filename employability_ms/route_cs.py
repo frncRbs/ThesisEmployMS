@@ -271,13 +271,21 @@ def predict_CS_():
 def edit_profile_cs():
     auth_user=current_user
     if auth_user.user_type == 1 and auth_user.department == "Computer Science":
-        career = User.query.filter_by(id=int(auth_user.id)).first()
-        career.desired_career = request.form['desiredCareer']
-        db.session.commit()
-        flash('Profile Successfully Modified', category='info')
-        return redirect(url_for('.cs_dashboard'))
+        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+        current_pred_no = predict_iter.predict_no
+        if current_pred_no < 2:
+            career = User.query.filter_by(id=int(auth_user.id)).first()
+            career.desired_career = request.form['desiredCareer']
+            
+            job = db.session.query(PredictionResult).filter(PredictionResult.result_id == int(auth_user.id))
+            job.desired_job = request.form['desiredCareer']
+            db.session.commit()
+            flash('Profile Successfully Modified', category='info')
+        else:
+            flash('Sorry there is no sense to change career, since you already met the prediction attempts', category='info')
     else:
         return redirect(url_for('_auth.index'))
+    return redirect(url_for('.cs_dashboard'))
 
 @_route_cs.route("/predict_CS", methods=["GET", "POST"])
 def predict_CS():

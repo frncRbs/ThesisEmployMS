@@ -267,17 +267,22 @@ def it_dashboard():
 def edit_profile_it():
     auth_user=current_user
     if auth_user.user_type == 1 and auth_user.department == "Information Technology":
-        career = User.query.filter_by(id=int(auth_user.id)).first()
-        career.desired_career = request.form['desiredCareer']
-        
-        # job = PredictionResult.query.filter_by(user_id=int(auth_user.id)).first()
-        job = db.session.query(PredictionResult).filter(PredictionResult.result_id == int(auth_user.id))
-        job.desired_job = request.form['desiredCareer']
-        db.session.commit()
-        flash('Profile Successfully Modified', category='info')
-        return redirect(url_for('.it_dashboard'))
+        predict_iter = User.query.filter_by(id=int(auth_user.id)).first()
+        current_pred_no = predict_iter.predict_no
+        if current_pred_no < 2:
+            career = User.query.filter_by(id=int(auth_user.id)).first()
+            career.desired_career = request.form['desiredCareer']
+            
+            job = db.session.query(PredictionResult).filter(PredictionResult.result_id == int(auth_user.id))
+            job.desired_job = request.form['desiredCareer']
+            db.session.commit()
+            flash('Profile Successfully Modified', category='info')
+        else:
+            flash('Sorry there is no sense to change career, since you already met the prediction attempts', category='info')
     else:
         return redirect(url_for('_auth.index'))
+    
+    return redirect(url_for('.it_dashboard'))
 
 @_route_it.route("/predict_IT", methods=["GET", "POST"])
 def predict_IT():
